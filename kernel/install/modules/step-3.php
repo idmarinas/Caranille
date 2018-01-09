@@ -55,10 +55,8 @@ if (isset($_POST['databaseName'])
 		
 		    $bdd->query(file_get_contents('../sql/ddb.sql'));
 		    ?>
-		    
-		    Création de la base de donnée terminée avec succès !<br />
 
-			<hr>
+			<p><h4>Etape 3/4 - Choix d'installation</h4></p>
 
 		    <form method="POST" action="step-4.php">
 				Type d'installation : <select class="form-control" name="installationType">

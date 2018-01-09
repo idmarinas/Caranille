@@ -8,6 +8,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si l'utilisateur à cliqué sur le bouton finalEdit
 if (isset($_POST['adminGameName'])
+&& isset($_POST['adminGameMaxLevel'])
 && isset($_POST['adminGamePresentation'])
 && isset($_POST['adminGameExperience'])
 && isset($_POST['adminGameSkillPoint'])
@@ -18,7 +19,8 @@ if (isset($_POST['adminGameName'])
 && isset($_POST['edit']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminGameExperience'])
+    if (ctype_digit($_POST['adminGameMaxLevel'])
+    && ctype_digit($_POST['adminGameExperience'])
     && ctype_digit($_POST['adminGameSkillPoint'])
     && ctype_digit($_POST['adminGameExperienceBonus'])
     && ctype_digit($_POST['adminGameGoldBonus'])
@@ -32,6 +34,7 @@ if (isset($_POST['adminGameName'])
         //On récupère les informations du formulaire
         $adminGameName = $_POST['adminGameName'];
         $adminGamePresentation = $_POST['adminGamePresentation'];
+        $adminGameMaxLevel = htmlspecialchars(addslashes($_POST['adminGameMaxLevel']));
         $adminGameExperience = htmlspecialchars(addslashes($_POST['adminGameExperience']));
         $adminGameSkillPoint = htmlspecialchars(addslashes($_POST['adminGameSkillPoint']));
         $adminGameExperienceBonus = htmlspecialchars(addslashes($_POST['adminGameExperienceBonus']));
@@ -64,6 +67,7 @@ if (isset($_POST['adminGameName'])
         <?php
         echo "Nom du jeu : " .stripslashes($adminGameName). "<br />";
         echo "Présentation : " .stripslashes($adminGamePresentation). "<br />";
+        echo "Niveau Max : $adminGameMaxLevel<br />";
         echo "Base d'expérience : $adminGameExperience<br />";
         echo "PC par niveau : $adminGameSkillPoint<br />";
         echo "Expérience bonus (%) : $adminGameExperienceBonus<br />";
@@ -82,6 +86,7 @@ if (isset($_POST['adminGameName'])
         <form method="POST" action="editConfigurationEnd.php">
             <input type="hidden" name="adminGameName" class="form-control" placeholder="Nom du jeu" value="<?php echo $adminGameName ?>">
             <input type="hidden" name="adminGamePresentation" class="form-control" value="<?php echo $adminGamePresentation; ?>">
+            <input type="hidden" name="adminGameMaxLevel" class="form-control" value="<?php echo $adminGameMaxLevel ?>">
             <input type="hidden" name="adminGameExperience" class="form-control" value="<?php echo $adminGameExperience ?>">
             <input type="hidden" name="adminGameSkillPoint" class="form-control" value="<?php echo $adminGameSkillPoint ?>">
             <input type="hidden" name="adminGameExperienceBonus" class="form-control" value="<?php echo $adminGameExperienceBonus ?>">

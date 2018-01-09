@@ -179,6 +179,7 @@ CREATE TABLE IF NOT EXISTS `car_configuration`
   `configurationId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `configurationGameName` varchar(30) NOT NULL,
   `configurationPresentation` text NOT NULL,
+  `configurationMaxLevel` int(11) NOT NULL,
   `configurationExperience` int(11) NOT NULL,
   `configurationSkillPoint` int(11) NOT NULL,
   `configurationExperienceBonus` int(11) NOT NULL,

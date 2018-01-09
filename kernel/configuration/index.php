@@ -8,7 +8,8 @@ while ($configuration = $configurationQuery->fetch())
     //On récupère les informations du jeu
     $gameId = stripslashes($configuration['configurationId']);
     $gameName = stripslashes($configuration['configurationGameName']);
-    $gamePresentation = stripslashes(nl2br($configuration['configurationPresentation']));  
+    $gamePresentation = stripslashes(nl2br($configuration['configurationPresentation']));
+    $gameMaxLevel = stripslashes($configuration['configurationMaxLevel']); 
     $gameExperience = stripslashes($configuration['configurationExperience']);
     $gameSkillPoint = stripslashes($configuration['configurationSkillPoint']);
     $gameExperienceBonus = stripslashes($configuration['configurationExperienceBonus']);

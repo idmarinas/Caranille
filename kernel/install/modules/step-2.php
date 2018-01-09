@@ -1,6 +1,6 @@
 <?php require_once("../html/header.php"); ?>
 
-<p>Veuillez saisir les informations de connexion à votre base de donnée Mysql</p>
+<p><h4>Etape 2/4 - Configuration de la base de donnée (Mysql)</h4></p>
 
 <form method="POST" action="step-3.php">
     Nom de la base de donnée : <input type="text" class="form-control" name="databaseName" required>

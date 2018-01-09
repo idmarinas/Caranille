@@ -1,5 +1,7 @@
 <?php require_once("../html/header.php"); ?>
 
+<p><h4>Etape 1/4 - Licence d'utilisation</h4></p>
+
 <p>Avant de procéder à l'installation de Caranille vous devez lire et accepter la licence d'utilisation du logiciel</p>
 
 <form method="POST" action="step-2.php">

@@ -15,7 +15,8 @@ while ($configuration = $configurationQuery->fetch())
     //On récupère les informations du jeu
     $adminGameId = stripslashes($configuration['configurationId']);
     $adminGameName = stripslashes($configuration['configurationGameName']);
-    $adminGamePresentation = stripslashes($configuration['configurationPresentation']);   
+    $adminGamePresentation = stripslashes($configuration['configurationPresentation']); 
+    $adminGameMaxLevel = stripslashes($configuration['configurationMaxLevel']);  
     $adminGameExperience = stripslashes($configuration['configurationExperience']);
     $adminGameSkillPoint = stripslashes($configuration['configurationSkillPoint']);
     $adminGameExperienceBonus = stripslashes($configuration['configurationExperienceBonus']);
@@ -31,6 +32,7 @@ $configurationQuery->closeCursor();
 <form method="POST" action="editConfiguration.php">
     Nom du jeu : <input type="text" name="adminGameName" class="form-control" placeholder="Nom du jeu" value="<?php echo $adminGameName ?>" required>
     Présentation : <br> <textarea class="form-control" name="adminGamePresentation" id="adminGamePresentation" rows="3" required><?php echo $adminGamePresentation; ?></textarea>
+    Niveau maximum : <input type="number" name="adminGameMaxLevel" class="form-control" placeholder="Niveau maximum" value="<?php echo $adminGameMaxLevel ?>" required>
     Base d'expérience (base d'expérience * niveau actuel = expérience requise pour monter de niveau) : <input type="number" name="adminGameExperience" class="form-control" placeholder="Base expérience" value="<?php echo $adminGameExperience ?>" required>
     PC par niveau : <input type="number" name="adminGameSkillPoint" class="form-control" placeholder="PC par niveau" value="<?php echo $adminGameSkillPoint ?>" required>
     Expérience bonus (%) : <input type="number" name="adminGameExperienceBonus" class="form-control" placeholder="Expérience bonus (%)" value="<?php echo $adminGameExperienceBonus ?>" required>

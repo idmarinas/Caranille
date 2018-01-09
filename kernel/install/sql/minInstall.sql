@@ -3,8 +3,8 @@
 -- Contenu de la table `car_configuration`
 --
 
-INSERT INTO `car_configuration` (`configurationId`, `configurationGameName`, `configurationPresentation`, `configurationExperience`, `configurationSkillPoint`, `configurationExperienceBonus`, `configurationGoldBonus`, `configurationDropBonus`, `configurationAccess`) VALUES
-(1, 'Nom de votre jeu', 'Description de votre jeu', 500, 4, 0, 0, 0, 'Closed');
+INSERT INTO `car_configuration` (`configurationId`, `configurationGameName`, `configurationPresentation`, `configurationMaxLevel`, `configurationExperience`, `configurationSkillPoint`, `configurationExperienceBonus`, `configurationGoldBonus`, `configurationDropBonus`, `configurationAccess`) VALUES
+(1, 'Nom de votre jeu', 'Description de votre jeu', 40, 500, 4, 0, 0, 0, 'Closed');
 
 --
 -- Contenu de la table `car_items_types`

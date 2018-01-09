@@ -31,6 +31,8 @@ if (isset($_POST['installationType'])
                 $bdd->query(file_get_contents('../sql/minInstall.sql'));
             }
             ?>
+
+            <p><h4>Etape 4/4 - Création d'un compte administrateur</h4></p>
         
             <form method="POST" action="step-5.php">
                 Pseudo : <input type="text" class="form-control" name="accountPseudo" required>

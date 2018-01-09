@@ -9,6 +9,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 //Si l'utilisateur à cliqué sur le bouton finalEdit
 if (isset($_POST['adminGameName'])
 && isset($_POST['adminGamePresentation'])
+&& isset($_POST['adminGameMaxLevel'])
 && isset($_POST['adminGameExperience'])
 && isset($_POST['adminGameSkillPoint'])
 && isset($_POST['adminGameExperienceBonus'])
@@ -18,7 +19,8 @@ if (isset($_POST['adminGameName'])
 && isset($_POST['editEnd']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminGameExperience'])
+    if (ctype_digit($_POST['adminGameMaxLevel'])
+    && ctype_digit($_POST['adminGameExperience'])
     && ctype_digit($_POST['adminGameSkillPoint'])
     && ctype_digit($_POST['adminGameExperienceBonus'])
     && ctype_digit($_POST['adminGameGoldBonus'])
@@ -32,6 +34,7 @@ if (isset($_POST['adminGameName'])
         //On récupère les informations du formulaire
         $adminGameName = htmlspecialchars(addslashes($_POST['adminGameName']));
         $adminGamePresentation = htmlspecialchars(addslashes($_POST['adminGamePresentation']));
+        $adminGameMaxLevel = htmlspecialchars(addslashes($_POST['adminGameMaxLevel']));
         $adminGameExperience = htmlspecialchars(addslashes($_POST['adminGameExperience']));
         $adminGameSkillPoint = htmlspecialchars(addslashes($_POST['adminGameSkillPoint']));
         $adminGameExperienceBonus = htmlspecialchars(addslashes($_POST['adminGameExperienceBonus']));
@@ -165,6 +168,7 @@ if (isset($_POST['adminGameName'])
         $updateConfiguration = $bdd->prepare('UPDATE car_configuration
         SET configurationGameName = :adminGameName,
         configurationPresentation = :adminGamePresentation,
+        configurationMaxLevel = :adminGameMaxLevel,
         configurationExperience = :adminGameExperience,
         configurationSkillPoint = :adminGameSkillPoint,
         configurationExperienceBonus = :adminGameExperienceBonus,
@@ -174,6 +178,7 @@ if (isset($_POST['adminGameName'])
         $updateConfiguration->execute([
         'adminGameName' => $adminGameName,
         'adminGamePresentation' => $adminGamePresentation,
+        'adminGameMaxLevel' => $adminGameMaxLevel,
         'adminGameExperience' => $adminGameExperience,
         'adminGameSkillPoint' => $adminGameSkillPoint,
         'adminGameExperienceBonus' => $adminGameExperienceBonus,
