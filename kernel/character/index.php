@@ -123,99 +123,109 @@ $prospectingByLevel = $raceProspectingBonus;
 //Valeur des points de compétences obtenu à la monté d'un niveau ($gameSkillPoint = kernel/configuration/index.php)
 $skillPointsByLevel = $gameSkillPoint;
 
-//On calcul l'expérience nécessaire pour monter de niveau
-$experienceLevel = $characterLevel * $gameExperience;
-//On calcul combien d'experience il reste au joueur pour monter de niveau
-$experienceRemaining = $characterLevel * $gameExperience - $characterExperience;
 //On créer une variable qui va s'incrémenter à chaque niveau obtenu pour savoir combien de niveau le joueur gagne en une fois
 $levelUpNumber = 0;
 
-//Tant que le personnage à suffisament d'experience pour la monté d'un niveau
-while ($characterExperience >= $experienceLevel)
+//Si le joueur est à un niveau inférieur au maximum on vérifit si il peut monter de niveau
+if ($characterLevel < $gameMaxLevel)
 {
-    $characterHpMin = $characterHpMin + $hPByLevel;
-    $characterHpMax = $characterHpMax + $hPByLevel;
-    $characterHpTotal = $characterHpTotal + $hPByLevel;
-    $characterMpMin = $characterMpMin + $mPByLevel;
-    $characterMpMax = $characterMpMax + $mPByLevel;
-    $characterMpTotal = $characterMpTotal + $mPByLevel;
-    $characterStrength = $characterStrength + $strengthByLevel;
-    $characterStrengthTotal = $characterStrengthTotal + $strengthByLevel;
-    $characterMagic = $characterMagic + $magicByLevel;
-    $characterMagicTotal = $characterMagicTotal + $magicByLevel;
-    $characterAgility = $characterAgility + $agilityByLevel;
-    $characterAgilityTotal = $characterAgilityTotal + $agilityByLevel;
-    $characterDefense = $characterDefense + $defenseByLevel;
-    $characterDefenseTotal = $characterDefenseTotal + $defenseByLevel;
-    $characterDefenseMagic = $characterDefenseMagic + $defenseMagicByLevel;
-    $characterDefenseMagicTotal = $characterDefenseMagicTotal + $defenseMagicByLevel;
-    $characterWisdom = $characterWisdom + $wisdomByLevel;
-    $characterWisdomTotal = $characterWisdomTotal + $wisdomByLevel;
-    $characterProspecting = $characterProspecting + $prospectingByLevel;
-    $characterProspectingTotal = $characterProspectingTotal + $prospectingByLevel;
-    $characterExperience = $characterExperience - $experienceLevel;
-    $characterSkillPoints = $characterSkillPoints + $skillPointsByLevel;
-    $characterLevel = $characterLevel + 1;
-    
-    //On recalcul l'expérience nécessaire pour monter de niveau
+    //On calcul l'expérience nécessaire pour monter de niveau
     $experienceLevel = $characterLevel * $gameExperience;
-    //On calcul combien de niveau ont été gagné
-    $levelUpNumber++;
+    //On calcul combien d'experience il reste au joueur pour monter de niveau
+    $experienceRemaining = $characterLevel * $gameExperience - $characterExperience;
 
-    //On met le personnage à jour
-    $updateCharacter = $bdd->prepare("UPDATE car_characters SET
-    characterLevel = :characterLevel,
-    characterHpMin = :characterHpMin, 
-    characterHpMax = :characterHpMax, 
-    characterHpTotal = :characterHpTotal, 
-    characterMpMin = :characterMpMin, 
-    characterMpMax = :characterMpMax, 
-    characterMpTotal = :characterMpTotal, 
-    characterStrength = :characterStrength, 
-    characterStrengthTotal = :characterStrengthTotal, 
-    characterMagic = :characterMagic, 
-    characterMagicTotal = :characterMagicTotal, 
-    characterAgility = :characterAgility, 
-    characterAgilityTotal = :characterAgilityTotal, 
-    characterDefense = :characterDefense, 
-    characterDefenseTotal = :characterDefenseTotal, 
-    characterDefenseMagic = :characterDefenseMagic, 
-    characterDefenseMagicTotal = :characterDefenseMagicTotal, 
-    characterWisdom = :characterWisdom, 
-    characterWisdomTotal = :characterWisdomTotal,
-    characterProspecting = :characterProspecting, 
-    characterProspectingTotal = :characterProspectingTotal, 
-    characterExperience = :characterExperience, 
-    characterExperienceTotal = :characterExperienceTotal,
-    characterSkillPoints = :characterSkillPoints
-    WHERE characterId = :characterId");
-    $updateCharacter->execute(array(
-    'characterLevel' => $characterLevel,  
-    'characterHpMin' => $characterHpMin, 
-    'characterHpMax' => $characterHpMax, 
-    'characterHpTotal' => $characterHpTotal, 
-    'characterMpMin' => $characterMpMin, 
-    'characterMpMax' => $characterMpMax, 
-    'characterMpTotal' => $characterMpTotal, 
-    'characterStrength' => $characterStrength, 
-    'characterStrengthTotal' => $characterStrengthTotal, 
-    'characterMagic' => $characterMagic, 
-    'characterMagicTotal' => $characterMagicTotal, 
-    'characterAgility' => $characterAgility, 
-    'characterAgilityTotal' => $characterAgilityTotal, 
-    'characterDefense' => $characterDefense, 
-    'characterDefenseTotal' => $characterDefenseTotal, 
-    'characterDefenseMagic' => $characterDefenseMagic, 
-    'characterDefenseMagicTotal' => $characterDefenseMagicTotal, 
-    'characterWisdom' => $characterWisdom, 
-    'characterWisdomTotal' => $characterWisdomTotal,
-    'characterProspecting' => $characterProspecting, 
-    'characterProspectingTotal' => $characterProspectingTotal,  
-    'characterExperience' => $characterExperience, 
-    'characterExperienceTotal' => $characterExperienceTotal, 
-    'characterSkillPoints' => $characterSkillPoints, 
-    'characterId' => $characterId));
-    $updateCharacter->closeCursor();
+    //Tant que le personnage à suffisament d'experience pour la monté d'un niveau
+    while ($characterExperience >= $experienceLevel)
+    {
+        $characterHpMin = $characterHpMin + $hPByLevel;
+        $characterHpMax = $characterHpMax + $hPByLevel;
+        $characterHpTotal = $characterHpTotal + $hPByLevel;
+        $characterMpMin = $characterMpMin + $mPByLevel;
+        $characterMpMax = $characterMpMax + $mPByLevel;
+        $characterMpTotal = $characterMpTotal + $mPByLevel;
+        $characterStrength = $characterStrength + $strengthByLevel;
+        $characterStrengthTotal = $characterStrengthTotal + $strengthByLevel;
+        $characterMagic = $characterMagic + $magicByLevel;
+        $characterMagicTotal = $characterMagicTotal + $magicByLevel;
+        $characterAgility = $characterAgility + $agilityByLevel;
+        $characterAgilityTotal = $characterAgilityTotal + $agilityByLevel;
+        $characterDefense = $characterDefense + $defenseByLevel;
+        $characterDefenseTotal = $characterDefenseTotal + $defenseByLevel;
+        $characterDefenseMagic = $characterDefenseMagic + $defenseMagicByLevel;
+        $characterDefenseMagicTotal = $characterDefenseMagicTotal + $defenseMagicByLevel;
+        $characterWisdom = $characterWisdom + $wisdomByLevel;
+        $characterWisdomTotal = $characterWisdomTotal + $wisdomByLevel;
+        $characterProspecting = $characterProspecting + $prospectingByLevel;
+        $characterProspectingTotal = $characterProspectingTotal + $prospectingByLevel;
+        $characterExperience = $characterExperience - $experienceLevel;
+        $characterSkillPoints = $characterSkillPoints + $skillPointsByLevel;
+        $characterLevel = $characterLevel + 1;
+        
+        //On recalcul l'expérience nécessaire pour monter de niveau
+        $experienceLevel = $characterLevel * $gameExperience;
+        //On calcul combien de niveau ont été gagné
+        $levelUpNumber++;
+
+        //On met le personnage à jour
+        $updateCharacter = $bdd->prepare("UPDATE car_characters SET
+        characterLevel = :characterLevel,
+        characterHpMin = :characterHpMin, 
+        characterHpMax = :characterHpMax, 
+        characterHpTotal = :characterHpTotal, 
+        characterMpMin = :characterMpMin, 
+        characterMpMax = :characterMpMax, 
+        characterMpTotal = :characterMpTotal, 
+        characterStrength = :characterStrength, 
+        characterStrengthTotal = :characterStrengthTotal, 
+        characterMagic = :characterMagic, 
+        characterMagicTotal = :characterMagicTotal, 
+        characterAgility = :characterAgility, 
+        characterAgilityTotal = :characterAgilityTotal, 
+        characterDefense = :characterDefense, 
+        characterDefenseTotal = :characterDefenseTotal, 
+        characterDefenseMagic = :characterDefenseMagic, 
+        characterDefenseMagicTotal = :characterDefenseMagicTotal, 
+        characterWisdom = :characterWisdom, 
+        characterWisdomTotal = :characterWisdomTotal,
+        characterProspecting = :characterProspecting, 
+        characterProspectingTotal = :characterProspectingTotal, 
+        characterExperience = :characterExperience, 
+        characterExperienceTotal = :characterExperienceTotal,
+        characterSkillPoints = :characterSkillPoints
+        WHERE characterId = :characterId");
+        $updateCharacter->execute(array(
+        'characterLevel' => $characterLevel,  
+        'characterHpMin' => $characterHpMin, 
+        'characterHpMax' => $characterHpMax, 
+        'characterHpTotal' => $characterHpTotal, 
+        'characterMpMin' => $characterMpMin, 
+        'characterMpMax' => $characterMpMax, 
+        'characterMpTotal' => $characterMpTotal, 
+        'characterStrength' => $characterStrength, 
+        'characterStrengthTotal' => $characterStrengthTotal, 
+        'characterMagic' => $characterMagic, 
+        'characterMagicTotal' => $characterMagicTotal, 
+        'characterAgility' => $characterAgility, 
+        'characterAgilityTotal' => $characterAgilityTotal, 
+        'characterDefense' => $characterDefense, 
+        'characterDefenseTotal' => $characterDefenseTotal, 
+        'characterDefenseMagic' => $characterDefenseMagic, 
+        'characterDefenseMagicTotal' => $characterDefenseMagicTotal, 
+        'characterWisdom' => $characterWisdom, 
+        'characterWisdomTotal' => $characterWisdomTotal,
+        'characterProspecting' => $characterProspecting, 
+        'characterProspectingTotal' => $characterProspectingTotal,  
+        'characterExperience' => $characterExperience, 
+        'characterExperienceTotal' => $characterExperienceTotal, 
+        'characterSkillPoints' => $characterSkillPoints, 
+        'characterId' => $characterId));
+        $updateCharacter->closeCursor();
+    }
+}
+else
+{
+    $experienceLevel = 0;
+    $experienceRemaining = 0;
 }
 
 //Si le personnage a gagné un niveau

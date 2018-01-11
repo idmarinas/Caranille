@@ -209,6 +209,24 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
             $updateCharacterChapter->closeCursor();
         }
 
+        //Si il ne reste qu'un niveau à monte
+        if ($characterLevel == $gameMaxLevel -1 )
+        {
+            //Si le monstre donne plus d'expérience que ce qu'il reste pour monter le dernier niveau
+            if ($opponentExperience > $experienceRemaining)
+            {
+                //On bride les gains d'experience en ajoutant que ce qu'il manque ou en donnant zéro
+                $opponentExperience = $experienceRemaining;
+            }
+        }
+
+        //Si le joueur est au niveau maximum
+        if ($characterLevel == $gameMaxLevel)
+        {
+            //On bride les gains d'experience en ajoutant que ce qu'il manque ou en donnant zéro
+            $opponentExperience = 0;
+        }
+
         //On rajoute l'expérience ainsi que l'argent au joueur
         $updateCharacter = $bdd->prepare("UPDATE car_characters
         SET characterExperience = characterExperience + :opponentExperience,
