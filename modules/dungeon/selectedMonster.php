@@ -93,7 +93,15 @@ if (isset($_POST['token'])
                     //Sinon on prévient le joueur
                     else
                     {
-                        echo "Erreur : Ce monstre n'est plus disponible";
+                        ?>
+
+                        Ce monstre n'est plus disponible !
+
+                        <form method="POST" action="index.php">
+                            <input type="submit" name="back" class="btn btn-default form-control" value="Retour"><br />
+                        </form>
+
+                        <?php
                     }
                 }                
             }
