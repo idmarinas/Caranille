@@ -20,6 +20,8 @@ if (isset($_POST['adminMonsterPicture'])
 && isset($_POST['adminMonsterDefenseMagic'])
 && isset($_POST['adminMonsterGold'])
 && isset($_POST['adminMonsterExperience'])
+&& isset($_POST['adminMonsterLimited'])
+&& isset($_POST['adminMonsterQuantity'])
 && isset($_POST['finalAdd']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
@@ -33,6 +35,7 @@ if (isset($_POST['adminMonsterPicture'])
     && ctype_digit($_POST['adminMonsterDefenseMagic'])
     && ctype_digit($_POST['adminMonsterGold'])
     && ctype_digit($_POST['adminMonsterExperience'])
+    && ctype_digit($_POST['adminMonsterQuantity'])
     && $_POST['adminMonsterLevel'] >= 0
     && $_POST['adminMonsterHp'] >= 0
     && $_POST['adminMonsterMp'] >= 0
@@ -42,7 +45,8 @@ if (isset($_POST['adminMonsterPicture'])
     && $_POST['adminMonsterDefense'] >= 0
     && $_POST['adminMonsterDefenseMagic'] >= 0
     && $_POST['adminMonsterGold'] >= 0
-    && $_POST['adminMonsterExperience'] >= 0)
+    && $_POST['adminMonsterExperience'] >= 0
+    && $_POST['adminMonsterQuantity'] >= 0)
     {
         //On récupère les informations du formulaire
         $adminMonsterPicture = htmlspecialchars(addslashes($_POST['adminMonsterPicture']));
@@ -56,8 +60,10 @@ if (isset($_POST['adminMonsterPicture'])
         $adminMonsterAgility = htmlspecialchars(addslashes($_POST['adminMonsterAgility']));
         $adminMonsterDefense = htmlspecialchars(addslashes($_POST['adminMonsterDefense']));
         $adminMonsterDefenseMagic = htmlspecialchars(addslashes($_POST['adminMonsterDefenseMagic']));             
-        $adminMonsterGold = htmlspecialchars(addslashes($_POST['adminMonsterGold']));
         $adminMonsterExperience = htmlspecialchars(addslashes($_POST['adminMonsterExperience']));
+        $adminMonsterGold = htmlspecialchars(addslashes($_POST['adminMonsterGold']));
+        $adminMonsterLimited = htmlspecialchars(addslashes($_POST['adminMonsterLimited']));
+        $adminMonsterQuantity = htmlspecialchars(addslashes($_POST['adminMonsterQuantity']));
 
         //On ajoute le monstre dans la base de donnée
         $addMonster = $bdd->prepare("INSERT INTO car_monsters VALUES(
@@ -74,7 +80,9 @@ if (isset($_POST['adminMonsterPicture'])
         :adminMonsterDefense,
         :adminMonsterDefenseMagic,
         :adminMonsterExperience,
-        :adminMonsterGold)");
+        :adminMonsterGold,
+        :adminMonsterLimited,
+        :adminMonsterQuantity)");
         $addMonster->execute([
         'adminMonsterPicture' => $adminMonsterPicture,
         'adminMonsterName' => $adminMonsterName,
@@ -88,7 +96,9 @@ if (isset($_POST['adminMonsterPicture'])
         'adminMonsterDefense' => $adminMonsterDefense,
         'adminMonsterDefenseMagic' => $adminMonsterDefenseMagic,
         'adminMonsterExperience' => $adminMonsterExperience,
-        'adminMonsterGold' => $adminMonsterGold]);
+        'adminMonsterGold' => $adminMonsterGold,
+        'adminMonsterLimited' => $adminMonsterLimited,
+        'adminMonsterQuantity' => $adminMonsterQuantity]);
         $addMonster->closeCursor();
         ?>
 

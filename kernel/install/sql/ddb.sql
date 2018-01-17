@@ -284,7 +284,9 @@ CREATE TABLE IF NOT EXISTS `car_monsters` (
   `monsterDefense` int(11) NOT NULL,
   `monsterDefenseMagic` int(11) NOT NULL,
   `monsterExperience` int(11) NOT NULL,
-  `monsterGold` int(11) NOT NULL
+  `monsterGold` int(11) NOT NULL,
+  `monsterLimited` varchar(30) NOT NULL,
+  `monsterQuantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_monsters_drops`

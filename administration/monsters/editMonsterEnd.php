@@ -21,6 +21,8 @@ if (isset($_POST['adminMonsterId'])
 && isset($_POST['adminMonsterDefenseMagic'])
 && isset($_POST['adminMonsterGold'])
 && isset($_POST['adminMonsterExperience'])
+&& isset($_POST['adminMonsterLimited'])
+&& isset($_POST['adminMonsterQuantity'])
 && isset($_POST['finalEdit']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
@@ -35,6 +37,7 @@ if (isset($_POST['adminMonsterId'])
     && ctype_digit($_POST['adminMonsterDefenseMagic'])
     && ctype_digit($_POST['adminMonsterGold'])
     && ctype_digit($_POST['adminMonsterExperience'])
+    && ctype_digit($_POST['adminMonsterQuantity'])
     && $_POST['adminMonsterId'] >= 1
     && $_POST['adminMonsterLevel'] >= 0
     && $_POST['adminMonsterHp'] >= 0
@@ -45,7 +48,8 @@ if (isset($_POST['adminMonsterId'])
     && $_POST['adminMonsterDefense'] >= 0
     && $_POST['adminMonsterDefenseMagic'] >= 0
     && $_POST['adminMonsterGold'] >= 0
-    && $_POST['adminMonsterExperience'] >= 0)
+    && $_POST['adminMonsterExperience'] >= 0
+    && $_POST['adminMonsterQuantity'] >= 0)
     {
         //On récupère l'id du formulaire précédent
         $adminMonsterId = htmlspecialchars(addslashes($_POST['adminMonsterId']));
@@ -74,6 +78,8 @@ if (isset($_POST['adminMonsterId'])
             $adminMonsterDefenseMagic = htmlspecialchars(addslashes($_POST['adminMonsterDefenseMagic']));   
             $adminMonsterExperience = htmlspecialchars(addslashes($_POST['adminMonsterExperience']));          
             $adminMonsterGold = htmlspecialchars(addslashes($_POST['adminMonsterGold']));
+            $adminMonsterLimited = htmlspecialchars(addslashes($_POST['adminMonsterLimited']));
+            $adminMonsterQuantity = htmlspecialchars(addslashes($_POST['adminMonsterQuantity']));
 
             //On met le monstre à jour dans la base de donnée
             $updateMonster = $bdd->prepare('UPDATE car_monsters 
@@ -89,7 +95,9 @@ if (isset($_POST['adminMonsterId'])
             monsterDefense = :adminMonsterDefense,
             monsterDefenseMagic = :adminMonsterDefenseMagic,
             monsterExperience = :adminMonsterExperience,
-            monsterGold = :adminMonsterGold
+            monsterGold = :adminMonsterGold,
+            monsterLimited = :adminMonsterLimited,
+            monsterQuantity = :adminMonsterQuantity
             WHERE monsterId = :adminMonsterId');
             $updateMonster->execute([
             'adminMonsterPicture' => $adminMonsterPicture,
@@ -105,6 +113,8 @@ if (isset($_POST['adminMonsterId'])
             'adminMonsterDefenseMagic' => $adminMonsterDefenseMagic,
             'adminMonsterExperience' => $adminMonsterExperience,
             'adminMonsterGold' => $adminMonsterGold,
+            'adminMonsterLimited' => $adminMonsterLimited,
+            'adminMonsterQuantity' => $adminMonsterQuantity,
             'adminMonsterId' => $adminMonsterId]);
             $updateMonster->closeCursor();
             ?>

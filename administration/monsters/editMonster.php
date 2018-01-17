@@ -44,6 +44,8 @@ if (isset($_POST['adminMonsterId'])
                 $adminMonsterDefenseMagic = stripslashes($monster['monsterDefenseMagic']);
                 $adminMonsterExperience = stripslashes($monster['monsterExperience']);              
                 $adminMonsterGold = stripslashes($monster['monsterGold']);
+                $adminMonsterLimited = stripslashes($monster['monsterLimited']);
+                $adminMonsterQuantity = stripslashes($monster['monsterQuantity']);
             }
             ?>
 
@@ -67,6 +69,29 @@ if (isset($_POST['adminMonsterId'])
                 Défense Magique : <input type="number" name="adminMonsterDefenseMagic" class="form-control" placeholder="Défense Magique" value="<?php echo $adminMonsterDefenseMagic ?>" required>
                 Experience : <input type="number" name="adminMonsterExperience" class="form-control" placeholder="Expérience" value="<?php echo $adminMonsterExperience ?>" required>
                 Argent : <input type="number" name="adminMonsterGold" class="form-control" placeholder="Argent" value="<?php echo $adminMonsterGold ?>" required>
+                Monstre limité : <select name="adminMonsterLimited" class="form-control">
+
+                <?php
+                //Si le monstre n'est pas limité
+                if ($adminMonsterLimited == "No")
+                {
+                    ?>
+                    <option selected="selected" value="No">Non</option>
+                    <option value="Yes">Oui</option>
+                    <?php
+                }
+                //Si le monstre est limité
+                else
+                {
+                    ?>
+                    <option selected="selected" value="Yes">Oui</option>
+                    <option value="No">Non</option>
+                    <?php
+                }
+                ?>
+
+                </select>
+                Quantité restante (Si monstre limité) : <input type="number" name="adminMonsterQuantity" class="form-control" placeholder="Quantité du monstre" value="<?php echo $adminMonsterQuantity ?>" required>
                 <input type="hidden" name="adminMonsterId" value="<?php echo $adminMonsterId ?>">
                 <input name="finalEdit" class="btn btn-default form-control" type="submit" value="Modifier">
             </form>

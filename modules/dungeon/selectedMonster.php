@@ -39,28 +39,65 @@ if (isset($_POST['token'])
                 while ($opponent = $opponentQuery->fetch())
                 {
                     //On récupère les informations du monstre
-                    $opponentHp = $opponent['monsterHp'];
-                    $opponentMp = $opponent['monsterMp'];
+                    $opponentHp = stripslashes($opponent['monsterHp']);
+                    $opponentMp = stripslashes($opponent['monsterMp']);
+                    $monsterLimited = stripslashes($opponent['monsterLimited']);
+                    $monsterQuantity = stripslashes($opponent['monsterQuantity']);
                 }
                 $opponentQuery->closeCursor();
+
+                //Si le monstre n'est pas limité on lance le combat
+                if ($monsterLimited == "No")
+                {
+                    //Insertion du combat dans la base de donnée avec les données
+                    $addBattle = $bdd->prepare("INSERT INTO car_battles VALUES(
+                    NULL,
+                    :characterId,
+                    :opponentId,
+                    'Dungeon',
+                    :opponentHp,
+                    :opponentMp)");
+                    $addBattle->execute([
+                    'characterId' => $characterId,
+                    'opponentId' => $opponentId,
+                    'opponentHp' => $opponentHp,
+                    'opponentMp' => $opponentMp]);
+                    $addBattle->closeCursor();
+
+                    //On redirige le joueur vers le combat
+                    header("Location: ../../modules/battle/index.php");
+                }
+                else
+                {
+                    //On vérifie si il en reste et si c'est le cas on lance le combat
+                    if ($monsterQuantity > 0)
+                    {
+                        //Insertion du combat dans la base de donnée avec les données
+                        $addBattle = $bdd->prepare("INSERT INTO car_battles VALUES(
+                        NULL,
+                        :characterId,
+                        :opponentId,
+                        'Dungeon',
+                        :opponentHp,
+                        :opponentMp)");
+                        $addBattle->execute([
+                        'characterId' => $characterId,
+                        'opponentId' => $opponentId,
+                        'opponentHp' => $opponentHp,
+                        'opponentMp' => $opponentMp]);
+                        $addBattle->closeCursor();
+
+                        //On redirige le joueur vers le combat
+                        header("Location: ../../modules/battle/index.php");
+                    }
+                    //Sinon on prévient le joueur
+                    else
+                    {
+                        echo "Erreur : Ce monstre n'est plus disponible";
+                    }
+                }
     
-                //Insertion du combat dans la base de donnée avec les données
-                $addBattle = $bdd->prepare("INSERT INTO car_battles VALUES(
-                NULL,
-                :characterId,
-                :opponentId,
-                'Dungeon',
-                :opponentHp,
-                :opponentMp)");
-                $addBattle->execute([
-                'characterId' => $characterId,
-                'opponentId' => $opponentId,
-                'opponentHp' => $opponentHp,
-                'opponentMp' => $opponentMp]);
-                $addBattle->closeCursor();
-    
-                //On redirige le joueur vers le combat
-                header("Location: ../../modules/battle/index.php");
+                
             }
             //Si le monstre n'exite pas
             else

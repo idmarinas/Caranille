@@ -47,6 +47,8 @@ if ($battleRow == 1)
             $opponentDefenseMagic = stripslashes($opponent['monsterDefenseMagic']);
             $opponentGold = stripslashes($opponent['monsterGold']);
             $opponentExperience = stripslashes($opponent['monsterExperience']);
+            $opponentLimited = stripslashes($opponent['monsterLimited']);
+            $opponentQuantity = stripslashes($opponent['monsterQuantity']);
         }
         $opponentQuery->closeCursor();
     }

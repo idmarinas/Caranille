@@ -30,10 +30,29 @@ if ($monsterRow > 0)
                 //On récupère les informations du monstre
                 $monsterId = stripslashes($monster['monsterId']); 
                 $monsterName = stripslashes($monster['monsterName']);
-				$monsterLevel = stripslashes($monster['monsterLevel']);
-                ?>
-                <option value="<?php echo $monsterId ?>"><?php echo "Niveau $monsterLevel - $monsterName" ?></option>
-                <?php
+                $monsterLevel = stripslashes($monster['monsterLevel']);
+                $monsterLimited = stripslashes($monster['monsterLimited']);
+                $monsterQuantity = stripslashes($monster['monsterQuantity']);
+
+                //Si le monstre n'est pas limité on l'affiche
+                if ($monsterLimited == "No")
+                {
+                    ?>
+                    <option value="<?php echo $monsterId ?>"><?php echo "Niveau $monsterLevel - $monsterName" ?></option>
+                    <?php
+                }
+                //Si le monstre est limité
+                else
+                {
+                    //On vérifie si il en reste et si c'est le cas on l'affiche
+                    if ($monsterQuantity > 0)
+                    {
+                        ?>
+                        <option value="<?php echo $monsterId ?>"><?php echo "Niveau $monsterLevel - $monsterName" ?></option>
+                        <?php
+                    }
+                }
+                
             }
             ?>
                 

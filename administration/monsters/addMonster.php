@@ -27,6 +27,11 @@ if (isset($_POST['add']))
         Défense Magique : <input type="number" name="adminMonsterDefenseMagic" class="form-control" placeholder="Défense Magique" value="0" required>
         Experience : <input type="number" name="adminMonsterExperience" class="form-control" placeholder="Expérience" value="0" required>
         Argent : <input type="number" name="adminMonsterGold" class="form-control" placeholder="Argent" value="0" required>
+        Monstre limité : <select name="adminMonsterLimited" class="form-control">
+            <option value="No">Non</option>
+            <option value="Yes">Oui</option>
+        </select>
+        Quantité restante (Si monstre limité) : <input type="number" name="adminMonsterQuantity" class="form-control" placeholder="Quantité du monstre" value="<?php echo $adminMonsterQuantity ?>" required>
         <input type="hidden" name="adminMonsterId" value="<?php echo $adminMonsterId ?>">
         <input name="finalAdd" class="btn btn-default form-control" type="submit" value="Ajouter">
     </form>

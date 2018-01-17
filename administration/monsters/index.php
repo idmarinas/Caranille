@@ -24,8 +24,19 @@ if ($monsterRow > 0)
             {
                 $adminMonsterId = stripslashes($monster['monsterId']);
                 $adminMonsterName = stripslashes($monster['monsterName']);
+                $adminMonsterLimited = stripslashes($monster['monsterLimited']);
+                $adminMonsterQuantity = stripslashes($monster['monsterQuantity']);
+
+                if ($adminMonsterLimited == "No")
+                {
+                    $adminMonsterLimitedValue = "Non";
+                }
+                else
+                {
+                    $adminMonsterLimitedValue = "Oui";
+                }
                 ?>
-                <option value="<?php echo $adminMonsterId ?>"><?php echo "N°$adminMonsterId - $adminMonsterName" ?></option>
+                <option value="<?php echo $adminMonsterId ?>"><?php echo "N°$adminMonsterId - $adminMonsterName (Limité : $adminMonsterLimitedValue - Restant : $adminMonsterQuantity)" ?></option>
                 <?php
             }
             $monsterQuery->closeCursor();
