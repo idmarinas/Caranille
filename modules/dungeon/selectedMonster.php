@@ -95,9 +95,7 @@ if (isset($_POST['token'])
                     {
                         echo "Erreur : Ce monstre n'est plus disponible";
                     }
-                }
-    
-                
+                }                
             }
             //Si le monstre n'exite pas
             else
