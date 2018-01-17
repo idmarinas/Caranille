@@ -284,22 +284,6 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
             $addBestiary->closeCursor(); 
         }
         $bestiaryQuery->closeCursor(); 
-
-        //Si le monstre était limité on fait -1
-        if ($opponentLimited == "Yes")
-        {
-            //On met le monstre à jour dans la base de donnée
-            $updateMonster = $bdd->prepare('UPDATE car_monsters 
-            SET monsterQuantity = monsterQuantity - 1
-            WHERE monsterId = :opponentId');
-            $updateMonster->execute([
-            'opponentId' => $opponentId]);
-            $updateMonster->closeCursor();
-
-            ?>
-            -1 quantité pour <?php echo $opponentName ?>
-            <?php
-        }
     }
     //S'il s'agit d'un combat contre un autre joueur
     else if ($battleType == "Arena")

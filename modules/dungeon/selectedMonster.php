@@ -67,6 +67,7 @@ if (isset($_POST['token'])
                     //On redirige le joueur vers le combat
                     header("Location: ../../modules/battle/index.php");
                 }
+                //Si le monstre est limité
                 else
                 {
                     //On vérifie si il en reste et si c'est le cas on lance le combat
@@ -86,6 +87,14 @@ if (isset($_POST['token'])
                         'opponentHp' => $opponentHp,
                         'opponentMp' => $opponentMp]);
                         $addBattle->closeCursor();
+
+                        //On met le monstre à jour dans la base de donnée
+                        $updateMonster = $bdd->prepare('UPDATE car_monsters 
+                        SET monsterQuantity = monsterQuantity - 1
+                        WHERE monsterId = :opponentId');
+                        $updateMonster->execute([
+                        'opponentId' => $opponentId]);
+                        $updateMonster->closeCursor();
 
                         //On redirige le joueur vers le combat
                         header("Location: ../../modules/battle/index.php");
