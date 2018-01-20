@@ -60,20 +60,20 @@ if (isset($_POST['adminMonsterDropMonsterId'])
                     if ($monsterDropRow == 0) 
                     {
                         //On met à jour le monstre dans la base de donnée
-                        $addTownMonster = $bdd->prepare("INSERT INTO car_monsters_drops VALUES(
+                        $addPlaceMonster = $bdd->prepare("INSERT INTO car_monsters_drops VALUES(
                         NULL,
                         :adminMonsterDropMonsterId,
                         :adminMonsterDropItemId,
                         :adminMonsterDropItemVisible,
                         :adminMonsterDropRate,
                         :adminMonsterDropRateVisible)");
-                        $addTownMonster->execute([
+                        $addPlaceMonster->execute([
                         'adminMonsterDropMonsterId' => $adminMonsterDropMonsterId,
                         'adminMonsterDropItemId' => $adminMonsterDropItemId,
                         'adminMonsterDropItemVisible' => $adminMonsterDropItemVisible,
                         'adminMonsterDropRate' => $adminMonsterDropRate,
                         'adminMonsterDropRateVisible' => $adminMonsterDropRateVisible]);
-                        $addTownMonster->closeCursor();
+                        $addPlaceMonster->closeCursor();
                         ?>
 
                         L'objet a bien été ajouté au monstre
@@ -87,7 +87,7 @@ if (isset($_POST['adminMonsterDropMonsterId'])
                         
                         <?php
                     }
-                    //Si l'objet est déjà sur le monstre est déjà dans cette ville
+                    //Si l'objet est déjà sur le monstre est déjà dans cette lieu
                     else
                     {
                         ?>

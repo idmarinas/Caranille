@@ -6,7 +6,7 @@ Avant toute chose il ne propose pas la création de jeu 2D ni 3D juste du texte 
 Actuellement voici tout ce que vous pouvez faire :
 -Créer une histoire sous forme de chapitre avec introduction, conclusion
 -Créer une ou plusieurs classes dans le jeu (Guerrier, Mage etc.…)
--Créer des villes
+-Créer des lieux
 -Créer des monstres
 -Créer des objets/équipements pouvant être obtenu sur des monstres ou acheté en boutique
 -Créer des magasins

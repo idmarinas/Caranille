@@ -210,35 +210,35 @@ if (isset($_POST['token'])
                             <td>
                                 
                                 <?php
-                                //On recherche dans la base de donnée les ville dans lequel ce monstre se trouve
-                                $monsterTownQuery = $bdd->prepare("SELECT * FROM car_towns, car_towns_monsters
-                                WHERE townMonsterTownId = townId
-                                AND townMonsterMonsterId = ?");
+                                //On recherche dans la base de donnée les lieu dans lequel ce monstre se trouve
+                                $monsterTownQuery = $bdd->prepare("SELECT * FROM car_places, car_places_monsters
+                                WHERE placeMonsterPlaceId = placeId
+                                AND placeMonsterMonsterId = ?");
                                 $monsterTownQuery->execute([$monsterId]);
                                 $monsterTownRow = $monsterTownQuery->rowCount();
                             
-                                //S'il existe une ou plusieurs ville pour ce monstre
+                                //S'il existe une ou plusieurs lieu pour ce monstre
                                 if ($monsterTownRow > 0) 
                                 {
                                     //On va tester si le joueur l'obtient
                                     while ($monsterTown = $monsterTownQuery->fetch())
                                     {
-                                        $monsterTownName = stripslashes($monsterTown['townName']);
-                                        $monsterTownChapter = stripslashes($monsterTown['townChapter']);
+                                        $monsterplaceName = stripslashes($monsterTown['placeName']);
+                                        $monsterplaceChapter = stripslashes($monsterTown['placeChapter']);
                                         
-                                        //Si le joueur à accès à cette ville on l'affiche
-                                        if ($monsterTownChapter <= $characterChapter)
+                                        //Si le joueur à accès à cette lieu on l'affiche
+                                        if ($monsterplaceChapter <= $characterChapter)
                                         {
-                                        echo "$monsterTownName<br />"; 
+                                        echo "$monsterplaceName<br />"; 
                                         }
-                                        //Si le joueur n'a pas accès à cette ville on cache le nom
+                                        //Si le joueur n'a pas accès à cette lieu on cache le nom
                                         else 
                                         {
                                             echo "???<br />";
                                         }
                                     }
                                 }
-                                //Si ce monstre se trouve dans aucune ville
+                                //Si ce monstre se trouve dans aucun lieu
                                 else
                                 {
                                     echo "Lieu inconnu";

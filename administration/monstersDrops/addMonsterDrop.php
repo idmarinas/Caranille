@@ -103,7 +103,7 @@ if (isset($_POST['adminMonsterDropMonsterId'])
 
                         <?php
                     }
-                    //Si l'objet est déjà sur le monstre est déjà dans cette ville
+                    //Si l'objet est déjà sur le monstre est déjà dans cette lieu
                     else
                     {
                         ?>

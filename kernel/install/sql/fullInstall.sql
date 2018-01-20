@@ -58,22 +58,22 @@ INSERT INTO `car_shops_items` (`shopItemId`, `shopItemShopId`, `shopItemItemId`,
 (1, '1', '1', 0);
 
 --
--- Contenu de la table `car_towns`
+-- Contenu de la table `car_places`
 --
 
-INSERT INTO `car_towns` (`townId`, `townPicture`, `townName`, `townDescription`, `townPriceInn`, `townChapter`) VALUES
+INSERT INTO `car_places` (`placeId`, `placePicture`, `placeName`, `placeDescription`, `placePriceInn`, `placeChapter`) VALUES
 (1, '../../img/empty.png', 'Indicia', 'Petit village situé à proximité d\\\'une grand forêt', 10, 1);
 
 --
--- Contenu de la table `car_towns_monsters`
+-- Contenu de la table `car_places_monsters`
 --
 
-INSERT INTO `car_towns_monsters` (`townMonsterId`, `townMonsterTownId`, `townMonsterMonsterId`) VALUES
+INSERT INTO `car_places_monsters` (`placeMonsterId`, `placeMonsterPlaceId`, `placeMonsterMonsterId`) VALUES
 (1, 1, 1);
 
 --
--- Contenu de la table `car_towns_shops`
+-- Contenu de la table `car_places_shops`
 --
 
-INSERT INTO `car_towns_shops` (`townShopId`, `townShopTownId`, `townShopShopId`) VALUES
+INSERT INTO `car_places_shops` (`townShopId`, `townShopplaceId`, `townShopShopId`) VALUES
 (1, 1, 1);

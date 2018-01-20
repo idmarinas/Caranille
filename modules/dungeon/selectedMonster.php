@@ -2,8 +2,8 @@
 
 //S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
 if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
-//Si le joueur n'est pas dans une ville on le redirige vers la carte du monde
-if ($characterTownId == 0) { exit(header("Location: ../../modules/map/index.php")); }
+//Si le joueur n'est pas dans un lieu on le redirige vers la carte du monde
+if ($characterplaceId == 0) { exit(header("Location: ../../modules/map/index.php")); }
 //S'il y a actuellement un combat on redirige le joueur vers le module battle
 if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); }
 
@@ -24,13 +24,13 @@ if (isset($_POST['token'])
             //On récupère l'id du formulaire précédent
             $opponentId = htmlspecialchars(addslashes($_POST['battleMonsterId']));
     
-            //On fait une requête pour vérifier si le monstre est bien disponible dans la ville du joueur
-            $opponentQuery = $bdd->prepare("SELECT * FROM car_monsters, car_towns, car_towns_monsters
-            WHERE townMonsterMonsterId = monsterId
-            AND townMonsterTownId = townId
+            //On fait une requête pour vérifier si le monstre est bien disponible dans le lieu du joueur
+            $opponentQuery = $bdd->prepare("SELECT * FROM car_monsters, car_places, car_places_monsters
+            WHERE placeMonsterMonsterId = monsterId
+            AND placeMonsterPlaceId = placeId
             AND monsterId = ?
-            AND townId = ?");
-            $opponentQuery->execute([$opponentId, $townId]);
+            AND placeId = ?");
+            $opponentQuery->execute([$opponentId, $placeId]);
             $opponentRow = $opponentQuery->rowCount();
     
             //Si le monstre existe

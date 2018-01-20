@@ -7,57 +7,57 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminTownMonsterTownId'])
+if (isset($_POST['adminPlaceMonsterPlaceId'])
 && isset($_POST['manage']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminTownMonsterTownId'])
-    && $_POST['adminTownMonsterTownId'] >= 1)
+    if (ctype_digit($_POST['adminPlaceMonsterPlaceId'])
+    && $_POST['adminPlaceMonsterPlaceId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $adminTownMonsterTownId = htmlspecialchars(addslashes($_POST['adminTownMonsterTownId']));
+        $adminPlaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceMonsterPlaceId']));
 
-        //On fait une requête pour vérifier si la ville choisit existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_towns 
-        WHERE townId = ?');
-        $townQuery->execute([$adminTownMonsterTownId]);
+        //On fait une requête pour vérifier si le lieu choisit existe
+        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        WHERE placeId = ?');
+        $townQuery->execute([$adminPlaceMonsterPlaceId]);
         $townRow = $townQuery->rowCount();
 
-        //Si la ville existe
+        //Si le lieu existe
         if ($townRow == 1)
         {
-            //On fait une requête pour rechercher tous les monstres présent dans cette ville
-            $townMonsterQuery = $bdd->prepare("SELECT * FROM car_monsters, car_towns, car_towns_monsters
-            WHERE townMonsterMonsterId = monsterId
-            AND townMonsterTownId = townId
-            AND townId = ?");
-            $townMonsterQuery->execute([$adminTownMonsterTownId]);
+            //On fait une requête pour rechercher tous les monstres présent dans cette lieu
+            $townMonsterQuery = $bdd->prepare("SELECT * FROM car_monsters, car_places, car_places_monsters
+            WHERE placeMonsterMonsterId = monsterId
+            AND placeMonsterPlaceId = placeId
+            AND placeId = ?");
+            $townMonsterQuery->execute([$adminPlaceMonsterPlaceId]);
             $townMonsterRow = $townMonsterQuery->rowCount();
 
-            //S'il existe un ou plusieurs monstre dans la ville on affiche le menu déroulant
+            //S'il existe un ou plusieurs monstre dans le lieu on affiche le menu déroulant
             if ($townMonsterRow > 0) 
             {
                 ?>
                 
-                <form method="POST" action="deleteTownMonster.php">
-                    Monstres présent dans la ville : <select name="adminTownMonsterMonsterId" class="form-control">
+                <form method="POST" action="deletePlaceMonster.php">
+                    Monstres présent dans le lieu : <select name="adminplaceMonsterMonsterId" class="form-control">
                             
                         <?php
                         //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                         while ($townMonster = $townMonsterQuery->fetch())
                         {
                             //On récupère les informations du monstre
-                            $adminTownMonsterMonsterId = stripslashes($townMonster['monsterId']);
+                            $adminplaceMonsterMonsterId = stripslashes($townMonster['monsterId']);
                             $adminTownMonsterMonsterName = stripslashes($townMonster['monsterName']);
                             ?>
-                            <option value="<?php echo $adminTownMonsterMonsterId ?>"><?php echo "N°$adminTownMonsterMonsterId - $adminTownMonsterMonsterName"; ?></option>
+                            <option value="<?php echo $adminplaceMonsterMonsterId ?>"><?php echo "N°$adminplaceMonsterMonsterId - $adminTownMonsterMonsterName"; ?></option>
                             <?php
                         }
                         $townMonsterQuery->closeCursor();
                         ?>
                         
                     </select>
-                    <input type="hidden" name="adminTownMonsterTownId" value="<?php echo $adminTownMonsterTownId ?>">
+                    <input type="hidden" name="adminPlaceMonsterPlaceId" value="<?php echo $adminPlaceMonsterPlaceId ?>">
                     <input type="submit" name="delete" class="btn btn-default form-control" value="Retirer le monstre">
                 </form>
                 
@@ -67,37 +67,37 @@ if (isset($_POST['adminTownMonsterTownId'])
             }
             $townMonsterQuery->closeCursor();
 
-            //On fait une requête pour afficher la liste des monstres du jeu qui ne sont pas dans la ville
+            //On fait une requête pour afficher la liste des monstres du jeu qui ne sont pas dans le lieu
             $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters
-			WHERE (SELECT COUNT(*) FROM car_towns_monsters
-            WHERE townMonsterTownId = ?
-            AND townMonsterMonsterId = monsterId) = 0");
-            $monsterQuery->execute([$adminTownMonsterTownId]);
+			WHERE (SELECT COUNT(*) FROM car_places_monsters
+            WHERE placeMonsterPlaceId = ?
+            AND placeMonsterMonsterId = monsterId) = 0");
+            $monsterQuery->execute([$adminPlaceMonsterPlaceId]);
             $monsterRow = $monsterQuery->rowCount();
             //S'il existe un ou plusieurs monstres on affiche le menu déroulant pour proposer au joueur d'en ajouter
             if ($monsterRow > 0) 
             {
                 ?>
                 
-                <form method="POST" action="addTownMonster.php">
-                    Monstres disponible : <select name="adminTownMonsterMonsterId" class="form-control">
+                <form method="POST" action="addPlaceMonster.php">
+                    Monstres disponible : <select name="adminplaceMonsterMonsterId" class="form-control">
                             
                         <?php
                         //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                         while ($monster = $monsterQuery->fetch())
                         {
                             //On récupère les informations du monstre
-                            $adminTownMonsterMonsterId = stripslashes($monster['monsterId']);
+                            $adminplaceMonsterMonsterId = stripslashes($monster['monsterId']);
                             $adminTownMonsterMonsterName = stripslashes($monster['monsterName']);
                             ?>
-                            <option value="<?php echo $adminTownMonsterMonsterId ?>"><?php echo "N°$adminTownMonsterMonsterId - $adminTownMonsterMonsterName"; ?></option>
+                            <option value="<?php echo $adminplaceMonsterMonsterId ?>"><?php echo "N°$adminplaceMonsterMonsterId - $adminTownMonsterMonsterName"; ?></option>
                             <?php
                         }
                         $monsterQuery->closeCursor();
                         ?>
                         
                     </select>
-                    <input type="hidden" name="adminTownMonsterTownId" value="<?php echo $adminTownMonsterTownId ?>">
+                    <input type="hidden" name="adminPlaceMonsterPlaceId" value="<?php echo $adminPlaceMonsterPlaceId ?>">
                     <input type="submit" name="add" class="btn btn-default form-control" value="Ajouter le monstre">
                 </form>
                 
@@ -118,10 +118,10 @@ if (isset($_POST['adminTownMonsterTownId'])
             
             <?php
         }
-        //Si la ville n'exite pas
+        //Si le lieu n'exite pas
         else
         {
-            echo "Erreur : Ville indisponible";
+            echo "Erreur : lieu indisponible";
         }
     }
     //Si tous les champs numérique ne contiennent pas un nombre

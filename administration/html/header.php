@@ -13,8 +13,8 @@ require_once("../../kernel/character/index.php");
 require_once("../../kernel/equipmentType/index.php");
 //On vérifie si le personnage est actuellement dans un combat
 require_once("../../kernel/battle/index.php");
-//On vérifie si le personnage est actuellement dans une ville. Si c'est le cas on récupère toutes les informations de la ville
-require_once("../../kernel/town/index.php");
+//On vérifie si le personnage est actuellement dans un lieu. Si c'est le cas on récupère toutes les informations du lieu
+require_once("../../kernel/place/index.php");
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +53,7 @@ require_once("../../kernel/town/index.php");
 							<a class="dropdown-item" href="../../administration/parchments/index.php">Parchemins</a>
 							<a class="dropdown-item" href="../../administration/races/index.php">Classes</a>
 							<a class="dropdown-item" href="../../administration/shops/index.php">Magasins</a>
-							<a class="dropdown-item" href="../../administration/towns/index.php">Villes</a>
+							<a class="dropdown-item" href="../../administration/places/index.php">lieux</a>
 						</div>
 					</li>
 					<li class="nav-item dropdown">

@@ -7,41 +7,41 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminTownShopTownId'])
+if (isset($_POST['adminPlaceShopPlaceId'])
 && isset($_POST['manage']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminTownShopTownId'])
-    && $_POST['adminTownShopTownId'] >= 1)
+    if (ctype_digit($_POST['adminPlaceShopPlaceId'])
+    && $_POST['adminPlaceShopPlaceId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $adminTownShopTownId = htmlspecialchars(addslashes($_POST['adminTownShopTownId']));
+        $adminPlaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceShopPlaceId']));
 
-        //On fait une requête pour vérifier si la ville choisit existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_towns 
-        WHERE townId = ?');
-        $townQuery->execute([$adminTownShopTownId]);
+        //On fait une requête pour vérifier si le lieu choisit existe
+        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        WHERE placeId = ?');
+        $townQuery->execute([$adminPlaceShopPlaceId]);
         $townRow = $townQuery->rowCount();
 
-        //Si la ville existe
+        //Si le lieu existe
         if ($townRow == 1)
         {
-            //On fait une requête pour afficher la liste des magasins de cette ville
-            $townShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_towns, car_towns_shops
+            //On fait une requête pour afficher la liste des magasins de cette lieu
+            $townShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_places, car_places_shops
             WHERE townShopShopId = shopId
-            AND townShopTownId = townId
-            AND townId = ?
+            AND townShopplaceId = placeId
+            AND placeId = ?
 			ORDER BY shopName");
-            $townShopQuery->execute([$adminTownShopTownId]);
+            $townShopQuery->execute([$adminPlaceShopPlaceId]);
             $townShopRow = $townShopQuery->rowCount();
 
-            //S'il existe un ou plusieurs magasins dans la ville on affiche le menu déroulant
+            //S'il existe un ou plusieurs magasins dans le lieu on affiche le menu déroulant
             if ($townShopRow > 0) 
             {
                 ?>
                 
-                <form method="POST" action="deleteTownShop.php">
-                    Magasins présent dans la ville : <select name="adminTownShopShopId" class="form-control">
+                <form method="POST" action="deletePlaceShop.php">
+                    Magasins présent dans le lieu : <select name="adminTownShopShopId" class="form-control">
                             
                         <?php
                         //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
@@ -58,7 +58,7 @@ if (isset($_POST['adminTownShopTownId'])
                         ?>
                         
                     </select>
-                    <input type="hidden" name="adminTownShopTownId" value="<?php echo $adminTownShopTownId ?>">
+                    <input type="hidden" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceShopPlaceId ?>">
                     <input type="submit" name="delete" class="btn btn-default form-control" value="Retirer le magasin">
                 </form>
                 
@@ -68,20 +68,20 @@ if (isset($_POST['adminTownShopTownId'])
             }
             $townShopQuery->closeCursor();
 
-            //On fait une requête pour afficher la liste des magasins du jeu qui ne sont pas dans la ville
+            //On fait une requête pour afficher la liste des magasins du jeu qui ne sont pas dans le lieu
             $shopQuery = $bdd->prepare("SELECT * FROM car_shops
-            WHERE (SELECT COUNT(*) FROM car_towns_shops
-            WHERE townShopTownId = ?
+            WHERE (SELECT COUNT(*) FROM car_places_shops
+            WHERE townShopplaceId = ?
             AND townShopShopId = shopId) = 0
 			ORDER BY shopName");
-            $shopQuery->execute([$adminTownShopTownId]);
+            $shopQuery->execute([$adminPlaceShopPlaceId]);
             $shopRow = $shopQuery->rowCount();
             //S'il existe un ou plusieurs magasin on affiche le menu déroulant pour proposer au joueur d'en ajouter
             if ($shopRow > 0) 
             {
                 ?>
                 
-                <form method="POST" action="addTownShop.php">
+                <form method="POST" action="addPlaceShop.php">
                     Magasins disponible : <select name="adminTownShopShopId" class="form-control">
                             
                             <?php
@@ -99,7 +99,7 @@ if (isset($_POST['adminTownShopTownId'])
                             
                         </select>
                     
-                    <input type="hidden" name="adminTownShopTownId" value="<?php echo $adminTownShopTownId ?>">
+                    <input type="hidden" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceShopPlaceId ?>">
                     <input type="submit" name="add" class="btn btn-default form-control" value="Ajouter le magasin">
                 </form>
                 
@@ -120,10 +120,10 @@ if (isset($_POST['adminTownShopTownId'])
             
             <?php
         }
-        //Si la ville n'exite pas
+        //Si le lieu n'exite pas
         else
         {
-            echo "Erreur : Ville indisponible";
+            echo "Erreur : lieu indisponible";
         }
     }
     //Si tous les champs numérique ne contiennent pas un nombre

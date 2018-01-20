@@ -45,7 +45,7 @@ if (isset($_POST['adminShopItemShopId'])
                 //Si l'objet existe
                 if ($itemRow == 1) 
                 {
-                    //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette ville
+                    //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette lieu
                     $shopItemQuery = $bdd->prepare('SELECT * FROM car_shops_items
                     WHERE shopItemShopId = ?
                     AND shopItemItemId = ?');

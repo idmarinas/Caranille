@@ -7,38 +7,35 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminTownShopTownId'])
+if (isset($_POST['adminPlaceShopPlaceId'])
 && isset($_POST['adminTownShopShopId'])
-&& isset($_POST['add']))
+&& isset($_POST['delete']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminTownShopTownId'])
+    if (ctype_digit($_POST['adminPlaceShopPlaceId'])
     && ctype_digit($_POST['adminTownShopShopId'])
-    && $_POST['adminTownShopTownId'] >= 1
+    && $_POST['adminPlaceShopPlaceId'] >= 1
     && $_POST['adminTownShopShopId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $adminTownShopTownId = htmlspecialchars(addslashes($_POST['adminTownShopTownId']));
+        $adminPlaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceShopPlaceId']));
         $adminTownShopShopId = htmlspecialchars(addslashes($_POST['adminTownShopShopId']));
 
-        //On fait une requête pour vérifier si la ville choisie existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_towns 
-        WHERE townId = ?');
-        $townQuery->execute([$adminTownShopTownId]);
+        //On fait une requête pour vérifier si le lieu choisie existe
+        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        WHERE placeId = ?');
+        $townQuery->execute([$adminPlaceShopPlaceId]);
         $townRow = $townQuery->rowCount();
 
-        //Si la ville existe
+        //Si le lieu existe
         if ($townRow == 1) 
         {
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
             while ($town = $townQuery->fetch())
             {
-                //On récupère les informations de la ville
-                $adminTownShopTownPicture = stripslashes($town['townPicture']);
-                $adminTownShopTownName = stripslashes($town['townName']);
+                //On récupère les informations du magasin
+                $adminTownShopplaceName = stripslashes($town['placeName']);
             }
-            $townQuery->closeCursor();
-
+    
             //On fait une requête pour vérifier si le magasin choisit existe
             $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
             WHERE shopId = ?');
@@ -48,39 +45,37 @@ if (isset($_POST['adminTownShopTownId'])
             //Si le magasin existe
             if ($shopRow == 1) 
             {
-                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                 while ($shop = $shopQuery->fetch())
                 {
                     //On récupère les informations du magasin
-                    $adminTownShopShopPicture = stripslashes($shop['shopPicture']);
                     $adminTownShopShopName = stripslashes($shop['shopName']);
                 }
 
-                //On fait une requête pour vérifier si le magasin n'est pas déjà dans cette ville
-                $townShopQuery = $bdd->prepare('SELECT * FROM car_towns_shops 
-                WHERE townShopTownId = ?
+                //On fait une requête pour vérifier si le magasin n'est pas déjà dans cette lieu
+                $townShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
+                WHERE townShopplaceId = ?
                 AND townShopShopId = ?');
-                $townShopQuery->execute([$adminTownShopTownId, $adminTownShopShopId]);
+                $townShopQuery->execute([$adminPlaceShopPlaceId, $adminTownShopShopId]);
                 $townShopRow = $townShopQuery->rowCount();
 
-                //Si le magasin n'est pas dans la ville
-                if ($townShopRow == 0) 
+                //Si le magasin n'est pas dans le lieu
+                if ($townShopRow == 1) 
                 {
                     ?>
-            
-                    <p>ATTENTION</p> 
-
-                    Vous êtes sur le point d'ajouter le magasin <em><?php echo $adminTownShopShopName ?></em> dans la ville <em><?php echo $adminTownShopTownName ?></em>.<br />
-                    Confirmez-vous l'ajout ?
+                    
+                    <p>ATTENTION</p>
+                    
+                    Vous êtes sur le point de retirer le magasin <em><?php echo $adminTownShopShopName ?></em> du lieu <em><?php echo $adminTownShopplaceName ?></em>.<br />
+                    Confirmez-vous ?
 
                     <hr>
                         
-                    <form method="POST" action="addTownShopEnd.php">
-                        <input type="hidden" class="btn btn-default form-control" name="adminTownShopTownId" value="<?php echo $adminTownShopTownId ?>">
+                    <form method="POST" action="deletePlaceShopEnd.php">
+                        <input type="hidden" class="btn btn-default form-control" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceShopPlaceId ?>">
                         <input type="hidden" class="btn btn-default form-control" name="adminTownShopShopId" value="<?php echo $adminTownShopShopId ?>">
-                        <input type="submit" class="btn btn-default form-control" name="finalAdd" value="Je confirme">
+                        <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme">
                     </form>
-                    
+            
                     <hr>
 
                     <form method="POST" action="index.php">
@@ -89,19 +84,10 @@ if (isset($_POST['adminTownShopTownId'])
                     
                     <?php
                 }
-                //Si le magasin est déjà dans cette ville
+                //Si le magasin n'exite pas
                 else
                 {
-                    ?>
-                    
-                    Erreur : Ce magasin est déjà dans cette ville
-                    
-                    <form method="POST" action="manageTownShop.php">
-                        <input type="hidden" name="adminTownShopTownId" value="<?php echo $adminTownShopTownId ?>">
-                        <input type="submit" class="btn btn-default form-control" name="manage" value="Retour">
-                    </form>
-                    
-                    <?php
+                    echo "Erreur : Ce magasin n'est pas dans cette lieu";
                 }
                 $townShopQuery->closeCursor();
             }
@@ -112,10 +98,10 @@ if (isset($_POST['adminTownShopTownId'])
             }
             $townShopQuery->closeCursor();
         }
-        //Si la ville existe pas
+        //Si le lieu existe pas
         else
         {
-            echo "Erreur : Cette ville n'existe pas";
+            echo "Erreur : Cette lieu n'existe pas";
         }
         $shopQuery->closeCursor();
     }
@@ -128,7 +114,7 @@ if (isset($_POST['adminTownShopTownId'])
 //Si toutes les variables $_POST n'existent pas
 else
 {
-    echo "Erreur : Tous les champs n'ont pas été rempli";
+    echo "Erreur : Tous les champs n'ont pas été remplis";
 }
 
 require_once("../html/footer.php");

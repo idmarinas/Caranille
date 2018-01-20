@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `car_characters` (
   `characterAccountId` int(11) NOT NULL,
   `characterGuildId` int(11) NOT NULL,
   `characterRaceId` int(11) NOT NULL,
-  `characterTownId` int(11) NOT NULL,
+  `characterplaceId` int(11) NOT NULL,
   `characterPicture` varchar(50) NOT NULL,
   `characterName` varchar(30) NOT NULL,
   `characterLevel` int(11) NOT NULL,
@@ -368,27 +368,27 @@ CREATE TABLE IF NOT EXISTS `car_shops_items`
   `shopItemDiscount` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `car_towns` 
+CREATE TABLE IF NOT EXISTS `car_places` 
 (
-  `townId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `townPicture` varchar(50) NOT NULL,
-  `townName` varchar(30) NOT NULL,
-  `townDescription` text NOT NULL,
-  `townPriceInn` int(10) NOT NULL,
-  `townChapter` int(5) NOT NULL
+  `placeId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `placePicture` varchar(50) NOT NULL,
+  `placeName` varchar(30) NOT NULL,
+  `placeDescription` text NOT NULL,
+  `placePriceInn` int(10) NOT NULL,
+  `placeChapter` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `car_towns_monsters` 
+CREATE TABLE IF NOT EXISTS `car_places_monsters` 
 (
-  `townMonsterId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `townMonsterTownId` int(10) NOT NULL,
-  `townMonsterMonsterId` int(10) NOT NULL
+  `placeMonsterId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `placeMonsterPlaceId` int(10) NOT NULL,
+  `placeMonsterMonsterId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `car_towns_shops` 
+CREATE TABLE IF NOT EXISTS `car_places_shops` 
 (
   `townShopId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `townShopTownId` int(10) NOT NULL,
+  `townShopplaceId` int(10) NOT NULL,
   `townShopShopId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -7,42 +7,42 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminTownMonsterTownId'])
-&& isset($_POST['adminTownMonsterMonsterId'])
+if (isset($_POST['adminPlaceMonsterPlaceId'])
+&& isset($_POST['adminplaceMonsterMonsterId'])
 && isset($_POST['add']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminTownMonsterTownId'])
-    && ctype_digit($_POST['adminTownMonsterMonsterId'])
-    && $_POST['adminTownMonsterTownId'] >= 1
-    && $_POST['adminTownMonsterMonsterId'] >= 1)
+    if (ctype_digit($_POST['adminPlaceMonsterPlaceId'])
+    && ctype_digit($_POST['adminplaceMonsterMonsterId'])
+    && $_POST['adminPlaceMonsterPlaceId'] >= 1
+    && $_POST['adminplaceMonsterMonsterId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $adminTownMonsterTownId = htmlspecialchars(addslashes($_POST['adminTownMonsterTownId']));
-        $adminTownMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminTownMonsterMonsterId']));
+        $adminPlaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceMonsterPlaceId']));
+        $adminplaceMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminplaceMonsterMonsterId']));
 
-        //On fait une requête pour vérifier si la ville choisie existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_towns 
-        WHERE townId = ?');
-        $townQuery->execute([$adminTownMonsterTownId]);
+        //On fait une requête pour vérifier si le lieu choisie existe
+        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        WHERE placeId = ?');
+        $townQuery->execute([$adminPlaceMonsterPlaceId]);
         $townRow = $townQuery->rowCount();
 
-        //Si la ville existe
+        //Si le lieu existe
         if ($townRow == 1) 
         {
             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
             while ($town = $townQuery->fetch())
             {
-                //On récupère les informations de la ville
-                $adminTownMonsterTownPicture = stripslashes($town['townPicture']);
-                $adminTownMonsterTownName = stripslashes($town['townName']);
+                //On récupère les informations du lieu
+                $adminTownMonsterplacePicture = stripslashes($town['placePicture']);
+                $adminTownMonsterplaceName = stripslashes($town['placeName']);
             }
             $townQuery->closeCursor();
 
             //On fait une requête pour vérifier si le monstre choisit existe
             $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
             WHERE monsterId = ?');
-            $monsterQuery->execute([$adminTownMonsterMonsterId]);
+            $monsterQuery->execute([$adminplaceMonsterMonsterId]);
             $monsterRow = $monsterQuery->rowCount();
 
             //Si le monstre existe
@@ -57,28 +57,28 @@ if (isset($_POST['adminTownMonsterTownId'])
                 }
                 $monsterQuery->closeCursor();
 
-                //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette ville
-                $townMonsterQuery = $bdd->prepare('SELECT * FROM car_towns_monsters 
-                WHERE townMonsterTownId = ?
-                AND townMonsterMonsterId = ?');
-                $townMonsterQuery->execute([$adminTownMonsterTownId, $adminTownMonsterMonsterId]);
+                //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette lieu
+                $townMonsterQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
+                WHERE placeMonsterPlaceId = ?
+                AND placeMonsterMonsterId = ?');
+                $townMonsterQuery->execute([$adminPlaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
                 $townMonsterRow = $townMonsterQuery->rowCount();
 
-                //Si le monstre n'est pas dans la ville
+                //Si le monstre n'est pas dans le lieu
                 if ($townMonsterRow == 0) 
                 {
                     ?>
             
                     <p>ATTENTION</p> 
 
-                    Vous êtes sur le point d'ajouter le monstre <em><?php echo $adminTownMonsterMonsterName ?></em> dans la ville <em><?php echo $adminTownMonsterTownName ?></em>.<br />
+                    Vous êtes sur le point d'ajouter le monstre <em><?php echo $adminTownMonsterMonsterName ?></em> dans le lieu <em><?php echo $adminTownMonsterplaceName ?></em>.<br />
                     Confirmez-vous l'ajout ?
 
                     <hr>
                         
-                    <form method="POST" action="addTownMonsterEnd.php">
-                        <input type="hidden" class="btn btn-default form-control" name="adminTownMonsterTownId" value="<?php echo $adminTownMonsterTownId ?>">
-                        <input type="hidden" class="btn btn-default form-control" name="adminTownMonsterMonsterId" value="<?php echo $adminTownMonsterMonsterId ?>">
+                    <form method="POST" action="addPlaceMonsterEnd.php">
+                        <input type="hidden" class="btn btn-default form-control" name="adminPlaceMonsterPlaceId" value="<?php echo $adminPlaceMonsterPlaceId ?>">
+                        <input type="hidden" class="btn btn-default form-control" name="adminplaceMonsterMonsterId" value="<?php echo $adminplaceMonsterMonsterId ?>">
                         <input type="submit" class="btn btn-default form-control" name="finalAdd" value="Je confirme">
                     </form>
                     
@@ -90,15 +90,15 @@ if (isset($_POST['adminTownMonsterTownId'])
                     
                     <?php
                 }
-                //Si le monstre est déjà dans cette ville
+                //Si le monstre est déjà dans cette lieu
                 else
                 {
                     ?>
                     
-                    Erreur : Ce monstre est déjà dans cette ville
+                    Erreur : Ce monstre est déjà dans cette lieu
                     
-                    <form method="POST" action="manageTownMonster.php">
-                        <input type="hidden" name="adminTownMonsterTownId" value="<?php echo $adminTownMonsterTownId ?>">
+                    <form method="POST" action="managePlaceMonster.php">
+                        <input type="hidden" name="adminPlaceMonsterPlaceId" value="<?php echo $adminPlaceMonsterPlaceId ?>">
                         <input type="submit" class="btn btn-default form-control" name="manage" value="Retour">
                     </form>
                     
@@ -113,10 +113,10 @@ if (isset($_POST['adminTownMonsterTownId'])
             }
             $monsterQuery->closeCursor();
         }
-        //Si la ville existe pas
+        //Si le lieu existe pas
         else
         {
-            echo "Erreur : Cette ville n'existe pas";
+            echo "Erreur : Cette lieu n'existe pas";
         }
         $townQuery->closeCursor();
     }

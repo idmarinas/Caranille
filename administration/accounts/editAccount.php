@@ -49,7 +49,7 @@ if (isset($_POST['adminAccountId'])
                 $adminCharacterAccountId = stripslashes($character['characterAccountId']);
                 $adminCharacterGuildId = stripslashes($character['characterGuildId']);
                 $adminCharacterRaceId = stripslashes($character['characterRaceId']);
-                $adminCharacterTownId = stripslashes($character['characterTownId']);
+                $adminCharacterplaceId = stripslashes($character['characterplaceId']);
                 $adminCharacterPicture = stripslashes($character['characterPicture']);
                 $adminCharacterName = stripslashes($character['characterName']);
                 $adminCharacterLevel = stripslashes($character['characterLevel']);
@@ -135,27 +135,27 @@ if (isset($_POST['adminAccountId'])
             }
             $raceQuery->closeCursor();
 
-            //Si adminCharacterTownId à un Id supérieur à zéro c'est que le joueur est dans une ville
-            if ($adminCharacterTownId > 0)
+            //Si adminCharacterplaceId à un Id supérieur à zéro c'est que le joueur est dans un lieu
+            if ($adminCharacterplaceId > 0)
             {
-                //On récupère la ville du personnage pour l'afficher dans le menu d'information du personnage
-                $townQuery = $bdd->prepare("SELECT * FROM car_towns
-                WHERE townId = ?");
-                $townQuery->execute([$adminCharacterTownId]);
+                //On récupère le lieu du personnage pour l'afficher dans le menu d'information du personnage
+                $townQuery = $bdd->prepare("SELECT * FROM car_places
+                WHERE placeId = ?");
+                $townQuery->execute([$adminCharacterplaceId]);
 
                 //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                 while ($town = $townQuery->fetch())
                 {
-                    //On récupère le nom de la ville où se situe le personnage
-                    $adminTownName = stripslashes($town['townName']);
+                    //On récupère le nom du lieu où se situe le personnage
+                    $adminplaceName = stripslashes($town['placeName']);
                 }
                 $townQuery->closeCursor();
             }
-            //Si adminCharacterTownId à un Id à zéro c'est que le joueur est sur la carte du monde
+            //Si adminCharacterplaceId à un Id à zéro c'est que le joueur est sur la carte du monde
             else
             {
-                //On met Carte du monde comme nom de ville au personnage
-                $adminTownName = "Carte du monde";
+                //On met Carte du monde comme nom de lieu au personnage
+                $adminplaceName = "Carte du monde";
             }
 
             //On récupère les équipements équipé du personnage pour les afficher dans le menu d'information du personnage
@@ -401,7 +401,7 @@ if (isset($_POST['adminAccountId'])
             Experience total : <?php echo $adminCharacterExperienceTotal ?><br />
             Points de compétence : <?php echo $adminCharacterSkillPoints ?><br />
             Argent : <?php echo $adminCharacterGold ?><br />
-            Ville : <?php echo $adminTownName ?><br />
+            lieu : <?php echo $adminplaceName ?><br />
             Chapitre : <?php echo $adminCharacterChapter ?><br />
             En combat : <?php echo $adminCharacterOnBattleName ?><br />
             Activé : <?php echo $adminCharacterEnable ?><br />

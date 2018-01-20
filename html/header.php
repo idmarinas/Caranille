@@ -33,8 +33,8 @@ if (isset($_SESSION['account']['id']))
     require_once("../../kernel/notification/index.php");
     //On vérifie le nombre de message de conversation privée non lu
     require_once("../../kernel/privateConversation/index.php");
-    //On vérifie si le personnage est actuellement dans une ville. Si c'est le cas on récupère toutes les informations de la ville
-    require_once("../../kernel/town/index.php");
+    //On vérifie si le personnage est actuellement dans un lieu. Si c'est le cas on récupère toutes les informations du lieu
+    require_once("../../kernel/place/index.php");
     //On vérifie le nombre de d'échange en cours
     require_once("../../kernel/trade/index.php");
     //On vérifie le nombre de demande d'échange en cours
@@ -100,16 +100,16 @@ if (isset($_SESSION['account']['id']))
 								<a class="dropdown-item" href="../../modules/story/index.php">Continuer l'aventure</a>
 
 								<?php
-								//Si characterTownId est supérieur ou égal à un le joueur est dans une ville. On met le raccourcit vers la ville
-								if($characterTownId >= 1)
+								//Si characterplaceId est supérieur ou égal à un le joueur est dans un lieu. On met le raccourcit vers le lieu
+								if($characterplaceId >= 1)
 								{
 									?>
 
-									<a class="dropdown-item" href="../../modules/town/index.php">Retourner en ville</a>
+									<a class="dropdown-item" href="../../modules/town/index.php">Lieu actuel</a>
 
 									<?php
 								}
-								//Si characterTownId n'est pas supérieur ou égal à un le joueur est dans aucune ville. On met le raccourcit vers la carte du monde
+								//Si characterplaceId n'est pas supérieur ou égal à un le joueur est dans aucun lieu. On met le raccourcit vers la carte du monde
 								else
 								{
 									?>

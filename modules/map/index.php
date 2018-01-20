@@ -2,51 +2,51 @@
 
 //S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
 if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
-//Si le joueur est déjà dans une ville on le redirige vers la ville
-if ($characterTownId >= 1) { exit(header("Location: ../../modules/town/index.php")); }
+//Si le joueur est déjà dans un lieu on le redirige vers le lieu
+if ($characterplaceId >= 1) { exit(header("Location: ../../modules/town/index.php")); }
 //S'il y a actuellement un combat on redirige le joueur vers le module battle
 if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); }
 
-//On recherche la liste des villes disponible par rapport au chapitre du joueur
-$townQuery = $bdd->prepare('SELECT * FROM car_towns
-WHERE townChapter <= ?
-ORDER BY townChapter');
+//On recherche la liste des lieux disponible par rapport au chapitre du joueur
+$townQuery = $bdd->prepare('SELECT * FROM car_places
+WHERE placeChapter <= ?
+ORDER BY placeChapter');
 $townQuery->execute([$characterChapter]);
 $townRow = $townQuery->rowCount();
 
-//S'il y a au moins une ville de disponible on affiche le formulaire
+//S'il y a au moins un lieu de disponible on affiche le formulaire
 if ($townRow >= 1)
 {
     ?>
     
     <form method="POST" action="chooseTown.php"><div class="form-group">
-        Liste des villes disponible <select name="townId" class="form-control">
+        Liste des lieux disponible <select name="placeId" class="form-control">
             
             <?php
             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
             while ($townList = $townQuery->fetch())
             {
-                //on récupère les valeurs de chaque villes qu'on va ensuite mettre dans le menu déroulant
-                $townId = stripslashes($townList['townId']); 
-                $townName = stripslashes($townList['townName']);
-                $townChapter = stripslashes($townList['townChapter']);
+                //on récupère les valeurs de chaque lieux qu'on va ensuite mettre dans le menu déroulant
+                $placeId = stripslashes($townList['placeId']); 
+                $placeName = stripslashes($townList['placeName']);
+                $placeChapter = stripslashes($townList['placeChapter']);
                 ?>
-                <option value="<?php echo $townId ?>"><?php echo "Chapitre $townChapter - $townName" ?></option>
+                <option value="<?php echo $placeId ?>"><?php echo "Chapitre $placeChapter - $placeName" ?></option>
                 <?php
             }
             ?>
             
         </select>
         <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-        <input type="submit" name="enter" class="btn btn-default form-control" value="Entrer dans la ville">
+        <input type="submit" name="enter" class="btn btn-default form-control" value="Entrer dans le lieu">
     </form>
     
     <?php
 }
-//S'il n'y a aucune ville de disponible on affiche un message
+//S'il n'y a aucun lieu de disponible on affiche un message
 else
 {
-    echo "Aucune ville disponible";
+    echo "Aucun lieu disponible";
 }
 $townQuery->closeCursor();
 ?>

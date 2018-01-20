@@ -1,0 +1,55 @@
+<?php 
+require_once("../html/header.php");
+
+//S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
+if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
+//Si le joueur n'a pas les droits administrateurs (Accès 2) on le redirige vers l'accueil
+if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
+
+//On fait une recherche dans la base de donnée de toutes les lieux
+$townQuery = $bdd->query("SELECT * FROM car_places
+ORDER by placeChapter");
+$townRow = $townQuery->rowCount();
+
+//S'il existe un ou plusieurs lieux on affiche le menu déroulant
+if ($townRow > 0) 
+{
+    ?>
+    
+    <form method="POST" action="managePlace.php">
+        Liste des lieux : <select name="adminPlaceId" class="form-control">
+
+            <?php
+            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+            while ($town = $townQuery->fetch())
+            {
+                $adminPlaceId = stripslashes($town['placeId']);
+                $adminplaceName = stripslashes($town['placeName']);
+				$adminplaceChapter = stripslashes($town['placeChapter']);
+                ?>
+                <option value="<?php echo $adminPlaceId ?>"><?php echo "Chapitre $adminplaceChapter - $adminplaceName"; ?></option>
+                <?php
+            }
+            ?>
+        
+        </select>
+        <input type="submit" name="manage" class="btn btn-default form-control" value="Gérer le lieu">
+    </form>
+    
+    <?php
+}
+//S'il n'y a aucun lieu on prévient le joueur
+else
+{
+    echo "Il n'y a actuellement aucun lieu";
+}
+$townQuery->closeCursor();
+?>
+
+<hr>
+
+<form method="POST" action="addPlace.php">
+    <input type="submit" class="btn btn-default form-control" name="add" value="Créer un lieu">
+</form>
+
+<?php require_once("../html/footer.php");
