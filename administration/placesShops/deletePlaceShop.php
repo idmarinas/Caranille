@@ -8,18 +8,18 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminPlaceShopPlaceId'])
-&& isset($_POST['adminTownShopShopId'])
+&& isset($_POST['adminPlaceShopShopId'])
 && isset($_POST['delete']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
     if (ctype_digit($_POST['adminPlaceShopPlaceId'])
-    && ctype_digit($_POST['adminTownShopShopId'])
+    && ctype_digit($_POST['adminPlaceShopShopId'])
     && $_POST['adminPlaceShopPlaceId'] >= 1
-    && $_POST['adminTownShopShopId'] >= 1)
+    && $_POST['adminPlaceShopShopId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
         $adminPlaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceShopPlaceId']));
-        $adminTownShopShopId = htmlspecialchars(addslashes($_POST['adminTownShopShopId']));
+        $adminPlaceShopShopId = htmlspecialchars(addslashes($_POST['adminPlaceShopShopId']));
 
         //On fait une requête pour vérifier si le lieu choisie existe
         $placeQuery = $bdd->prepare('SELECT * FROM car_places 
@@ -33,13 +33,13 @@ if (isset($_POST['adminPlaceShopPlaceId'])
             while ($place = $placeQuery->fetch())
             {
                 //On récupère les informations du magasin
-                $adminTownShopplaceName = stripslashes($place['placeName']);
+                $adminPlaceShopplaceName = stripslashes($place['placeName']);
             }
     
             //On fait une requête pour vérifier si le magasin choisit existe
             $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
             WHERE shopId = ?');
-            $shopQuery->execute([$adminTownShopShopId]);
+            $shopQuery->execute([$adminPlaceShopShopId]);
             $shopRow = $shopQuery->rowCount();
 
             //Si le magasin existe
@@ -48,14 +48,14 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                 while ($shop = $shopQuery->fetch())
                 {
                     //On récupère les informations du magasin
-                    $adminTownShopShopName = stripslashes($shop['shopName']);
+                    $adminPlaceShopShopName = stripslashes($shop['shopName']);
                 }
 
                 //On fait une requête pour vérifier si le magasin n'est pas déjà dans cette lieu
                 $placeShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
                 WHERE placeShopplaceId = ?
                 AND placeShopShopId = ?');
-                $placeShopQuery->execute([$adminPlaceShopPlaceId, $adminTownShopShopId]);
+                $placeShopQuery->execute([$adminPlaceShopPlaceId, $adminPlaceShopShopId]);
                 $placeShopRow = $placeShopQuery->rowCount();
 
                 //Si le magasin n'est pas dans le lieu
@@ -65,14 +65,14 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                     
                     <p>ATTENTION</p>
                     
-                    Vous êtes sur le point de retirer le magasin <em><?php echo $adminTownShopShopName ?></em> du lieu <em><?php echo $adminTownShopplaceName ?></em>.<br />
+                    Vous êtes sur le point de retirer le magasin <em><?php echo $adminPlaceShopShopName ?></em> du lieu <em><?php echo $adminPlaceShopplaceName ?></em>.<br />
                     Confirmez-vous ?
 
                     <hr>
                         
                     <form method="POST" action="deletePlaceShopEnd.php">
                         <input type="hidden" class="btn btn-default form-control" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceShopPlaceId ?>">
-                        <input type="hidden" class="btn btn-default form-control" name="adminTownShopShopId" value="<?php echo $adminTownShopShopId ?>">
+                        <input type="hidden" class="btn btn-default form-control" name="adminPlaceShopShopId" value="<?php echo $adminPlaceShopShopId ?>">
                         <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme">
                     </form>
             

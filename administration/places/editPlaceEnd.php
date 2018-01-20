@@ -41,21 +41,21 @@ if (isset($_POST['adminPlaceId'])
         if ($placeRow == 1) 
         {
             //On met à jour le lieu dans la base de donnée
-            $updateTown = $bdd->prepare('UPDATE car_places 
+            $updatePlace = $bdd->prepare('UPDATE car_places 
             SET placePicture = :adminplacePicture,
             placeName = :adminplaceName,
             placeDescription = :adminItemDescription,
             placePriceInn = :adminplacePriceInn,
             placeChapter = :adminplaceChapter
             WHERE placeId = :adminPlaceId');
-            $updateTown->execute([
+            $updatePlace->execute([
             'adminplacePicture' => $adminplacePicture,
             'adminplaceName' => $adminplaceName,
             'adminItemDescription' => $adminItemDescription,
             'adminplacePriceInn' => $adminplacePriceInn,
             'adminplaceChapter' => $adminplaceChapter,
             'adminPlaceId' => $adminPlaceId]);
-            $updateTown->closeCursor();
+            $updatePlace->closeCursor();
             ?>
 
             le lieu a bien été mit à jour

@@ -48,9 +48,9 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                         {
                             //On récupère les informations du monstre
                             $adminplaceMonsterMonsterId = stripslashes($placeMonster['monsterId']);
-                            $adminTownMonsterMonsterName = stripslashes($placeMonster['monsterName']);
+                            $adminPlaceMonsterMonsterName = stripslashes($placeMonster['monsterName']);
                             ?>
-                            <option value="<?php echo $adminplaceMonsterMonsterId ?>"><?php echo "N°$adminplaceMonsterMonsterId - $adminTownMonsterMonsterName"; ?></option>
+                            <option value="<?php echo $adminplaceMonsterMonsterId ?>"><?php echo "N°$adminplaceMonsterMonsterId - $adminPlaceMonsterMonsterName"; ?></option>
                             <?php
                         }
                         $placeMonsterQuery->closeCursor();
@@ -88,9 +88,9 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                         {
                             //On récupère les informations du monstre
                             $adminplaceMonsterMonsterId = stripslashes($monster['monsterId']);
-                            $adminTownMonsterMonsterName = stripslashes($monster['monsterName']);
+                            $adminPlaceMonsterMonsterName = stripslashes($monster['monsterName']);
                             ?>
-                            <option value="<?php echo $adminplaceMonsterMonsterId ?>"><?php echo "N°$adminplaceMonsterMonsterId - $adminTownMonsterMonsterName"; ?></option>
+                            <option value="<?php echo $adminplaceMonsterMonsterId ?>"><?php echo "N°$adminplaceMonsterMonsterId - $adminPlaceMonsterMonsterName"; ?></option>
                             <?php
                         }
                         $monsterQuery->closeCursor();

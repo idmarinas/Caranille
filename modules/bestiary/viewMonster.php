@@ -211,20 +211,20 @@ if (isset($_POST['token'])
                                 
                                 <?php
                                 //On recherche dans la base de donnée les lieu dans lequel ce monstre se trouve
-                                $monsterTownQuery = $bdd->prepare("SELECT * FROM car_places, car_places_monsters
+                                $monsterPlaceQuery = $bdd->prepare("SELECT * FROM car_places, car_places_monsters
                                 WHERE placeMonsterPlaceId = placeId
                                 AND placeMonsterMonsterId = ?");
-                                $monsterTownQuery->execute([$monsterId]);
-                                $monsterTownRow = $monsterTownQuery->rowCount();
+                                $monsterPlaceQuery->execute([$monsterId]);
+                                $monsterPlaceRow = $monsterPlaceQuery->rowCount();
                             
                                 //S'il existe une ou plusieurs lieu pour ce monstre
-                                if ($monsterTownRow > 0) 
+                                if ($monsterPlaceRow > 0) 
                                 {
                                     //On va tester si le joueur l'obtient
-                                    while ($monsterTown = $monsterTownQuery->fetch())
+                                    while ($monsterPlace = $monsterPlaceQuery->fetch())
                                     {
-                                        $monsterplaceName = stripslashes($monsterTown['placeName']);
-                                        $monsterplaceChapter = stripslashes($monsterTown['placeChapter']);
+                                        $monsterplaceName = stripslashes($monsterPlace['placeName']);
+                                        $monsterplaceChapter = stripslashes($monsterPlace['placeChapter']);
                                         
                                         //Si le joueur à accès à cette lieu on l'affiche
                                         if ($monsterplaceChapter <= $characterChapter)
@@ -243,7 +243,7 @@ if (isset($_POST['token'])
                                 {
                                     echo "Lieu inconnu";
                                 }
-                                $monsterTownQuery->closeCursor();
+                                $monsterPlaceQuery->closeCursor();
                                 ?>
                                 
                             </td>

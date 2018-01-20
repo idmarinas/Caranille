@@ -18,7 +18,7 @@ if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); 
 
 <hr>
 
-<form method="POST" action="leaveTown.php">
+<form method="POST" action="leavePlace.php">
     <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" name="leave" class="btn btn-default form-control" value="Quitter le lieu">
 </form>

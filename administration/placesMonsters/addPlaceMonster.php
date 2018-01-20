@@ -34,8 +34,8 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
             while ($place = $placeQuery->fetch())
             {
                 //On récupère les informations du lieu
-                $adminTownMonsterplacePicture = stripslashes($place['placePicture']);
-                $adminTownMonsterplaceName = stripslashes($place['placeName']);
+                $adminPlaceMonsterplacePicture = stripslashes($place['placePicture']);
+                $adminPlaceMonsterplaceName = stripslashes($place['placeName']);
             }
             $placeQuery->closeCursor();
 
@@ -52,8 +52,8 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                 while ($monster = $monsterQuery->fetch())
                 {
                     //On récupère les informations du monstre
-                    $adminTownMonsterMonsterPicture = stripslashes($monster['monsterPicture']);
-                    $adminTownMonsterMonsterName = stripslashes($monster['monsterName']);
+                    $adminPlaceMonsterMonsterPicture = stripslashes($monster['monsterPicture']);
+                    $adminPlaceMonsterMonsterName = stripslashes($monster['monsterName']);
                 }
                 $monsterQuery->closeCursor();
 
@@ -71,7 +71,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
             
                     <p>ATTENTION</p> 
 
-                    Vous êtes sur le point d'ajouter le monstre <em><?php echo $adminTownMonsterMonsterName ?></em> dans le lieu <em><?php echo $adminTownMonsterplaceName ?></em>.<br />
+                    Vous êtes sur le point d'ajouter le monstre <em><?php echo $adminPlaceMonsterMonsterName ?></em> dans le lieu <em><?php echo $adminPlaceMonsterplaceName ?></em>.<br />
                     Confirmez-vous l'ajout ?
 
                     <hr>

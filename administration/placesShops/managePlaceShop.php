@@ -41,17 +41,17 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                 ?>
                 
                 <form method="POST" action="deletePlaceShop.php">
-                    Magasins présent dans le lieu : <select name="adminTownShopShopId" class="form-control">
+                    Magasins présent dans le lieu : <select name="adminPlaceShopShopId" class="form-control">
                             
                         <?php
                         //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                         while ($placeShop = $placeShopQuery->fetch())
                         {
                             //On récupère les informations du magasin
-                            $adminTownShopShopId = stripslashes($placeShop['shopId']);
-                            $adminTownShopShopName = stripslashes($placeShop['shopName']);
+                            $adminPlaceShopShopId = stripslashes($placeShop['shopId']);
+                            $adminPlaceShopShopName = stripslashes($placeShop['shopName']);
                             ?>
-                            <option value="<?php echo $adminTownShopShopId ?>"><?php echo "$adminTownShopShopName"; ?></option>
+                            <option value="<?php echo $adminPlaceShopShopId ?>"><?php echo "$adminPlaceShopShopName"; ?></option>
                             <?php
                         }
                         $placeShopQuery->closeCursor();
@@ -82,17 +82,17 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                 ?>
                 
                 <form method="POST" action="addPlaceShop.php">
-                    Magasins disponible : <select name="adminTownShopShopId" class="form-control">
+                    Magasins disponible : <select name="adminPlaceShopShopId" class="form-control">
                             
                             <?php
                             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                             while ($shop = $shopQuery->fetch())
                             {
                                 //On récupère les informations du magasin
-                                $adminTownShopShopId = stripslashes($shop['shopId']);
-                                $adminTownShopShopName = stripslashes($shop['shopName']);
+                                $adminPlaceShopShopId = stripslashes($shop['shopId']);
+                                $adminPlaceShopShopName = stripslashes($shop['shopName']);
                                 ?>
-                                <option value="<?php echo $adminTownShopShopId ?>"><?php echo "$adminTownShopShopName"; ?></option>
+                                <option value="<?php echo $adminPlaceShopShopId ?>"><?php echo "$adminPlaceShopShopName"; ?></option>
                                 <?php
                             }
                             ?>

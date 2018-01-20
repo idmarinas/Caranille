@@ -8,18 +8,18 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminPlaceShopPlaceId'])
-&& isset($_POST['adminTownShopShopId'])
+&& isset($_POST['adminPlaceShopShopId'])
 && isset($_POST['finalAdd']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
     if (ctype_digit($_POST['adminPlaceShopPlaceId'])
-    && ctype_digit($_POST['adminTownShopShopId'])
+    && ctype_digit($_POST['adminPlaceShopShopId'])
     && $_POST['adminPlaceShopPlaceId'] >= 1
-    && $_POST['adminTownShopShopId'] >= 1)
+    && $_POST['adminPlaceShopShopId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
         $adminPlaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceShopPlaceId']));
-        $adminTownShopShopId = htmlspecialchars(addslashes($_POST['adminTownShopShopId']));
+        $adminPlaceShopShopId = htmlspecialchars(addslashes($_POST['adminPlaceShopShopId']));
 
         //On fait une requête pour vérifier si le lieu choisie existe
         $placeQuery = $bdd->prepare('SELECT * FROM car_places 
@@ -33,7 +33,7 @@ if (isset($_POST['adminPlaceShopPlaceId'])
             //On fait une requête pour vérifier si le magasin choisit existe
             $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
             WHERE shopId = ?');
-            $shopQuery->execute([$adminTownShopShopId]);
+            $shopQuery->execute([$adminPlaceShopShopId]);
             $shopRow = $shopQuery->rowCount();
 
             //Si le magasin existe
@@ -43,7 +43,7 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                 $placeShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
                 WHERE placeShopplaceId = ?
                 AND placeShopShopId = ?');
-                $placeShopQuery->execute([$adminPlaceShopPlaceId, $adminTownShopShopId]);
+                $placeShopQuery->execute([$adminPlaceShopPlaceId, $adminPlaceShopShopId]);
                 $placeShopRow = $placeShopQuery->rowCount();
 
                 //Si le magasin n'est pas dans le lieu
@@ -53,10 +53,10 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                     $addPlaceShop = $bdd->prepare("INSERT INTO car_places_shops VALUES(
                     NULL,
                     :adminPlaceShopPlaceId,
-                    :adminTownShopShopId)");
+                    :adminPlaceShopShopId)");
                     $addPlaceShop->execute([
                     'adminPlaceShopPlaceId' => $adminPlaceShopPlaceId,
-                    'adminTownShopShopId' => $adminTownShopShopId]);
+                    'adminPlaceShopShopId' => $adminPlaceShopShopId]);
                     $addPlaceShop->closeCursor();
                     ?>
 

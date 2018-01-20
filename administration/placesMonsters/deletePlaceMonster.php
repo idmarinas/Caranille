@@ -33,7 +33,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
             while ($place = $placeQuery->fetch())
             {
-                $adminTownMonsterplaceName = stripslashes($place['placeName']);
+                $adminPlaceMonsterplaceName = stripslashes($place['placeName']);
             }
     
             //On fait une requête pour vérifier si le monstre choisit existe
@@ -48,24 +48,24 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                 //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                 while ($monster = $monsterQuery->fetch())
                 {
-                    $adminTownMonsterMonsterName = stripslashes($monster['monsterName']);
+                    $adminPlaceMonsterMonsterName = stripslashes($monster['monsterName']);
                 }
 
                 //On fait une requête pour vérifier si le monstre choisit existe bien dans le lieu
-                $monsterTownQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
+                $monsterPlaceQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
                 WHERE placeMonsterPlaceId = ?
                 AND placeMonsterMonsterId = ?');
-                $monsterTownQuery->execute([$adminPlaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
-                $monsterTownRow = $monsterTownQuery->rowCount();
+                $monsterPlaceQuery->execute([$adminPlaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
+                $monsterPlaceRow = $monsterPlaceQuery->rowCount();
 
                 //Si le monstre existe
-                if ($monsterTownRow == 1) 
+                if ($monsterPlaceRow == 1) 
                 {
                     ?>
                     
                     <p>ATTENTION</p> 
                     
-                    Vous êtes sur le point de retirer le monstre <em><?php echo $adminTownMonsterMonsterName ?></em> du lieu <em><?php echo $adminTownMonsterplaceName ?></em>.<br />
+                    Vous êtes sur le point de retirer le monstre <em><?php echo $adminPlaceMonsterMonsterName ?></em> du lieu <em><?php echo $adminPlaceMonsterplaceName ?></em>.<br />
                     Confirmez-vous ?
 
                     <hr>
@@ -89,7 +89,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                 {
                     echo "Erreur : Monstre indisponible";
                 }
-                $monsterTownQuery->closeCursor();
+                $monsterPlaceQuery->closeCursor();
             }
             //Si le monstre existe pas
             else

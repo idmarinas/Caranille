@@ -19,7 +19,7 @@ if ($placeRow >= 1)
 {
     ?>
     
-    <form method="POST" action="chooseTown.php"><div class="form-group">
+    <form method="POST" action="choosePlace.php"><div class="form-group">
         Liste des lieux disponible <select name="placeId" class="form-control">
             
             <?php
