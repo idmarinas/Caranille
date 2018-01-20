@@ -7,20 +7,20 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminPlaceShopPlaceId'])
+if (isset($_POST['adminplaceShopPlaceId'])
 && isset($_POST['manage']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminPlaceShopPlaceId'])
-    && $_POST['adminPlaceShopPlaceId'] >= 1)
+    if (ctype_digit($_POST['adminplaceShopPlaceId'])
+    && $_POST['adminplaceShopPlaceId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $adminPlaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceShopPlaceId']));
+        $adminplaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminplaceShopPlaceId']));
 
         //On fait une requête pour vérifier si le lieu choisit existe
         $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $placeQuery->execute([$adminPlaceShopPlaceId]);
+        $placeQuery->execute([$adminplaceShopPlaceId]);
         $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
@@ -29,10 +29,10 @@ if (isset($_POST['adminPlaceShopPlaceId'])
             //On fait une requête pour afficher la liste des magasins de cette lieu
             $placeShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_places, car_places_shops
             WHERE placeShopShopId = shopId
-            AND placeShopplaceId = placeId
+            AND placeShopPlaceId = placeId
             AND placeId = ?
 			ORDER BY shopName");
-            $placeShopQuery->execute([$adminPlaceShopPlaceId]);
+            $placeShopQuery->execute([$adminplaceShopPlaceId]);
             $placeShopRow = $placeShopQuery->rowCount();
 
             //S'il existe un ou plusieurs magasins dans le lieu on affiche le menu déroulant
@@ -58,7 +58,7 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                         ?>
                         
                     </select>
-                    <input type="hidden" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceShopPlaceId ?>">
+                    <input type="hidden" name="adminplaceShopPlaceId" value="<?php echo $adminplaceShopPlaceId ?>">
                     <input type="submit" name="delete" class="btn btn-default form-control" value="Retirer le magasin">
                 </form>
                 
@@ -71,10 +71,10 @@ if (isset($_POST['adminPlaceShopPlaceId'])
             //On fait une requête pour afficher la liste des magasins du jeu qui ne sont pas dans le lieu
             $shopQuery = $bdd->prepare("SELECT * FROM car_shops
             WHERE (SELECT COUNT(*) FROM car_places_shops
-            WHERE placeShopplaceId = ?
+            WHERE placeShopPlaceId = ?
             AND placeShopShopId = shopId) = 0
 			ORDER BY shopName");
-            $shopQuery->execute([$adminPlaceShopPlaceId]);
+            $shopQuery->execute([$adminplaceShopPlaceId]);
             $shopRow = $shopQuery->rowCount();
             //S'il existe un ou plusieurs magasin on affiche le menu déroulant pour proposer au joueur d'en ajouter
             if ($shopRow > 0) 
@@ -99,7 +99,7 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                             
                         </select>
                     
-                    <input type="hidden" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceShopPlaceId ?>">
+                    <input type="hidden" name="adminplaceShopPlaceId" value="<?php echo $adminplaceShopPlaceId ?>">
                     <input type="submit" name="add" class="btn btn-default form-control" value="Ajouter le magasin">
                 </form>
                 

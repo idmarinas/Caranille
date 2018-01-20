@@ -7,24 +7,24 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminPlaceShopPlaceId'])
+if (isset($_POST['adminplaceShopPlaceId'])
 && isset($_POST['adminPlaceShopShopId'])
 && isset($_POST['add']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminPlaceShopPlaceId'])
+    if (ctype_digit($_POST['adminplaceShopPlaceId'])
     && ctype_digit($_POST['adminPlaceShopShopId'])
-    && $_POST['adminPlaceShopPlaceId'] >= 1
+    && $_POST['adminplaceShopPlaceId'] >= 1
     && $_POST['adminPlaceShopShopId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $adminPlaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceShopPlaceId']));
+        $adminplaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminplaceShopPlaceId']));
         $adminPlaceShopShopId = htmlspecialchars(addslashes($_POST['adminPlaceShopShopId']));
 
         //On fait une requête pour vérifier si le lieu choisie existe
         $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $placeQuery->execute([$adminPlaceShopPlaceId]);
+        $placeQuery->execute([$adminplaceShopPlaceId]);
         $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
@@ -58,9 +58,9 @@ if (isset($_POST['adminPlaceShopPlaceId'])
 
                 //On fait une requête pour vérifier si le magasin n'est pas déjà dans cette lieu
                 $placeShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
-                WHERE placeShopplaceId = ?
+                WHERE placeShopPlaceId = ?
                 AND placeShopShopId = ?');
-                $placeShopQuery->execute([$adminPlaceShopPlaceId, $adminPlaceShopShopId]);
+                $placeShopQuery->execute([$adminplaceShopPlaceId, $adminPlaceShopShopId]);
                 $placeShopRow = $placeShopQuery->rowCount();
 
                 //Si le magasin n'est pas dans le lieu
@@ -76,7 +76,7 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                     <hr>
                         
                     <form method="POST" action="addPlaceShopEnd.php">
-                        <input type="hidden" class="btn btn-default form-control" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceShopPlaceId ?>">
+                        <input type="hidden" class="btn btn-default form-control" name="adminplaceShopPlaceId" value="<?php echo $adminplaceShopPlaceId ?>">
                         <input type="hidden" class="btn btn-default form-control" name="adminPlaceShopShopId" value="<?php echo $adminPlaceShopShopId ?>">
                         <input type="submit" class="btn btn-default form-control" name="finalAdd" value="Je confirme">
                     </form>
@@ -97,7 +97,7 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                     Erreur : Ce magasin est déjà dans cette lieu
                     
                     <form method="POST" action="managePlaceShop.php">
-                        <input type="hidden" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceShopPlaceId ?>">
+                        <input type="hidden" name="adminplaceShopPlaceId" value="<?php echo $adminplaceShopPlaceId ?>">
                         <input type="submit" class="btn btn-default form-control" name="manage" value="Retour">
                     </form>
                     

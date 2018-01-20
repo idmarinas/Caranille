@@ -49,7 +49,7 @@ if (isset($_POST['adminAccountId'])
                 $adminCharacterAccountId = stripslashes($character['characterAccountId']);
                 $adminCharacterGuildId = stripslashes($character['characterGuildId']);
                 $adminCharacterRaceId = stripslashes($character['characterRaceId']);
-                $adminCharacterplaceId = stripslashes($character['characterplaceId']);
+                $adminCharacterPlaceId = stripslashes($character['characterPlaceId']);
                 $adminCharacterPicture = stripslashes($character['characterPicture']);
                 $adminCharacterName = stripslashes($character['characterName']);
                 $adminCharacterLevel = stripslashes($character['characterLevel']);
@@ -135,13 +135,13 @@ if (isset($_POST['adminAccountId'])
             }
             $raceQuery->closeCursor();
 
-            //Si adminCharacterplaceId à un Id supérieur à zéro c'est que le joueur est dans un lieu
-            if ($adminCharacterplaceId > 0)
+            //Si adminCharacterPlaceId à un Id supérieur à zéro c'est que le joueur est dans un lieu
+            if ($adminCharacterPlaceId > 0)
             {
                 //On récupère le lieu du personnage pour l'afficher dans le menu d'information du personnage
                 $placeQuery = $bdd->prepare("SELECT * FROM car_places
                 WHERE placeId = ?");
-                $placeQuery->execute([$adminCharacterplaceId]);
+                $placeQuery->execute([$adminCharacterPlaceId]);
 
                 //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                 while ($place = $placeQuery->fetch())
@@ -151,7 +151,7 @@ if (isset($_POST['adminAccountId'])
                 }
                 $placeQuery->closeCursor();
             }
-            //Si adminCharacterplaceId à un Id à zéro c'est que le joueur est sur la carte du monde
+            //Si adminCharacterPlaceId à un Id à zéro c'est que le joueur est sur la carte du monde
             else
             {
                 //On met Carte du monde comme nom de lieu au personnage

@@ -7,24 +7,24 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminPlaceMonsterPlaceId'])
+if (isset($_POST['adminplaceMonsterPlaceId'])
 && isset($_POST['adminplaceMonsterMonsterId'])
 && isset($_POST['delete']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminPlaceMonsterPlaceId'])
+    if (ctype_digit($_POST['adminplaceMonsterPlaceId'])
     && ctype_digit($_POST['adminplaceMonsterMonsterId'])
-    && $_POST['adminPlaceMonsterPlaceId'] >= 1
+    && $_POST['adminplaceMonsterPlaceId'] >= 1
     && $_POST['adminplaceMonsterMonsterId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $adminPlaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceMonsterPlaceId']));
+        $adminplaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminplaceMonsterPlaceId']));
         $adminplaceMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminplaceMonsterMonsterId']));
 
         //On fait une requête pour vérifier si le lieu choisie existe
         $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $placeQuery->execute([$adminPlaceMonsterPlaceId]);
+        $placeQuery->execute([$adminplaceMonsterPlaceId]);
         $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
@@ -55,7 +55,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                 $monsterPlaceQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
                 WHERE placeMonsterPlaceId = ?
                 AND placeMonsterMonsterId = ?');
-                $monsterPlaceQuery->execute([$adminPlaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
+                $monsterPlaceQuery->execute([$adminplaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
                 $monsterPlaceRow = $monsterPlaceQuery->rowCount();
 
                 //Si le monstre existe
@@ -71,7 +71,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                     <hr>
                         
                     <form method="POST" action="deletePlaceMonsterEnd.php">
-                        <input type="hidden" class="btn btn-default form-control" name="adminPlaceMonsterPlaceId" value="<?php echo $adminPlaceMonsterPlaceId ?>">
+                        <input type="hidden" class="btn btn-default form-control" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
                         <input type="hidden" class="btn btn-default form-control" name="adminplaceMonsterMonsterId" value="<?php echo $adminplaceMonsterMonsterId ?>">
                         <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme">
                     </form>

@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `car_characters` (
   `characterAccountId` int(11) NOT NULL,
   `characterGuildId` int(11) NOT NULL,
   `characterRaceId` int(11) NOT NULL,
-  `characterplaceId` int(11) NOT NULL,
+  `characterPlaceId` int(11) NOT NULL,
   `characterPicture` varchar(50) NOT NULL,
   `characterName` varchar(30) NOT NULL,
   `characterLevel` int(11) NOT NULL,
@@ -318,6 +318,30 @@ CREATE TABLE IF NOT EXISTS `car_notifications`
   `notificationRead` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `car_places` 
+(
+  `placeId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `placePicture` varchar(50) NOT NULL,
+  `placeName` varchar(30) NOT NULL,
+  `placeDescription` text NOT NULL,
+  `placePriceInn` int(10) NOT NULL,
+  `placeChapter` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `car_places_monsters` 
+(
+  `placeMonsterId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `placeMonsterPlaceId` int(10) NOT NULL,
+  `placeMonsterMonsterId` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `car_places_shops` 
+(
+  `placeShopId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `placeShopPlaceId` int(10) NOT NULL,
+  `placeShopShopId` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `car_private_conversation` 
 (
   `privateConversationId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -366,30 +390,6 @@ CREATE TABLE IF NOT EXISTS `car_shops_items`
   `shopItemShopId` varchar(30) NOT NULL,
   `shopItemItemId` varchar(30) NOT NULL,
   `shopItemDiscount` int(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `car_places` 
-(
-  `placeId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `placePicture` varchar(50) NOT NULL,
-  `placeName` varchar(30) NOT NULL,
-  `placeDescription` text NOT NULL,
-  `placePriceInn` int(10) NOT NULL,
-  `placeChapter` int(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `car_places_monsters` 
-(
-  `placeMonsterId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `placeMonsterPlaceId` int(10) NOT NULL,
-  `placeMonsterMonsterId` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `car_places_shops` 
-(
-  `placeShopId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `placeShopplaceId` int(10) NOT NULL,
-  `placeShopShopId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_trades` 

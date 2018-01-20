@@ -7,20 +7,20 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminPlaceMonsterPlaceId'])
+if (isset($_POST['adminplaceMonsterPlaceId'])
 && isset($_POST['manage']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminPlaceMonsterPlaceId'])
-    && $_POST['adminPlaceMonsterPlaceId'] >= 1)
+    if (ctype_digit($_POST['adminplaceMonsterPlaceId'])
+    && $_POST['adminplaceMonsterPlaceId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $adminPlaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceMonsterPlaceId']));
+        $adminplaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminplaceMonsterPlaceId']));
 
         //On fait une requête pour vérifier si le lieu choisit existe
         $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $placeQuery->execute([$adminPlaceMonsterPlaceId]);
+        $placeQuery->execute([$adminplaceMonsterPlaceId]);
         $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
@@ -31,7 +31,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
             WHERE placeMonsterMonsterId = monsterId
             AND placeMonsterPlaceId = placeId
             AND placeId = ?");
-            $placeMonsterQuery->execute([$adminPlaceMonsterPlaceId]);
+            $placeMonsterQuery->execute([$adminplaceMonsterPlaceId]);
             $placeMonsterRow = $placeMonsterQuery->rowCount();
 
             //S'il existe un ou plusieurs monstre dans le lieu on affiche le menu déroulant
@@ -57,7 +57,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                         ?>
                         
                     </select>
-                    <input type="hidden" name="adminPlaceMonsterPlaceId" value="<?php echo $adminPlaceMonsterPlaceId ?>">
+                    <input type="hidden" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
                     <input type="submit" name="delete" class="btn btn-default form-control" value="Retirer le monstre">
                 </form>
                 
@@ -72,7 +72,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
 			WHERE (SELECT COUNT(*) FROM car_places_monsters
             WHERE placeMonsterPlaceId = ?
             AND placeMonsterMonsterId = monsterId) = 0");
-            $monsterQuery->execute([$adminPlaceMonsterPlaceId]);
+            $monsterQuery->execute([$adminplaceMonsterPlaceId]);
             $monsterRow = $monsterQuery->rowCount();
             //S'il existe un ou plusieurs monstres on affiche le menu déroulant pour proposer au joueur d'en ajouter
             if ($monsterRow > 0) 
@@ -97,7 +97,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                         ?>
                         
                     </select>
-                    <input type="hidden" name="adminPlaceMonsterPlaceId" value="<?php echo $adminPlaceMonsterPlaceId ?>">
+                    <input type="hidden" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
                     <input type="submit" name="add" class="btn btn-default form-control" value="Ajouter le monstre">
                 </form>
                 

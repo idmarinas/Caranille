@@ -42,11 +42,11 @@ if (isset($_POST['adminPlaceId'])
                 <input type="submit" class="btn btn-default form-control" name="edit" value="Afficher/Modifier le lieu">
             </form>
             <form method="POST" action="../placesShops/managePlaceShop.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminPlaceShopPlaceId" value="<?php echo $adminPlaceId ?>">
+                <input type="hidden" class="btn btn-default form-control" name="adminplaceShopPlaceId" value="<?php echo $adminPlaceId ?>">
                 <input type="submit" class="btn btn-default form-control" name="manage" value="Magasins du lieu">
             </form>
             <form method="POST" action="../placesMonsters/managePlaceMonster.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminPlaceMonsterPlaceId" value="<?php echo $adminPlaceId ?>">
+                <input type="hidden" class="btn btn-default form-control" name="adminplaceMonsterPlaceId" value="<?php echo $adminPlaceId ?>">
                 <input type="submit" class="btn btn-default form-control" name="manage" value="Monstres du lieu">
             </form>
             

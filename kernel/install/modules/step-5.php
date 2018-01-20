@@ -126,7 +126,7 @@ if (isset($_POST['accountPseudo'])
                             :accountId, //characterAccountId
                             '0', //characterGuildId
                             :characterRaceId, //characterRaceId
-                            '0', //characterplaceId
+                            '0', //characterPlaceId
                             'http://localhost/character.png', //characterPicture
                             :characterName, //characterName
                             '1', //characterLevel

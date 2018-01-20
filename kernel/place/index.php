@@ -2,12 +2,12 @@
 require_once("../../kernel/config.php");
 
 //Si le personnage est dans un lieu
-if ($characterplaceId >= 1)
+if ($characterPlaceId >= 1)
 {
     //On fait une recherche dans la base de donnée pour récupérer le lieu du personnage
     $placeQuery = $bdd->prepare("SELECT * FROM car_places 
     WHERE placeId = ?");
-    $placeQuery->execute([$characterplaceId]);
+    $placeQuery->execute([$characterPlaceId]);
 
     //On fait une boucle sur les résultats
     while ($place = $placeQuery->fetch())
