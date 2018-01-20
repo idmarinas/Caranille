@@ -24,7 +24,7 @@ if (isset($_POST['token'])
             ?>
             
             <p>ATTENTION</p> 
-            Vous êtes sur le point d'attribuer 1 point en HP à votre personnage pour 1 PC.<br />
+            Vous êtes sur le point d'attribuer 10 points en HP à votre personnage pour 1 PC.<br />
             Confirmez-vous ?
 
             <hr>

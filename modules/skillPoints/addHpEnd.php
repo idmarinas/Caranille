@@ -20,7 +20,7 @@ if (isset($_POST['token'])
         {
             //On met la stats à jour
             $updateCharacter = $bdd->prepare('UPDATE car_characters 
-            SET characterHpSkillPoints = characterHpSkillPoints + 1,
+            SET characterHpSkillPoints = characterHpSkillPoints + 10,
             characterSkillPoints = characterSkillPoints -1
             WHERE characterId = :characterId');
             $updateCharacter->execute(['characterId' => $characterId]);
@@ -41,7 +41,7 @@ if (isset($_POST['token'])
             $updateCharacter->closeCursor();
             ?>
             
-            Vous venez d'ajouter 1 point en HP à votre personnage
+            Vous venez d'ajouter 10 points en HP à votre personnage
                     
             <hr>
             

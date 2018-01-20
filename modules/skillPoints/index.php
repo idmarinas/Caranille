@@ -11,7 +11,7 @@ Votre personnage possède <?php echo $characterSkillPoints; ?> PC (Point de comp
 
 <form method="POST" action="addHp.php">
 	<input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-	<input type="submit" name="addHp" class="btn btn-default form-control" value="+1 HP">
+	<input type="submit" name="addHp" class="btn btn-default form-control" value="+10 HP">
 </form>
 
 <form method="POST" action="addMp.php">
