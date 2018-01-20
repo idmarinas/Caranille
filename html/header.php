@@ -73,7 +73,7 @@ if (isset($_SESSION['account']['id']))
 						<div class="dropdown-menu" aria-labelledby="dropdown01">
 							<a class="dropdown-item" href="../../modules/main/index.php">Actualité</a>
 							<a class="dropdown-item" href="../../modules/presentation/index.php">Présentation</a>
-							<a class="dropdown-item" href="../../modules/races/index.php">Les classes</a>
+							<a class="dropdown-item" href="../../modules/race/index.php">Les classes</a>
 							<a class="dropdown-item" href="../../modules/contact/index.php">Contact</a>
 							<a class="dropdown-item" href="../../modules/about/index.php">A propos</a>
 						</div>
@@ -89,7 +89,7 @@ if (isset($_SESSION['account']['id']))
 							<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Personnage</a>
 							<div class="dropdown-menu" aria-labelledby="dropdown01">
 								<a class="dropdown-item" href="../../modules/character/index.php">Fiche complète</a>
-								<a class="dropdown-item" href="../../modules/skillPoints/index.php">Points de compétences</a>
+								<a class="dropdown-item" href="../../modules/skillPoint/index.php">Points de compétences</a>
 								<a class="dropdown-item" href="../../modules/inventory/index.php">Inventaire</a>
 							</div>
 						</li>
