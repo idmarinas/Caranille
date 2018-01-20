@@ -34,7 +34,7 @@ if (isset($_POST['token'])
     
             <hr>
             
-            <form method="POST" action="../../modules/town/index.php">
+            <form method="POST" action="../../modules/place/index.php">
                 <input type="submit" class="btn btn-default form-control" value="Retour">
             </form>
             
@@ -49,7 +49,7 @@ if (isset($_POST['token'])
             
             <hr>
             
-            <form method="POST" action="../../modules/town/index.php">
+            <form method="POST" action="../../modules/place/index.php">
                 <input type="submit" class="btn btn-default form-control" value="Retour">
             </form>
             

@@ -7,12 +7,12 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //On fait une recherche dans la base de donnée de toutes les lieux
-$townQuery = $bdd->query("SELECT * FROM car_places
+$placeQuery = $bdd->query("SELECT * FROM car_places
 ORDER by placeChapter");
-$townRow = $townQuery->rowCount();
+$placeRow = $placeQuery->rowCount();
 
 //S'il existe un ou plusieurs lieux on affiche le menu déroulant
-if ($townRow > 0) 
+if ($placeRow > 0) 
 {
     ?>
     
@@ -21,11 +21,11 @@ if ($townRow > 0)
 
             <?php
             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($town = $townQuery->fetch())
+            while ($place = $placeQuery->fetch())
             {
-                $adminPlaceId = stripslashes($town['placeId']);
-                $adminplaceName = stripslashes($town['placeName']);
-				$adminplaceChapter = stripslashes($town['placeChapter']);
+                $adminPlaceId = stripslashes($place['placeId']);
+                $adminplaceName = stripslashes($place['placeName']);
+				$adminplaceChapter = stripslashes($place['placeChapter']);
                 ?>
                 <option value="<?php echo $adminPlaceId ?>"><?php echo "Chapitre $adminplaceChapter - $adminplaceName"; ?></option>
                 <?php
@@ -43,7 +43,7 @@ else
 {
     echo "Il n'y a actuellement aucun lieu";
 }
-$townQuery->closeCursor();
+$placeQuery->closeCursor();
 ?>
 
 <hr>

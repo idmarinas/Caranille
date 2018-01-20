@@ -5,20 +5,20 @@ require_once("../../kernel/config.php");
 if ($characterplaceId >= 1)
 {
     //On fait une recherche dans la base de donnée pour récupérer le lieu du personnage
-    $townQuery = $bdd->prepare("SELECT * FROM car_places 
+    $placeQuery = $bdd->prepare("SELECT * FROM car_places 
     WHERE placeId = ?");
-    $townQuery->execute([$characterplaceId]);
+    $placeQuery->execute([$characterplaceId]);
 
     //On fait une boucle sur les résultats
-    while ($town = $townQuery->fetch())
+    while ($place = $placeQuery->fetch())
     {
         //On récupère les informations du lieu
-        $placeId = stripslashes($town['placeId']);
-        $placePicture = stripslashes($town['placePicture']);
-        $placeName = stripslashes($town['placeName']);
-        $placeDescription = stripslashes(nl2br($town['placeDescription']));
-        $placePriceInn = stripslashes($town['placePriceInn']);
+        $placeId = stripslashes($place['placeId']);
+        $placePicture = stripslashes($place['placePicture']);
+        $placeName = stripslashes($place['placeName']);
+        $placeDescription = stripslashes(nl2br($place['placeDescription']));
+        $placePriceInn = stripslashes($place['placePriceInn']);
     }
-    $townQuery->closeCursor();
+    $placeQuery->closeCursor();
 }
 ?>

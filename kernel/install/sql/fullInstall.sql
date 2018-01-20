@@ -75,5 +75,5 @@ INSERT INTO `car_places_monsters` (`placeMonsterId`, `placeMonsterPlaceId`, `pla
 -- Contenu de la table `car_places_shops`
 --
 
-INSERT INTO `car_places_shops` (`townShopId`, `townShopplaceId`, `townShopShopId`) VALUES
+INSERT INTO `car_places_shops` (`placeShopId`, `placeShopplaceId`, `placeShopShopId`) VALUES
 (1, 1, 1);

@@ -18,18 +18,18 @@ if (isset($_POST['adminPlaceId'])
         $adminPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceId']));
 
         //On fait une requête pour vérifier si l'objet choisit existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $townQuery->execute([$adminPlaceId]);
-        $townRow = $townQuery->rowCount();
+        $placeQuery->execute([$adminPlaceId]);
+        $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
-        if ($townRow == 1) 
+        if ($placeRow == 1) 
         {
             //On fait une recherche dans la base de donnée de toutes les lieux
-            while ($town = $townQuery->fetch())
+            while ($place = $placeQuery->fetch())
             {
-                $adminplaceName = stripslashes($town['placeName']);
+                $adminplaceName = stripslashes($place['placeName']);
             }
             ?>
             
@@ -63,7 +63,7 @@ if (isset($_POST['adminPlaceId'])
         {
             echo "Erreur : Cette lieu n'existe pas";
         }
-        $townQuery->closeCursor();
+        $placeQuery->closeCursor();
     }
     //Si tous les champs numérique ne contiennent pas un nombre
     else

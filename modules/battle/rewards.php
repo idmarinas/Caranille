@@ -33,7 +33,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin <= 0)
 
     <hr>
 
-    <form method="POST" action="../../modules/town/index.php">
+    <form method="POST" action="../../modules/place/index.php">
         <input type="submit" name="escape" class="btn btn-default form-control" value="Continuer"><br />
     </form>
     
@@ -308,7 +308,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
 
     <hr>
 
-    <form method="POST" action="../../modules/town/index.php">
+    <form method="POST" action="../../modules/place/index.php">
         <input type="submit" name="escape" class="btn btn-default form-control" value="Continuer"><br />
     </form>
     
@@ -354,7 +354,7 @@ if ($characterHpMin <= 0 && $battleOpponentHpRemaining > 0)
 
     <hr>
 
-    <form method="POST" action="../../modules/town/index.php">
+    <form method="POST" action="../../modules/place/index.php">
         <input type="submit" name="escape" class="btn btn-default form-control" value="Continuer"><br />
     </form>
     

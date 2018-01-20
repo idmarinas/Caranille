@@ -38,7 +38,7 @@ if (isset($_POST['token'])
             
         <hr>
     
-        <form method="POST" action="../../modules/town/index.php">
+        <form method="POST" action="../../modules/place/index.php">
             <input type="submit" name="escape" class="btn btn-default form-control" value="Continuer"><br />
         </form>
         

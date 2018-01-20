@@ -29,8 +29,8 @@ if (isset($_POST['token'])
 
             //On fait une requête pour vérifier si le magasin est bien disponible dans le lieu du joueur
             $shopQueryList = $bdd->prepare("SELECT * FROM car_shops, car_places, car_places_shops
-            WHERE townShopShopId = shopId
-            AND townShopplaceId = placeId
+            WHERE placeShopShopId = shopId
+            AND placeShopplaceId = placeId
             AND placeId = ?");
             $shopQueryList->execute([$shopId]);
             $shopRow = $shopQueryList->rowCount();
@@ -48,17 +48,17 @@ if (isset($_POST['token'])
                 }
 
                 //On cherche à savoir S'il y a un ou plusieurs objets en vente
-                $townShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_items, car_items_types, car_shops_items
+                $placeShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_items, car_items_types, car_shops_items
                 WHERE itemItemTypeId = itemTypeId
                 AND shopItemShopId = shopId
                 AND shopItemItemId = itemId
                 AND shopId = ?
                 ORDER BY itemItemTypeId, itemName");
-                $townShopQuery->execute([$shopId]);
-                $townShopRow = $townShopQuery->rowCount();
+                $placeShopQuery->execute([$shopId]);
+                $placeShopRow = $placeShopQuery->rowCount();
 
                 //S'il existe un ou plusieurs objet dans le magasin on affiche le menu déroulant
-                if ($townShopRow > 0) 
+                if ($placeShopRow > 0) 
                 {
                     ?>
                     
@@ -74,15 +74,15 @@ if (isset($_POST['token'])
                         
                         <?php
                         //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                        while ($townShop = $townShopQuery->fetch())
+                        while ($placeShop = $placeShopQuery->fetch())
                         {
                             //On récupère les informations de l'objet
-                            $itemId = stripslashes($townShop['itemId']);
-                            $itemName = stripslashes($townShop['itemName']);
-                            $itemPurchasePrice = stripslashes($townShop['itemPurchasePrice']);
-                            $itemDiscount = stripslashes($townShop['shopItemDiscount']);
-                            $itemTypeName = stripslashes($townShop['itemTypeName']);
-                            $itemTypeNameShow = stripslashes($townShop['itemTypeNameShow']);
+                            $itemId = stripslashes($placeShop['itemId']);
+                            $itemName = stripslashes($placeShop['itemName']);
+                            $itemPurchasePrice = stripslashes($placeShop['itemPurchasePrice']);
+                            $itemDiscount = stripslashes($placeShop['shopItemDiscount']);
+                            $itemTypeName = stripslashes($placeShop['itemTypeName']);
+                            $itemTypeNameShow = stripslashes($placeShop['itemTypeNameShow']);
 
                             //On calcule la réduction de l'équipement/objet
                             $discount = $itemPurchasePrice * $itemDiscount / 100;
@@ -112,7 +112,7 @@ if (isset($_POST['token'])
                 {
                     echo "Il n'y a aucun article dans ce magasin";
                 }
-                $townShopQuery->closeCursor();
+                $placeShopQuery->closeCursor();
             }
             //Si le magasin n'exite pas
             else

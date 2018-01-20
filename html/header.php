@@ -105,7 +105,7 @@ if (isset($_SESSION['account']['id']))
 								{
 									?>
 
-									<a class="dropdown-item" href="../../modules/town/index.php">Lieu actuel</a>
+									<a class="dropdown-item" href="../../modules/place/index.php">Lieu actuel</a>
 
 									<?php
 								}

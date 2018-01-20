@@ -3,19 +3,19 @@
 //S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
 if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 //Si le joueur est déjà dans un lieu on le redirige vers le lieu
-if ($characterplaceId >= 1) { exit(header("Location: ../../modules/town/index.php")); }
+if ($characterplaceId >= 1) { exit(header("Location: ../../modules/place/index.php")); }
 //S'il y a actuellement un combat on redirige le joueur vers le module battle
 if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); }
 
 //On recherche la liste des lieux disponible par rapport au chapitre du joueur
-$townQuery = $bdd->prepare('SELECT * FROM car_places
+$placeQuery = $bdd->prepare('SELECT * FROM car_places
 WHERE placeChapter <= ?
 ORDER BY placeChapter');
-$townQuery->execute([$characterChapter]);
-$townRow = $townQuery->rowCount();
+$placeQuery->execute([$characterChapter]);
+$placeRow = $placeQuery->rowCount();
 
 //S'il y a au moins un lieu de disponible on affiche le formulaire
-if ($townRow >= 1)
+if ($placeRow >= 1)
 {
     ?>
     
@@ -24,12 +24,12 @@ if ($townRow >= 1)
             
             <?php
             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($townList = $townQuery->fetch())
+            while ($placeList = $placeQuery->fetch())
             {
                 //on récupère les valeurs de chaque lieux qu'on va ensuite mettre dans le menu déroulant
-                $placeId = stripslashes($townList['placeId']); 
-                $placeName = stripslashes($townList['placeName']);
-                $placeChapter = stripslashes($townList['placeChapter']);
+                $placeId = stripslashes($placeList['placeId']); 
+                $placeName = stripslashes($placeList['placeName']);
+                $placeChapter = stripslashes($placeList['placeChapter']);
                 ?>
                 <option value="<?php echo $placeId ?>"><?php echo "Chapitre $placeChapter - $placeName" ?></option>
                 <?php
@@ -48,7 +48,7 @@ else
 {
     echo "Aucun lieu disponible";
 }
-$townQuery->closeCursor();
+$placeQuery->closeCursor();
 ?>
 
 <?php require_once("../../html/footer.php"); ?>

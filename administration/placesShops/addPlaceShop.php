@@ -22,22 +22,22 @@ if (isset($_POST['adminPlaceShopPlaceId'])
         $adminTownShopShopId = htmlspecialchars(addslashes($_POST['adminTownShopShopId']));
 
         //On fait une requête pour vérifier si le lieu choisie existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $townQuery->execute([$adminPlaceShopPlaceId]);
-        $townRow = $townQuery->rowCount();
+        $placeQuery->execute([$adminPlaceShopPlaceId]);
+        $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
-        if ($townRow == 1) 
+        if ($placeRow == 1) 
         {
             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($town = $townQuery->fetch())
+            while ($place = $placeQuery->fetch())
             {
                 //On récupère les informations du lieu
-                $adminTownShopplacePicture = stripslashes($town['placePicture']);
-                $adminTownShopplaceName = stripslashes($town['placeName']);
+                $adminTownShopplacePicture = stripslashes($place['placePicture']);
+                $adminTownShopplaceName = stripslashes($place['placeName']);
             }
-            $townQuery->closeCursor();
+            $placeQuery->closeCursor();
 
             //On fait une requête pour vérifier si le magasin choisit existe
             $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
@@ -57,14 +57,14 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                 }
 
                 //On fait une requête pour vérifier si le magasin n'est pas déjà dans cette lieu
-                $townShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
-                WHERE townShopplaceId = ?
-                AND townShopShopId = ?');
-                $townShopQuery->execute([$adminPlaceShopPlaceId, $adminTownShopShopId]);
-                $townShopRow = $townShopQuery->rowCount();
+                $placeShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
+                WHERE placeShopplaceId = ?
+                AND placeShopShopId = ?');
+                $placeShopQuery->execute([$adminPlaceShopPlaceId, $adminTownShopShopId]);
+                $placeShopRow = $placeShopQuery->rowCount();
 
                 //Si le magasin n'est pas dans le lieu
-                if ($townShopRow == 0) 
+                if ($placeShopRow == 0) 
                 {
                     ?>
             
@@ -103,14 +103,14 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                     
                     <?php
                 }
-                $townShopQuery->closeCursor();
+                $placeShopQuery->closeCursor();
             }
             //Si le magasin existe pas
             else
             {
                 echo "Erreur : Ce magasin n'existe pas";
             }
-            $townShopQuery->closeCursor();
+            $placeShopQuery->closeCursor();
         }
         //Si le lieu existe pas
         else

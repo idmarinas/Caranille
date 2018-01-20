@@ -22,13 +22,13 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
         $adminplaceMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminplaceMonsterMonsterId']));
 
         //On fait une requête pour vérifier si le lieu choisie existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $townQuery->execute([$adminPlaceMonsterPlaceId]);
-        $townRow = $townQuery->rowCount();
+        $placeQuery->execute([$adminPlaceMonsterPlaceId]);
+        $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
-        if ($townRow == 1) 
+        if ($placeRow == 1) 
         {
             //On fait une requête pour vérifier si le monstre choisit existe
             $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
@@ -50,10 +50,10 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
                 if ($monsterRow == 1) 
                 {
                     //On supprime l'équipement de la base de donnée
-                    $townMonsterDeleteQuery = $bdd->prepare("DELETE FROM car_places_monsters
+                    $placeMonsterDeleteQuery = $bdd->prepare("DELETE FROM car_places_monsters
                     WHERE placeMonsterMonsterId = ?");
-                    $townMonsterDeleteQuery->execute([$adminplaceMonsterMonsterId]);
-                    $townMonsterDeleteQuery->closeCursor();
+                    $placeMonsterDeleteQuery->execute([$adminplaceMonsterMonsterId]);
+                    $placeMonsterDeleteQuery->closeCursor();
                     ?>
 
                     Le monstre a bien été retiré du lieu
@@ -86,7 +86,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
         {
             echo "Erreur : Cette lieu n'existe pas";
         }
-        $townQuery->closeCursor();
+        $placeQuery->closeCursor();
     }
     //Si tous les champs numérique ne contiennent pas un nombre
     else

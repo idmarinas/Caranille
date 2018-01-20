@@ -18,25 +18,25 @@ if (isset($_POST['adminPlaceShopPlaceId'])
         $adminPlaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceShopPlaceId']));
 
         //On fait une requête pour vérifier si le lieu choisit existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $townQuery->execute([$adminPlaceShopPlaceId]);
-        $townRow = $townQuery->rowCount();
+        $placeQuery->execute([$adminPlaceShopPlaceId]);
+        $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
-        if ($townRow == 1)
+        if ($placeRow == 1)
         {
             //On fait une requête pour afficher la liste des magasins de cette lieu
-            $townShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_places, car_places_shops
-            WHERE townShopShopId = shopId
-            AND townShopplaceId = placeId
+            $placeShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_places, car_places_shops
+            WHERE placeShopShopId = shopId
+            AND placeShopplaceId = placeId
             AND placeId = ?
 			ORDER BY shopName");
-            $townShopQuery->execute([$adminPlaceShopPlaceId]);
-            $townShopRow = $townShopQuery->rowCount();
+            $placeShopQuery->execute([$adminPlaceShopPlaceId]);
+            $placeShopRow = $placeShopQuery->rowCount();
 
             //S'il existe un ou plusieurs magasins dans le lieu on affiche le menu déroulant
-            if ($townShopRow > 0) 
+            if ($placeShopRow > 0) 
             {
                 ?>
                 
@@ -45,16 +45,16 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                             
                         <?php
                         //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                        while ($townShop = $townShopQuery->fetch())
+                        while ($placeShop = $placeShopQuery->fetch())
                         {
                             //On récupère les informations du magasin
-                            $adminTownShopShopId = stripslashes($townShop['shopId']);
-                            $adminTownShopShopName = stripslashes($townShop['shopName']);
+                            $adminTownShopShopId = stripslashes($placeShop['shopId']);
+                            $adminTownShopShopName = stripslashes($placeShop['shopName']);
                             ?>
                             <option value="<?php echo $adminTownShopShopId ?>"><?php echo "$adminTownShopShopName"; ?></option>
                             <?php
                         }
-                        $townShopQuery->closeCursor();
+                        $placeShopQuery->closeCursor();
                         ?>
                         
                     </select>
@@ -66,13 +66,13 @@ if (isset($_POST['adminPlaceShopPlaceId'])
 
                 <?php
             }
-            $townShopQuery->closeCursor();
+            $placeShopQuery->closeCursor();
 
             //On fait une requête pour afficher la liste des magasins du jeu qui ne sont pas dans le lieu
             $shopQuery = $bdd->prepare("SELECT * FROM car_shops
             WHERE (SELECT COUNT(*) FROM car_places_shops
-            WHERE townShopplaceId = ?
-            AND townShopShopId = shopId) = 0
+            WHERE placeShopplaceId = ?
+            AND placeShopShopId = shopId) = 0
 			ORDER BY shopName");
             $shopQuery->execute([$adminPlaceShopPlaceId]);
             $shopRow = $shopQuery->rowCount();

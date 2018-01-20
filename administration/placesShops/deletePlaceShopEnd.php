@@ -22,13 +22,13 @@ if (isset($_POST['adminPlaceShopPlaceId'])
         $adminTownShopShopId = htmlspecialchars(addslashes($_POST['adminTownShopShopId']));
 
         //On fait une requête pour vérifier si le lieu choisie existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $townQuery->execute([$adminPlaceShopPlaceId]);
-        $townRow = $townQuery->rowCount();
+        $placeQuery->execute([$adminPlaceShopPlaceId]);
+        $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
-        if ($townRow == 1) 
+        if ($placeRow == 1) 
         {
             //On fait une requête pour vérifier si le magasin choisit existe
             $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
@@ -40,20 +40,20 @@ if (isset($_POST['adminPlaceShopPlaceId'])
             if ($shopRow == 1) 
             {
                 //On fait une requête pour vérifier si le magasin n'est pas déjà dans cette lieu
-                $townShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
-                WHERE townShopplaceId = ?
-                AND townShopShopId = ?');
-                $townShopQuery->execute([$adminPlaceShopPlaceId, $adminTownShopShopId]);
-                $townShopRow = $townShopQuery->rowCount();
+                $placeShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
+                WHERE placeShopplaceId = ?
+                AND placeShopShopId = ?');
+                $placeShopQuery->execute([$adminPlaceShopPlaceId, $adminTownShopShopId]);
+                $placeShopRow = $placeShopQuery->rowCount();
 
                 //Si le magasin est dans le lieu
-                if ($townShopRow == 1) 
+                if ($placeShopRow == 1) 
                 {
                     //On supprime l'équipement de la base de donnée
-                    $townShopDeleteQuery = $bdd->prepare("DELETE FROM car_places_shops
-                    WHERE townShopShopId = ?");
-                    $townShopDeleteQuery->execute([$adminTownShopShopId]);
-                    $townShopDeleteQuery->closeCursor();
+                    $placeShopDeleteQuery = $bdd->prepare("DELETE FROM car_places_shops
+                    WHERE placeShopShopId = ?");
+                    $placeShopDeleteQuery->execute([$adminTownShopShopId]);
+                    $placeShopDeleteQuery->closeCursor();
                     ?>
 
                     Le magasin a bien été retiré du lieu
@@ -72,14 +72,14 @@ if (isset($_POST['adminPlaceShopPlaceId'])
                 {
                     echo "Erreur : Ce magasin n'est pas dans cette lieu";
                 }
-                $townShopQuery->closeCursor();
+                $placeShopQuery->closeCursor();
             }
             //Si le magasin existe pas
             else
             {
                 echo "Erreur : Ce magasin n'existe pas";
             }
-            $townShopQuery->closeCursor();
+            $placeShopQuery->closeCursor();
         }
         //Si le lieu existe pas
         else

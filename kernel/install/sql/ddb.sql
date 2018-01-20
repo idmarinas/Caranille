@@ -387,9 +387,9 @@ CREATE TABLE IF NOT EXISTS `car_places_monsters`
 
 CREATE TABLE IF NOT EXISTS `car_places_shops` 
 (
-  `townShopId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `townShopplaceId` int(10) NOT NULL,
-  `townShopShopId` int(10) NOT NULL
+  `placeShopId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `placeShopplaceId` int(10) NOT NULL,
+  `placeShopShopId` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_trades` 

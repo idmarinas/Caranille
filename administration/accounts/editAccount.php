@@ -139,17 +139,17 @@ if (isset($_POST['adminAccountId'])
             if ($adminCharacterplaceId > 0)
             {
                 //On récupère le lieu du personnage pour l'afficher dans le menu d'information du personnage
-                $townQuery = $bdd->prepare("SELECT * FROM car_places
+                $placeQuery = $bdd->prepare("SELECT * FROM car_places
                 WHERE placeId = ?");
-                $townQuery->execute([$adminCharacterplaceId]);
+                $placeQuery->execute([$adminCharacterplaceId]);
 
                 //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                while ($town = $townQuery->fetch())
+                while ($place = $placeQuery->fetch())
                 {
                     //On récupère le nom du lieu où se situe le personnage
-                    $adminplaceName = stripslashes($town['placeName']);
+                    $adminplaceName = stripslashes($place['placeName']);
                 }
-                $townQuery->closeCursor();
+                $placeQuery->closeCursor();
             }
             //Si adminCharacterplaceId à un Id à zéro c'est que le joueur est sur la carte du monde
             else

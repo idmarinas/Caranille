@@ -27,17 +27,17 @@ if (isset($_POST['adminShopItemShopId'])
         if ($shopRow == 1)
         {
             //On fait une requête pour vérifier la liste des objets/équipement dans le magasin
-            $townShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_items, car_items_types, car_shops_items
+            $placeShopQuery = $bdd->prepare("SELECT * FROM car_shops, car_items, car_items_types, car_shops_items
             WHERE itemItemTypeId = itemTypeId
             AND shopItemShopId = shopId
             AND shopItemItemId = itemId
             AND shopId = ?
             ORDER BY itemItemTypeId, itemName");
-            $townShopQuery->execute([$adminShopItemShopId]);
-            $townShopRow = $townShopQuery->rowCount();
+            $placeShopQuery->execute([$adminShopItemShopId]);
+            $placeShopRow = $placeShopQuery->rowCount();
 
             //S'il existe un ou plusieurs objet dans le magasin on affiche le menu déroulant
-            if ($townShopRow > 0) 
+            if ($placeShopRow > 0) 
             {
                 ?>
 
@@ -46,14 +46,14 @@ if (isset($_POST['adminShopItemShopId'])
                         
                         <?php
                         //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                        while ($townShop = $townShopQuery->fetch())
+                        while ($placeShop = $placeShopQuery->fetch())
                         {
                             //On récupère les informations des objets
-                            $adminShopItemItemId = stripslashes($townShop['itemId']);
-                            $adminShopItemItemName = stripslashes($townShop['itemName']);
-                            $adminShopItemDiscount = stripslashes($townShop['shopItemDiscount']);
-                            $adminItemTypeName = stripslashes($townShop['itemTypeName']);
-                            $adminItemTypeNameShow = stripslashes($townShop['itemTypeNameShow']);
+                            $adminShopItemItemId = stripslashes($placeShop['itemId']);
+                            $adminShopItemItemName = stripslashes($placeShop['itemName']);
+                            $adminShopItemDiscount = stripslashes($placeShop['shopItemDiscount']);
+                            $adminItemTypeName = stripslashes($placeShop['itemTypeName']);
+                            $adminItemTypeNameShow = stripslashes($placeShop['itemTypeNameShow']);
                             ?>
                             <option value="<?php echo $adminShopItemItemId ?>"><?php echo "[$adminItemTypeNameShow] - $adminShopItemItemName ($adminShopItemDiscount%)"; ?></option>
                             <?php
@@ -70,7 +70,7 @@ if (isset($_POST['adminShopItemShopId'])
 
                 <?php
             }
-            $townShopQuery->closeCursor();
+            $placeShopQuery->closeCursor();
 
             //On fait une requête pour afficher la liste des objets du jeu qui ne sont pas dans le magasin
             $itemQuery = $bdd->prepare("SELECT * FROM car_items, car_items_types

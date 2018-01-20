@@ -22,13 +22,13 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
         $adminplaceMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminplaceMonsterMonsterId']));
 
         //On fait une requête pour vérifier si le lieu choisie existe
-        $townQuery = $bdd->prepare('SELECT * FROM car_places 
+        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
         WHERE placeId = ?');
-        $townQuery->execute([$adminPlaceMonsterPlaceId]);
-        $townRow = $townQuery->rowCount();
+        $placeQuery->execute([$adminPlaceMonsterPlaceId]);
+        $placeRow = $placeQuery->rowCount();
 
         //Si le lieu existe
-        if ($townRow == 1) 
+        if ($placeRow == 1) 
         {
             //On fait une requête pour vérifier si le monstre choisit existe
             $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
@@ -40,14 +40,14 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
             if ($monsterRow == 1) 
             {
                 //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette lieu
-                $townMonsterQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
+                $placeMonsterQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
                 WHERE placeMonsterPlaceId = ?
                 AND placeMonsterMonsterId = ?');
-                $townMonsterQuery->execute([$adminPlaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
-                $townMonsterRow = $townMonsterQuery->rowCount();
+                $placeMonsterQuery->execute([$adminPlaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
+                $placeMonsterRow = $placeMonsterQuery->rowCount();
 
                 //Si le monstre n'est pas dans le lieu
-                if ($townMonsterRow == 0) 
+                if ($placeMonsterRow == 0) 
                 {
                     //On ajoute le monstre dans le lieu la base de donnée
                     $addPlaceMonster = $bdd->prepare("INSERT INTO car_places_monsters VALUES(
@@ -99,7 +99,7 @@ if (isset($_POST['adminPlaceMonsterPlaceId'])
         {
             echo "Erreur : Cette lieu n'existe pas";
         }
-        $townQuery->closeCursor();
+        $placeQuery->closeCursor();
     }
     //Si tous les champs numérique ne contiennent pas un nombre
     else

@@ -9,8 +9,8 @@ if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); 
 
 //On fait une jointure entre les 3 tables car_shops, car_places, car_places_shops pour récupérer les magasin lié à le lieu
 $shopQuery = $bdd->prepare("SELECT * FROM car_shops, car_places, car_places_shops
-WHERE townShopShopId = shopId
-AND townShopplaceId = placeId
+WHERE placeShopShopId = shopId
+AND placeShopplaceId = placeId
 AND placeId = ?");
 $shopQuery->execute([$placeId]);
 $shopRow = $shopQuery->rowCount();
