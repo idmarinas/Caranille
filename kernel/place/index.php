@@ -20,5 +20,11 @@ if ($characterPlaceId >= 1)
         $placePriceInn = stripslashes($place['placePriceInn']);
     }
     $placeQuery->closeCursor();
+
+    //On fait une recherche du nombre de magasin dans cette ville
+    $shopPlaceQuery = $bdd->prepare("SELECT * FROM car_places_shops
+    WHERE placeShopPlaceId = ?");
+    $shopPlaceQuery->execute([$placeId]);
+    $shopPlaceRow = $shopPlaceQuery->rowCount();
 }
 ?>

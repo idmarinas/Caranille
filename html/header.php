@@ -100,16 +100,16 @@ if (isset($_SESSION['account']['id']))
 								<a class="dropdown-item" href="../../modules/story/index.php">Continuer l'aventure</a>
 
 								<?php
-								//Si characterPlaceId est supérieur ou égal à un le joueur est dans un lieu. On met le raccourcit vers le lieu
+								//Si characterplaceId est supérieur ou égal à un le joueur est dans un lieu. On met le raccourcit vers le lieu
 								if($characterPlaceId >= 1)
 								{
 									?>
 
-									<a class="dropdown-item" href="../../modules/place/index.php">Lieu actuel</a>
+									<a class="dropdown-item" href="../../modules/town/index.php">Lieu actuel</a>
 
 									<?php
 								}
-								//Si characterPlaceId n'est pas supérieur ou égal à un le joueur est dans aucun lieu. On met le raccourcit vers la carte du monde
+								//Si characterplaceId n'est pas supérieur ou égal à un le joueur est dans aucun lieu. On met le raccourcit vers la carte du monde
 								else
 								{
 									?>

@@ -12,9 +12,17 @@ if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); 
 
 <?php echo $placeName ?><br />
 <?php echo $placeDescription ?><br /><br />
-<a href="../../modules/dungeon/index.php">Donjon</a><br>
-<a href="../../modules/inn/index.php">Auberge</a><br>
-<a href="../../modules/shops/index.php">Magasin(s)</a>
+<a href="../../modules/dungeon/index.php">S'entrainer</a><br>
+<a href="../../modules/inn/index.php">Se reposer</a><br>
+
+<?php
+if ($shopPlaceRow > 0)
+{
+    ?>
+    <a href="../../modules/shops/index.php">Magasin(s)</a>
+    <?php
+}
+?>
 
 <hr>
 

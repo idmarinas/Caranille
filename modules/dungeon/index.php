@@ -7,55 +7,80 @@ if ($characterPlaceId == 0) { exit(header("Location: ../../modules/map/index.php
 //S'il y a actuellement un combat on redirige le joueur vers le module battle
 if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); }
 
-//On fait une jointure entre les 3 tables car_monsters, car_places, car_places_monsters pour récupérer les monstres lié à le lieu
-$monsterQueryList = $bdd->prepare("SELECT * FROM car_monsters, car_places, car_places_monsters
+//On fait une recherche de tous les monstres limité
+$monsterLimitedQueryList = $bdd->prepare("SELECT * FROM car_monsters, car_places, car_places_monsters
 WHERE placeMonsterMonsterId = monsterId
 AND placeMonsterPlaceId = placeId
+AND monsterLimited = 'Yes'
+AND monsterQuantity > 0
 AND placeId = ?");
-$monsterQueryList->execute([$placeId]);
-$monsterRow = $monsterQueryList->rowCount();
+$monsterLimitedQueryList->execute([$placeId]);
+$monsterLimitedQueryRow = $monsterLimitedQueryList->rowCount();
 
 //Si plusieurs monstres ont été trouvé
-if ($monsterRow > 0)
+if ($monsterLimitedQueryRow > 0)
 {
     ?>
     
     <form method="POST" action="selectedMonster.php">
-        Liste des monstres : <select name="battleMonsterId" class="form-control">
+        Monstres temporaire : <select name="battleMonsterId" class="form-control">
                 
             <?php
             //On fait une boucle sur tous les résultats
-            while ($monster = $monsterQueryList->fetch())
+            while ($monsterLimited = $monsterLimitedQueryList->fetch())
             {
                 //On récupère les informations du monstre
-                $monsterId = stripslashes($monster['monsterId']); 
-                $monsterName = stripslashes($monster['monsterName']);
-                $monsterLevel = stripslashes($monster['monsterLevel']);
-                $monsterLimited = stripslashes($monster['monsterLimited']);
-                $monsterQuantity = stripslashes($monster['monsterQuantity']);
-
-                //Si le monstre n'est pas limité on l'affiche
-                if ($monsterLimited == "No")
-                {
-                    ?>
-                    <option value="<?php echo $monsterId ?>"><?php echo "Niveau $monsterLevel - $monsterName" ?></option>
-                    <?php
-                }
-                //Si le monstre est limité
-                else
-                {
-                    //On vérifie si il en reste et si c'est le cas on l'affiche
-                    if ($monsterQuantity > 0)
-                    {
-                        ?>
-                        <option value="<?php echo $monsterId ?>"><?php echo "Niveau $monsterLevel - $monsterName" ?></option>
-                        <?php
-                    }
-                }
-                
+                $monsterLimitedId = stripslashes($monsterLimited['monsterId']); 
+                $monsterLimitedName = stripslashes($monsterLimited['monsterName']);
+                $monsterLimitedLevel = stripslashes($monsterLimited['monsterLevel']);
+                ?>
+                <option value="<?php echo $monsterLimitedId ?>"><?php echo "Niveau $monsterLimitedLevel - $monsterLimitedName" ?></option>
+                <?php
             }
             ?>
+
+        </select>
+        <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+        <input type="submit" name="enter" class="btn btn-default form-control" value="Lancer le combat">
+    </form>
+
+    <hr>
+    
+    <?php
+}
+$monsterLimitedQueryList->closeCursor();
+
+//On fait une recherche de tous les monstres classiques
+$monsterClassicQueryList = $bdd->prepare("SELECT * FROM car_monsters, car_places, car_places_monsters
+WHERE placeMonsterMonsterId = monsterId
+AND placeMonsterPlaceId = placeId
+AND monsterLimited = 'No'
+AND placeId = ?");
+$monsterClassicQueryList->execute([$placeId]);
+$monsterClassicQueryRow = $monsterClassicQueryList->rowCount();
+
+//Si plusieurs monstres ont été trouvé
+if ($monsterClassicQueryRow > 0)
+{
+    ?>
+    
+    <form method="POST" action="selectedMonster.php">
+        Monstres classique : <select name="battleMonsterId" class="form-control">
                 
+            <?php
+            //On fait une boucle sur tous les résultats
+            while ($monsterClassic = $monsterClassicQueryList->fetch())
+            {
+                //On récupère les informations du monstre
+                $monsterClassicId = stripslashes($monsterClassic['monsterId']); 
+                $monsterClassicName = stripslashes($monsterClassic['monsterName']);
+                $monsterClassicLevel = stripslashes($monsterClassic['monsterLevel']);
+                ?>
+                <option value="<?php echo $monsterClassicId ?>"><?php echo "Niveau $monsterClassicLevel - $monsterClassicName" ?></option>
+                <?php
+            }
+            ?>
+ 
         </select>
         <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
         <input type="submit" name="enter" class="btn btn-default form-control" value="Lancer le combat">
@@ -66,8 +91,8 @@ if ($monsterRow > 0)
 //S'il n'y a aucun monstre de disponible on prévient le joueur
 else
 {
-    echo "Il n'y a aucun monstre de disponible.";
+    echo "Il n'y a aucun monstre classique de disponible.";
 }
-$monsterQueryList->closeCursor();
+$monsterClassicQueryList->closeCursor();
 
 require_once("../../html/footer.php"); ?>
