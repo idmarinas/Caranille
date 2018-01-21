@@ -14,11 +14,6 @@ Classe : <?php echo $characterRaceName ?><br />
 <hr>
 
 Niveau : <?php echo $characterLevel ?><br />
-<?php echo $itemArmorNameShow ?> : <?php echo $equipmentArmorName ?><br />
-<?php echo $itemBootsNameShow ?> : <?php echo $equipmentBootsName ?><br />
-<?php echo $itemGlovesNameShow ?> : <?php echo $equipmentGlovesName ?><br />
-<?php echo $itemHelmetNameShow ?> : <?php echo $equipmentHelmetName ?><br />
-<?php echo $itemWeaponNameShow ?> : <?php echo $equipmentWeaponName ?><br />
 HP : <?php echo "$characterHpMin/$characterHpTotal" ?><br />
 MP : <?php echo "$characterMpMin/$characterMpTotal" ?><br />
 Force : <?php echo $characterStrengthTotal ?><br />
@@ -34,5 +29,13 @@ Expérience : <?php echo "$characterExperience/$experienceLevel" ?><br />
 Prochain niveau dans : <?php echo $experienceRemaining ?><br />
 Experience total : <?php echo $characterExperienceTotal ?><br />
 Argent : <?php echo $characterGold ?><br />
+
+<hr >
+
+<?php echo $itemArmorNameShow ?> : <?php echo $equipmentArmorName ?><br />
+<?php echo $itemBootsNameShow ?> : <?php echo $equipmentBootsName ?><br />
+<?php echo $itemGlovesNameShow ?> : <?php echo $equipmentGlovesName ?><br />
+<?php echo $itemHelmetNameShow ?> : <?php echo $equipmentHelmetName ?><br />
+<?php echo $itemWeaponNameShow ?> : <?php echo $equipmentWeaponName ?><br />
 
 <?php require_once("../../html/footer.php"); ?>
