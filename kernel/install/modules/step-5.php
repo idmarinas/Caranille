@@ -131,8 +131,8 @@ if (isset($_POST['accountPseudo'])
                             :characterName, //characterName
                             '1', //characterLevel
                             :characterSex, //characterSex
-                            '10', //characterHpMin
-                            '10', //characterHpMax
+                            '100', //characterHpMin
+                            '100', //characterHpMax
                             '0', //characterHpSkillPoints
                             '0', //characterHpParchment
                             '0', //characterHpEquipments
@@ -208,8 +208,8 @@ if (isset($_POST['accountPseudo'])
                             :characterName,
                             '1',
                             :characterSex,
-                            '120',
-                            '120',
+                            '100',
+                            '100',
                             '0',
                             '0',
                             '0',
