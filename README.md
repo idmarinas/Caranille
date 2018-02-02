@@ -1,5 +1,4 @@
 Bonjour tout le monde,
-
 Je viens ici pour vous présenter un très vieux projet que j'ai plusieurs fois remit au gout du jour car les anciennes versions ne me plaisaient pas du tout.
 
 Il s'agit de Caranille qui est la contraction de Caramel et Vanille et qui est un logiciel gratuit et Open-Source écrit en PHP pour vous permettre de créer votre propre MMORPG (Plus RPG que MMO mais quand même).
