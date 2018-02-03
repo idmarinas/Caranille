@@ -1,12 +1,4 @@
-Bonjour tout le monde,
-
-Je viens ici pour vous présenter un très vieux projet que j'ai plusieurs fois remit au gout du jour car les anciennes versions ne me plaisaient pas du tout.
-
-Il s'agit de Caranille qui est la contraction de Caramel et Vanille et qui est un logiciel gratuit et Open-Source écrit en PHP pour vous permettre de créer votre propre MMORPG (Plus RPG que MMO mais quand même).
-
-Avant toute chose il ne propose pas la création de jeu 2D ni 3D juste du texte et des images et c'est un choix tout à fait personnel je préfère prévenir avant de décevoir de futurs utilisateurs.
-
-Actuellement voici tout ce que vous pouvez faire :
+Fonctions de Caranille :
 
 -Créer une histoire sous forme de chapitre avec introduction, conclusion
 
@@ -20,7 +12,7 @@ Actuellement voici tout ce que vous pouvez faire :
 
 -Créer des magasins
 
-Voici le contenu Multi-joueurs
+Contenu Multi-joueurs
 
 -Faire des échanges
 
@@ -41,15 +33,6 @@ Pour les créateurs de jeu je propose même des outils pour créer vos propres �
 
 -Possibilité de donner de l'argent à un ou plusieurs joueurs
 
-
-Si ce logiciel vous intéresse vous pouvez le télécharger à l'adresse suivante :
-
-https://github.com/Caranille/Caranille/archive/master.zip
-
-Et pour un site vitrine de démonstration :
+Site vitrine de démonstration :
 
 http://www.caranille.com
-
-Merci à toutes et à tous et si vous avez la moindre question :
-
-mycaranille@gmail.com
