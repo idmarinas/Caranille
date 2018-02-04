@@ -54,7 +54,7 @@ if (isset($_POST['adminMonsterDropMonsterId'])
                         $adminItemTypeName = stripslashes($monsterDrop['itemTypeName']);
                         $adminItemTypeNameShow = stripslashes($monsterDrop['itemTypeNameShow']);
                         ?>
-                        <option value="<?php echo $adminMonsterDropItemId ?>"><?php echo "[$adminItemTypeNameShow] - $adminMonsterDropItemName ($adminMonsterDropRate%)"; ?></option>
+                        <option value="<?php echo $adminMonsterDropItemId ?>"><?php echo "[$adminItemTypeNameShow] - $adminMonsterDropItemName ($adminMonsterDropRate/1000)"; ?></option>
                         <?php
                     }
                     $monsterDropQuery->closeCursor();

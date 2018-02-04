@@ -300,7 +300,7 @@ if (isset($_POST['token'])
                                             $monsterDropRate = "???";
                                         }
                                         
-                                        echo "[$monsterDropItemTypeNameShow] - $monsterDropItemName ($monsterDropRate%)<br />";
+                                        echo "[$monsterDropItemTypeNameShow] - $monsterDropItemName ($monsterDropRate/1000)<br />";
                                     }
                                 }
                                 //Si aucun objet ne peut être obtenu
