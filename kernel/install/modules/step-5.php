@@ -137,14 +137,14 @@ if (isset($_POST['accountPseudo'])
                             '0', //characterHpParchment
                             '0', //characterHpEquipments
                             '0', //characterHpGuild
-                            '10', //characterHpTotal
-                            '1', //characterMpMin
-                            '1', //characterMpMax
+                            '100', //characterHpTotal
+                            '10', //characterMpMin
+                            '10', //characterMpMax
                             '0', //characterMpSkillPoints
                             '0', //characterMpParchment
                             '0', //characterMpEquipments
                             '0', //characterMpGuild
-                            '1', //characterMpTotal
+                            '10', //characterMpTotal
                             '1', //characterStrength
                             '0', //characterStrengthSkillPoints
                             '0', //characterStrengthParchment
@@ -214,14 +214,14 @@ if (isset($_POST['accountPseudo'])
                             '0',
                             '0',
                             '0',
+                            '100',
                             '10',
-                            '1',
-                            '1',
+                            '10',
                             '0',
                             '0',
                             '0',
                             '0',
-                            '1',
+                            '10',
                             '1',
                             '0',
                             '0',
