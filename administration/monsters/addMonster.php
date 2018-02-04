@@ -31,8 +31,7 @@ if (isset($_POST['add']))
             <option value="No">Non</option>
             <option value="Yes">Oui</option>
         </select>
-        Quantité restante (Si monstre limité) : <input type="number" name="adminMonsterQuantity" class="form-control" placeholder="Quantité du monstre" value="<?php echo $adminMonsterQuantity ?>" required>
-        <input type="hidden" name="adminMonsterId" value="<?php echo $adminMonsterId ?>">
+        Quantité restante (Si monstre limité) : <input type="number" name="adminMonsterQuantity" class="form-control" placeholder="Quantité du monstre" value="0" required>
         <input name="finalAdd" class="btn btn-default form-control" type="submit" value="Ajouter">
     </form>
     
