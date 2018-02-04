@@ -28,8 +28,8 @@ if (isset($_POST['adminMonsterDropMonsterId'])
         $adminMonsterDropRate = htmlspecialchars(addslashes($_POST['adminMonsterDropRate']));
         $adminMonsterDropRateVisible = htmlspecialchars(addslashes($_POST['adminMonsterDropRateVisible']));
 
-        //Si le taux d'obtention est entre 0 et 100 on ajoute l'objet
-        if ($adminMonsterDropRate >= 0 && $adminMonsterDropRate <= 100)
+        //Si le taux d'obtention est entre 0 et 1000 on ajoute l'objet
+        if ($adminMonsterDropRate >= 0 && $adminMonsterDropRate <= 1000)
         {
             //On fait une requête pour vérifier si le monstre choisit existe
             $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
