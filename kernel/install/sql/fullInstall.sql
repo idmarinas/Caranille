@@ -28,7 +28,7 @@ INSERT INTO `car_items_types` (`itemTypeId`, `itemTypeName`, `itemTypeNameShow`)
 -- Contenu de la table `car_monsters`
 --
 
-INSERT INTO `car_monsters` (`monsterId`, `monsterType`, `monsterPicture`, `monsterName`, `monsterDescription`, `monsterLevel`, `monsterHp`, `monsterMp`, `monsterStrength`, `monsterMagic`, `monsterAgility`, `monsterDefense`, `monsterDefenseMagic`, `monsterExperience`, `monsterGold`, `monsterLimited`, `monsterQuantity`) VALUES
+INSERT INTO `car_monsters` (`monsterId`, `monsterCategory`, `monsterPicture`, `monsterName`, `monsterDescription`, `monsterLevel`, `monsterHp`, `monsterMp`, `monsterStrength`, `monsterMagic`, `monsterAgility`, `monsterDefense`, `monsterDefenseMagic`, `monsterExperience`, `monsterGold`, `monsterLimited`, `monsterQuantity`) VALUES
 (1, 'Classic', '../../img/empty.png', 'Dragon vert', 'Taille : 1.70m\r\nPoids : 280kg\r\nLorsque les dragons vert ne sont plus avec leur parents c\\\'est qu\\\'ils sont adulte. \r\nLeur alimentation préféré est le maïs et le blé.', 5, 10, 0, 10, 0, 0, 0, 0, 10, 10, 'No', 0);
 --
 -- Contenu de la table `car_monsters_drops`
