@@ -272,6 +272,7 @@ CREATE TABLE IF NOT EXISTS `car_market` (
 
 CREATE TABLE IF NOT EXISTS `car_monsters` (
   `monsterId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `monsterType` varchar(50) NOT NULL,
   `monsterPicture` varchar(50) NOT NULL,
   `monsterName` varchar(30) NOT NULL,
   `monsterDescription` text NOT NULL,

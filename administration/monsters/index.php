@@ -57,8 +57,11 @@ else
 
 <hr>
 
-<form method="POST" action="addMonster.php">
-    <input type="submit" class="btn btn-default form-control" name="add" value="Créer un monstre">
+Générer X montre(s)
+
+<form method="POST" action="generateMonster.php">
+    Quantité : <input type="number" name="adminQuantityMonsterGenerate" class="form-control" placeholder="Quantité" value="1" required>
+    <input type="submit" class="btn btn-default form-control" name="generate" value="Générer le(s) monstre(s)">
 </form>
 
 <?php require_once("../html/footer.php");
