@@ -57,7 +57,7 @@ else
 
 <hr>
 
-Générer X montre(s)
+Générer X montre(s) vierge.
 
 <form method="POST" action="generateMonster.php">
     Quantité : <input type="number" name="adminQuantityMonsterGenerate" class="form-control" placeholder="Quantité" value="1" required>
