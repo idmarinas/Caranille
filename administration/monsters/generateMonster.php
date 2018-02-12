@@ -19,15 +19,15 @@ if (isset($_POST['generate']))
 
         for ($i = 0; $i < $adminQuantityMonsterGenerate -1; $i++)
         {
-            $generateMonsterSQL = $generateMonsterSQL . "('', 'Classic', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0),";
+            $generateMonsterSQL = $generateMonsterSQL . "('', '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0),";
         }
-        $generateMonsterSQL = $generateMonsterSQL . "('', 'Classic', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0);";
+        $generateMonsterSQL = $generateMonsterSQL . "('', '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0);";
     }
     //Si il n'y a qu'un monstre
     else
     {
         $generateMonsterSQL = "INSERT INTO car_monsters VALUES";
-        $generateMonsterSQL = $generateMonsterSQL . "('', 'Classic', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0);";
+        $generateMonsterSQL = $generateMonsterSQL . "('', '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0);";
     }
 
     $bdd->query($generateMonsterSQL);

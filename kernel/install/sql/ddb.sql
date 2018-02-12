@@ -138,34 +138,20 @@ CREATE TABLE IF NOT EXISTS `car_codes` (
 CREATE TABLE IF NOT EXISTS `car_codes_gift` (
   `codeGiftId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `codeGiftCodeId` int(11) NOT NULL,
-  `codeGiftMoney` int(11) NOT NULL,
-  `codeGiftGold` int(11) NOT NULL,
-  `codeGiftcharacterLevel` int(11) NOT NULL,
-  `codeGiftcharacterSex` int(11) NOT NULL,
-  `codeGiftcharacterSize` double NOT NULL,
-  `codeGiftcharacterWeight` double NOT NULL,
-  `codeGiftcharacterMoral` double NOT NULL,
-  `codeGiftcharacterThirst` double NOT NULL,
-  `codeGiftcharacterHunger` double NOT NULL,
-  `codeGiftcharacterPee` double NOT NULL,
-  `codeGiftcharacterPooh` double NOT NULL,
-  `codeGiftcharacterThrowUp` double NOT NULL,
-  `codeGiftcharacterHygiene` double NOT NULL,
-  `codeGiftcharacterTired` double NOT NULL,
-  `codeGiftcharacterFun` double NOT NULL,
-  `codeGiftcharacterAffection` double NOT NULL,
-  `codeGiftcharacterHappiness` double NOT NULL,
-  `codeGiftcharacterKarma` double NOT NULL,
-  `codeGiftcharacterHp` int(11) NOT NULL,
-  `codeGiftcharacterMp` int(11) NOT NULL,
-  `codeGiftcharacterStrength` int(11) NOT NULL,
-  `codeGiftcharacterMagic` int(11) NOT NULL,
-  `codeGiftcharacterAgility` int(11) NOT NULL,
-  `codeGiftcharacterDefense` int(11) NOT NULL,
-  `codeGiftcharacterDefenseMagic` int(11) NOT NULL,
+  `codeGiftCharacterLevel` int(11) NOT NULL,
+  `codeGiftCharacterHp` int(11) NOT NULL,
+  `codeGiftCharacterMp` int(11) NOT NULL,
+  `codeGiftCharacterStrength` int(11) NOT NULL,
+  `codeGiftCharacterMagic` int(11) NOT NULL,
+  `codeGiftCharacterAgility` int(11) NOT NULL,
+  `codeGiftCharacterDefense` int(11) NOT NULL,
+  `codeGiftCharacterDefenseMagic` int(11) NOT NULL,
   `codeGiftcharacterWisdom` int(11) NOT NULL,
-  `codeGiftitemId` int(11) NOT NULL,
-  `codeGiftBonusId` int(11) NOT NULL
+	`codeGiftCharacterProspecting` int(11) NOT NULL,
+	`codeGiftExperience` int(11) NOT NULL,
+	`codeGiftGold` int(11) NOT NULL,
+	`codeGiftitemId` int(11) NOT NULL,
+	`codeGiftMonsterId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_codes_used` (
@@ -288,6 +274,12 @@ CREATE TABLE IF NOT EXISTS `car_monsters` (
   `monsterGold` int(11) NOT NULL,
   `monsterLimited` varchar(30) NOT NULL,
   `monsterQuantity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `car_monsters_categories` (
+  `monsterCategoryId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `monsterCategoryName` varchar(30) NOT NULL,
+  `monsterCategoryNameShow` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_monsters_drops`

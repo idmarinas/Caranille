@@ -8,6 +8,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminMonsterId'])
+&& isset($_POST['adminMonsterCategoryCategoryId'])
 && isset($_POST['adminMonsterPicture'])
 && isset($_POST['adminMonsterName'])
 && isset($_POST['adminMonsterLevel'])
@@ -27,6 +28,7 @@ if (isset($_POST['adminMonsterId'])
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
     if (ctype_digit($_POST['adminMonsterId']) 
+    && ctype_digit($_POST['adminMonsterCategoryCategoryId']) 
     && ctype_digit($_POST['adminMonsterLevel']) 
     && ctype_digit($_POST['adminMonsterHp'])
     && ctype_digit($_POST['adminMonsterMp'])
@@ -39,6 +41,7 @@ if (isset($_POST['adminMonsterId'])
     && ctype_digit($_POST['adminMonsterExperience'])
     && ctype_digit($_POST['adminMonsterQuantity'])
     && $_POST['adminMonsterId'] >= 1
+    && $_POST['adminMonsterCategoryCategoryId'] >= 1
     && $_POST['adminMonsterLevel'] >= 0
     && $_POST['adminMonsterHp'] >= 0
     && $_POST['adminMonsterMp'] >= 0
@@ -65,6 +68,7 @@ if (isset($_POST['adminMonsterId'])
         {
             //On récupère les informations du formulaire
             $adminMonsterId = htmlspecialchars(addslashes($_POST['adminMonsterId']));
+            $adminMonsterCategoryCategoryId = htmlspecialchars(addslashes($_POST['adminMonsterCategoryCategoryId']));
             $adminMonsterPicture = htmlspecialchars(addslashes($_POST['adminMonsterPicture']));
             $adminMonsterName = htmlspecialchars(addslashes($_POST['adminMonsterName']));
             $adminMonsterDescription = htmlspecialchars(addslashes($_POST['adminMonsterDescription']));
@@ -83,7 +87,8 @@ if (isset($_POST['adminMonsterId'])
 
             //On met le monstre à jour dans la base de donnée
             $updateMonster = $bdd->prepare('UPDATE car_monsters 
-            SET monsterPicture = :adminMonsterPicture,
+            SET monsterCategory = :adminMonsterCategoryCategoryId,
+            monsterPicture = :adminMonsterPicture,
             monsterName = :adminMonsterName,
             monsterDescription = :adminMonsterDescription,
             monsterLevel = :adminMonsterLevel,
@@ -100,6 +105,7 @@ if (isset($_POST['adminMonsterId'])
             monsterQuantity = :adminMonsterQuantity
             WHERE monsterId = :adminMonsterId');
             $updateMonster->execute([
+          	'adminMonsterCategoryCategoryId' => $adminMonsterCategoryCategoryId,
             'adminMonsterPicture' => $adminMonsterPicture,
             'adminMonsterName' => $adminMonsterName,
             'adminMonsterDescription' => $adminMonsterDescription,

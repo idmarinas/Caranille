@@ -19,6 +19,16 @@ INSERT INTO `car_items_types` (`itemTypeId`, `itemTypeName`, `itemTypeNameShow`)
 (7, 'Parchment', 'Parchemin');
 
 --
+-- Contenu de la table `car_monsters_categories`
+--
+
+INSERT INTO `car_monsters_categories` (`monsterCategoryId`, `monsterCategoryName`, `monsterCategoryNameShow`) VALUES
+(1, 'Common', 'Commun'),
+(2, 'Unusual', 'Peu commun'),
+(3, 'Legendary', 'Légendaire'),
+(4, 'Mythical', 'Mythique');
+
+--
 -- Contenu de la table `car_races`
 --
 

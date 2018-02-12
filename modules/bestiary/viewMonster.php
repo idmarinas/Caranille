@@ -24,7 +24,7 @@ if (isset($_POST['token'])
             $monsterId = htmlspecialchars(addslashes($_POST['monsterId']));
             
             //On fait une requête pour vérifier si le monstre entré est bien dans le bestiaire du joueur
-            $monsterBestiaryQuery = $bdd->prepare("SELECT * FROM car_monsters, car_bestiary 
+            $monsterBestiaryQuery = $bdd->prepare("SELECT * FROM car_monsters, car_bestiary
             WHERE monsterId = bestiaryMonsterId
             AND bestiaryMonsterId = ?
             AND bestiaryCharacterId = ?");
@@ -42,8 +42,9 @@ if (isset($_POST['token'])
                 }
                 
                 //On fait une requête pour vérifier si le monstre entré existe
-                $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters
-                WHERE monsterId = ?");
+                $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters, car_monsters_categories
+                WHERE monsterCategory = monsterCategoryId 
+                AND monsterId = ?");
                 $monsterQuery->execute([$monsterId]);
                 $monsterRow = $monsterQuery->rowCount();
                 
@@ -53,6 +54,9 @@ if (isset($_POST['token'])
                     {
                         //On récupère les informations du monstre
                         $monsterId = stripslashes($monster['monsterId']);
+                        $monsterCategoryId = stripslashes($monster['monsterCategoryId']);
+				                $monsterCategoryName = stripslashes($monster['monsterCategoryName']);
+				                $monsterCategoryNameShow = stripslashes($monster['monsterCategoryNameShow']);
                         $monsterPicture = stripslashes($monster['monsterPicture']);
                         $monsterName = stripslashes($monster['monsterName']);
                         $monsterDescription = stripslashes($monster['monsterDescription']);
@@ -79,6 +83,16 @@ if (isset($_POST['token'])
                             
                             <td>
                                 <?php echo $monsterId; ?>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                Catégorie
+                            </td>
+                            
+                            <td>
+                                <?php echo $monsterCategoryNameShow; ?>
                             </td>
                         </tr>
                         
