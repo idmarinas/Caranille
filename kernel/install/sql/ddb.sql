@@ -147,11 +147,11 @@ CREATE TABLE IF NOT EXISTS `car_codes_gift` (
   `codeGiftCharacterDefense` int(11) NOT NULL,
   `codeGiftCharacterDefenseMagic` int(11) NOT NULL,
   `codeGiftcharacterWisdom` int(11) NOT NULL,
-	`codeGiftCharacterProspecting` int(11) NOT NULL,
-	`codeGiftExperience` int(11) NOT NULL,
-	`codeGiftGold` int(11) NOT NULL,
-	`codeGiftitemId` int(11) NOT NULL,
-	`codeGiftMonsterId` int(11) NOT NULL
+  `codeGiftCharacterProspecting` int(11) NOT NULL,
+  `codeGiftExperience` int(11) NOT NULL,
+  `codeGiftGold` int(11) NOT NULL,
+  `codeGiftitemId` int(11) NOT NULL,
+  `codeGiftMonsterId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_codes_used` (
