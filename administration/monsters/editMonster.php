@@ -62,27 +62,37 @@ if (isset($_POST['adminMonsterId'])
             <form method="POST" action="editMonsterEnd.php">
                 Image : <input type="text" name="adminMonsterPicture" class="form-control" placeholder="Image" value="<?php echo $adminMonsterPicture ?>" required>
                 Catégorie : <select name="adminMonsterCategoryCategoryId" class="form-control">
-                    <option value="<?php echo $adminMonsterCategoryId ?>"><?php echo $adminMonsterCategoryNameShow ?></option>
                     
                     <?php
                     //On rempli le menu déroulant avec la liste des classes disponible
-                    $monsterCategoryQuery = $bdd->prepare("SELECT * FROM car_monsters_categories
-                    WHERE monsterCategoryId != ?");
+                    $monsterCategoryQuery = $bdd->prepare("SELECT * FROM car_monsters_categories");
                     $monsterCategoryQuery->execute([$adminMonsterCategoryId]);
                     
                     //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                     while ($monsterCategory = $monsterCategoryQuery->fetch())
                     {
                         //On récupère les informations de la classe
-                      	$adminMonsterCategoryId = stripslashes($monsterCategory['monsterCategoryId']);
-				                $adminMonsterCategoryName = stripslashes($monsterCategory['monsterCategoryName']);
-				                $adminMonsterCategoryNameShow = stripslashes($monsterCategory['monsterCategoryNameShow']);
-                        ?>
-                        <option value="<?php echo $adminMonsterCategoryId ?>"><?php echo $adminMonsterCategoryNameShow ?></option>
-                        <?php
+                        $adminMonsterCategoryIdSql = stripslashes($monsterCategory['monsterCategoryId']);
+		                $adminMonsterCategoryName = stripslashes($monsterCategory['monsterCategoryName']);
+		                $adminMonsterCategoryNameShow = stripslashes($monsterCategory['monsterCategoryNameShow']);
+		                
+		                if ($adminMonsterCategoryIdSql == $adminMonsterCategoryId)
+		                {
+		                	?>
+		                	<option selected="selected" value="<?php echo $adminMonsterCategoryIdSql ?>"><?php echo $adminMonsterCategoryNameShow ?></option>
+		                	<?php
+		                }
+		                else
+		                {
+		                	?>
+	                        <option value="<?php echo $adminMonsterCategoryIdSql ?>"><?php echo $adminMonsterCategoryNameShow ?></option>
+	                        <?php
+		                }
+                        
                     }
                     $monsterCategoryQuery->closeCursor();
                     ?>
+                    
                 </select>    
                 Nom : <input type="text" name="adminMonsterName" class="form-control" placeholder="Nom" value="<?php echo $adminMonsterName ?>" required>
                 Niveau : <input type="number" name="adminMonsterLevel" class="form-control" placeholder="Niveau" value="<?php echo $adminMonsterLevel ?>" required>
