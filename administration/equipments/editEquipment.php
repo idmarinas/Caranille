@@ -124,13 +124,12 @@ if (isset($_POST['adminItemId'])
                 </select>
                 Image : <input type="mail" name="adminItemPicture" class="form-control" placeholder="Image" value="<?php echo $adminItemPicture ?>" required>
                 Type <select name="adminItemItemTypeId" class="form-control">
-                    <option value="<?php echo $adminItemItemTypeId ?>"><?php echo $adminItemItemTypeNameShow ?></option>
+                
                     
                     <?php
                     //On rempli le menu déroulant avec la liste des classes disponible
                     $itemTypeQuery = $bdd->prepare("SELECT * FROM car_items_types
-                    WHERE itemTypeId != ?
-                    AND itemTypeName != 'Item'
+                    WHERE itemTypeName != 'Item'
                     AND itemTypeName != 'Parchment'");
                     $itemTypeQuery->execute([$adminItemItemTypeId]);
                     
@@ -138,12 +137,23 @@ if (isset($_POST['adminItemId'])
                     while ($itemType = $itemTypeQuery->fetch())
                     {
                         //On récupère les informations de la classe
-                        $adminItemTypeId = stripslashes($itemType['itemTypeId']);
+                        $adminItemTypeIdSql = stripslashes($itemType['itemTypeId']);
                         $adminItemTypeName = stripslashes($itemType['itemTypeName']);
                         $adminItemTypeNameShow = stripslashes($itemType['itemTypeNameShow']);
-                        ?>
-                        <option value="<?php echo $adminItemTypeId ?>"><?php echo $adminItemTypeNameShow ?></option>
-                        <?php
+                        
+                        if ($adminItemTypeIdSql == $adminItemItemTypeId)
+                        {
+                        	?>
+                        	<option selected="selected" value="<?php echo $adminItemTypeIdSql ?>"><?php echo $adminItemItemTypeNameShow ?></option>
+                        	<?php
+                        }
+                        else
+                        {
+                        	?>
+	                        <option value="<?php echo $adminItemTypeIdSql ?>"><?php echo $adminItemTypeNameShow ?></option>
+                        	<?php
+                        }
+                        
                     }
                     $itemTypeQuery->closeCursor();
                     ?>
