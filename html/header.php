@@ -23,6 +23,8 @@ if (isset($_SESSION['account']['id']))
     require_once("../../kernel/character/index.php");
     //On vérifie si le personnage est actuellement dans un combat de monstre. Si c'est le cas on récupère toutes les informations du monstre
     require_once("../../kernel/battle/index.php");
+    //On vérifie le nombre d'invitation de combat du joueur
+    require_once("../../kernel/battleInvitation/index.php");
     //On récupère toutes les informations des équipements équipé au personnage
     require_once("../../kernel/equipment/index.php");
     //On récupère toutes les informations des type d'équipement
