@@ -24,6 +24,22 @@ CREATE TABLE IF NOT EXISTS `car_battles` (
   `battleOpponentMpRemaining` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `car_battles_invitations` (
+  `battleInvitationId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `battleInvitationMonsterId` int(11) NOT NULL,
+  `battleInvitationPicture` varchar(50) NOT NULL,
+  `battleInvitationName` varchar(30) NOT NULL,
+  `battleInvitationDescription` varchar(30) NOT NULL,
+  `battleInvitationDateBegin` datetime NOT NULL,
+  `battleInvitationDateEnd` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `car_battles_invitations_characters` (
+  `battleInvitationCharacterId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `battleInvitationCharacterBattleInvitationId` int(11) NOT NULL,
+  `battleInvitationCharacterCharacterId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `car_bestiary` (
   `bestiaryId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `bestiaryCharacterId` int(11) NOT NULL,

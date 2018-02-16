@@ -24,7 +24,7 @@ INSERT INTO `car_items_types` (`itemTypeId`, `itemTypeName`, `itemTypeNameShow`)
 
 INSERT INTO `car_monsters_categories` (`monsterCategoryId`, `monsterCategoryName`, `monsterCategoryNameShow`) VALUES
 (1, 'Common', 'Commun'),
-(2, 'Uncommon', 'Peu commun'),
+(2, 'Unusual', 'Peu commun'),
 (3, 'Legendary', 'Légendaire'),
 (4, 'Mythical', 'Mythique');
 

@@ -15,11 +15,12 @@ if (isset($_POST['battleInvitationId'])
     && $_POST['battleInvitationId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $battleInvitationId = htmlspecialchars(addslashes($_POST['battleInvitationId']));
+        $adminBattleInvitationId = htmlspecialchars(addslashes($_POST['battleInvitationId']));
 
         //On fait une requête pour vérifier si l'objet choisit existe
-        $battleInvitationQuery = $bdd->prepare('SELECT * FROM car_battles_invitations');
-        $battleInvitationQuery->execute([$battleInvitationId]);
+        $battleInvitationQuery = $bdd->prepare('SELECT * FROM car_battles_invitations
+        WHERE battleInvitationId = ?');
+        $battleInvitationQuery->execute([$adminBattleInvitationId]);
         $battleInvitationRow = $battleInvitationQuery->rowCount();
 
         //Si l'invitation de combat existe
@@ -28,14 +29,17 @@ if (isset($_POST['battleInvitationId'])
             //On fait une recherche dans la base de donnée de toutes les lieux
             while ($battleInvitation = $battleInvitationQuery->fetch())
             {
-                $battleInvitationName = stripslashes($battleInvitation['battleInvitationName']);
+                $adminBattleInvitationName = stripslashes($battleInvitation['battleInvitationName']);
+                $adminBattleInvitationDescription = stripslashes($battleInvitation['battleInvitationDescription']);
             }
             
             ?>
             
-            <p>Information de l'invitation <em><?php echo $battleInvitationName ?></em> ?</p>
+            <p><em><?php echo $adminBattleInvitationName ?></em></p>
             
-            <p>Liste des joueurs invité : </p>
+            <p><em><?php echo $adminBattleInvitationDescription ?></em></p>
+            
+            <p>Joueur(s) invité : </p>
             
             <?php
             
@@ -51,14 +55,16 @@ if (isset($_POST['battleInvitationId'])
                 $battleInvitationCharacterId = stripslashes($battleInvitationCharacter['characterId']);
                 $battleInvitationCharacterName = stripslashes($battleInvitationCharacter['characterName']);
                 
-            	echo "$battleInvitationCharacterName (Déjà vaincu) est invité <br />";
+            	echo "$battleInvitationCharacterName est invité <br />";
             }
             ?>
+            
+            <p>Que souhaitez-vous faire ?</p>
             
             <hr>
                 
             <form method="POST" action="deleteBattleInvitation.php">
-                <input type="hidden" class="btn btn-default form-control" name="battleInvitationId" value="<?php echo $battleInvitationId ?>">
+                <input type="hidden" class="btn btn-default form-control" name="adminBattleInvitationId" value="<?php echo $adminBattleInvitationId ?>">
                 <input type="submit" class="btn btn-default form-control" name="delete" value="Supprimer l'invitation">
             </form>
             

@@ -88,11 +88,20 @@ if (isset($_SESSION['account']['id']))
 						?>
 
 						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Personnage</a>
+							<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Personnage (<?php echo $battleInvitationRow ?>)</a>
 							<div class="dropdown-menu" aria-labelledby="dropdown01">
+								<?php
+								//Si le joueur possèdes une invtation de combaz
+								if ($battleInvitationRow > 0)
+								{
+									?>
+									<a class="dropdown-item" href="../../modules/battleInvitation/index.php">Invitation de combat (<?php echo $battleInvitationRow ?>)</a>
+									<?php
+								}
+								?>
 								<a class="dropdown-item" href="../../modules/character/index.php">Fiche complète</a>
-								<a class="dropdown-item" href="../../modules/skillPoint/index.php">Points de compétences</a>
 								<a class="dropdown-item" href="../../modules/inventory/index.php">Inventaire</a>
+								<a class="dropdown-item" href="../../modules/skillPoint/index.php">Points de compétences</a>
 							</div>
 						</li>
 								

@@ -7,20 +7,20 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['battleInvitationId'])
+if (isset($_POST['adminBattleInvitationId'])
 && isset($_POST['delete']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['battleInvitationId'])
-    && $_POST['battleInvitationId'] >= 1)
+    if (ctype_digit($_POST['adminBattleInvitationId'])
+    && $_POST['adminBattleInvitationId'] >= 1)
     {
         //On récupère l'id du formulaire précédent
-        $battleInvitationId = htmlspecialchars(addslashes($_POST['battleInvitationId']));
+        $adminBattleInvitationId = htmlspecialchars(addslashes($_POST['adminBattleInvitationId']));
 
         //On fait une requête pour vérifier si l'invitation de combat choisit existe
         $battleInvitationQuery = $bdd->prepare('SELECT * FROM car_battles_invitations 
         WHERE battleInvitationId = ?');
-        $battleInvitationQuery->execute([$battleInvitationId]);
+        $battleInvitationQuery->execute([$adminBattleInvitationId]);
         $battleInvitationRow = $battleInvitationQuery->rowCount();
 
         //Si l'invitation de combat existe
@@ -42,7 +42,7 @@ if (isset($_POST['battleInvitationId'])
             <hr>
                 
             <form method="POST" action="deleteBattleInvitationEnd.php">
-                <input type="hidden" class="btn btn-default form-control" name="battleInvitationId" value="<?php echo $battleInvitationId ?>">
+                <input type="hidden" class="btn btn-default form-control" name="adminBattleInvitationId" value="<?php echo $adminBattleInvitationId ?>">
                 <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme la suppression">
             </form>
             

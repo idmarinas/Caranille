@@ -58,8 +58,27 @@ if (isset($_POST['adminBattleInvitationMonsterId'])
 		while ($battleInvitation = $battleInvitationQuery->fetch())
         {
         	 //On récupère les informations de l'invitation
-            $battleInvitationId = stripslashes($battleInvitation['battleInvitationId']);
+            $adminBattleInvitationId = stripslashes($battleInvitation['battleInvitationId']);
         }
+        
+        //On fait une requête pour vérifier si le monstre choisit existe
+        $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters, car_monsters_categories
+        WHERE monsterCategory = monsterCategoryId
+        AND monsterId = ?');
+        $monsterQuery->execute([$adminBattleInvitationMonsterId]);
+        $monsterRow = $monsterQuery->rowCount();
+
+        //Si le monstre existe
+        if ($monsterRow == 1) 
+        {
+            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+            while ($monster = $monsterQuery->fetch())
+            {
+                $adminBattleInvitationMonsterName = stripslashes($monster['monsterName']);
+            }
+        }
+        
+        $battleInvitationNumber = 0;
         
         //On fait une recherche dans la base de donnée de tous les comptes et personnages
 		$accountQuery = $bdd->query("SELECT * FROM car_accounts, car_characters
@@ -108,15 +127,32 @@ if (isset($_POST['adminBattleInvitationMonsterId'])
 			        	//On ajoute l'invitation de combat dans la base de donnée
 		                $addInvitationBattleCharacter = $bdd->prepare("INSERT INTO car_battles_invitations_characters VALUES(
 		                NULL,
-		                :battleInvitationId,
+		                :adminBattleInvitationId,
 		                :adminAccountCharacterId)");
 		                $addInvitationBattleCharacter->execute([
-		                'battleInvitationId' => $battleInvitationId,
+		                'adminBattleInvitationId' => $adminBattleInvitationId,
 		                'adminAccountCharacterId' => $adminAccountCharacterId]);
 		                $addInvitationBattleCharacter->closeCursor();
+		                
+		                $notificationDate = date('Y-m-d H:i:s');
+                        $notificationMessage = "Félicitation : Vous avez reçu une invitation de combat contre le monstre $adminBattleInvitationMonsterName.<br />Rendez-vous dans le menu Personnage -> Invitation de combat pour y prendre part.";
+                        
+                        //On envoie une notification au joueur
+                        $addNotification = $bdd->prepare("INSERT INTO car_notifications VALUES(
+                        NULL,
+                        :adminAccountCharacterId,
+                        :notificationDate,
+                        :notificationMessage,
+                        'No')");
+                        $addNotification->execute(array(
+                        'adminAccountCharacterId' => $adminAccountCharacterId,  
+                        'notificationDate' => $notificationDate,
+                        'notificationMessage' => $notificationMessage));
+                        $addNotification->closeCursor();
+                        
+                        echo "$adminAccountCharacterName (Déjà vaincu) a été invité <br />";
+		        		$battleInvitationNumber++;
 		        	}
-		        	
-		        	echo "$adminAccountCharacterName (Déjà vaincu) a été invité <br />";
 		        }
 		        //Si le joueur n'a pas vaincu le monstre
 		        else
@@ -127,22 +163,54 @@ if (isset($_POST['adminBattleInvitationMonsterId'])
 		        		//On ajoute l'invitation de combat dans la base de donnée
 		                $addInvitationBattleCharacter = $bdd->prepare("INSERT INTO car_battles_invitations_characters VALUES(
 		                NULL,
-		                :battleInvitationId,
+		                :adminBattleInvitationId,
 		                :adminAccountCharacterId)");
 		                $addInvitationBattleCharacter->execute([
-		                'battleInvitationId' => $battleInvitationId,
+		                'adminBattleInvitationId' => $adminBattleInvitationId,
 		                'adminAccountCharacterId' => $adminAccountCharacterId]);
 		                $addInvitationBattleCharacter->closeCursor();
+		                
+		                $notificationDate = date('Y-m-d H:i:s');
+                        $notificationMessage = "Félicitation : Vous avez reçu une invitation de combat contre le monstre $adminBattleInvitationMonsterName.<br />Rendez-vous dans le menu Personnage -> Invitation de combat pour y prendre part.";
+                        
+                        //On envoie une notification au joueur
+                        $addNotification = $bdd->prepare("INSERT INTO car_notifications VALUES(
+                        NULL,
+                        :adminAccountCharacterId,
+                        :notificationDate,
+                        :notificationMessage,
+                        'No')");
+                        $addNotification->execute(array(
+                        'adminAccountCharacterId' => $adminAccountCharacterId,  
+                        'notificationDate' => $notificationDate,
+                        'notificationMessage' => $notificationMessage));
+                        $addNotification->closeCursor();
+                        
+                        echo "$adminAccountCharacterName (Jamais vaincu) a été invité <br />";
+                        $battleInvitationNumber++;
 		        	}
-		        	
-		        	echo "$adminAccountCharacterName (Jamais vaincu) a été invité <br />";
 		        }
             }
         }
+        
+        //Si il y a eu au moins un joueur invité
+        if ($battleInvitationNumber > 0)
+        {
+        	echo "Les invitations de combats ont bien été envoyée aux joueurs sélectionné.";
+        }
+        //Sinon on supprime l'invitation
+        else
+        {
+        	echo "Aucun joueur n'a été invité avec le taux d'obtention, l'invitation N°$adminBattleInvitationId est donc supprimée";
+        	
+        	//On supprime l'invitation de combat de la base de donnée
+            $battleInvitationDeleteQuery = $bdd->prepare("DELETE FROM car_battles_invitations
+            WHERE battleInvitationId = ?");
+            $battleInvitationDeleteQuery->execute([$adminBattleInvitationId]);
+            $battleInvitationDeleteQuery->closeCursor();
+        }
         ?>
-
-        Les invitations de combats ont bien été envoyée aux joueurs sélectionné.
-
+        
         <hr>
             
         <form method="POST" action="index.php">

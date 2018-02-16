@@ -6,11 +6,17 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); }
 ?>
 
+<hr>
+Informations
+<hr>
+
 <p><img src="<?php echo $characterPicture ?>" height="100" width="100"></p>
 
-<?php echo $characterName ?><br />
+Pseudo : <?php echo $characterName ?><br />
 Classe : <?php echo $characterRaceName ?><br />
 
+<hr>
+Statistiques
 <hr>
 
 Niveau : <?php echo $characterLevel ?><br />
@@ -30,7 +36,9 @@ Prochain niveau dans : <?php echo $experienceRemaining ?><br />
 Experience total : <?php echo $characterExperienceTotal ?><br />
 Argent : <?php echo $characterGold ?><br />
 
-<hr >
+<hr>
+Equipements
+<hr>
 
 <?php echo $itemArmorNameShow ?> : <?php echo $equipmentArmorName ?><br />
 <?php echo $itemBootsNameShow ?> : <?php echo $equipmentBootsName ?><br />
