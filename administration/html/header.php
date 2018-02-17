@@ -69,12 +69,12 @@ require_once("../../kernel/place/index.php");
 						</div>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Événements</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Offrir</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown01">
 							<a class="dropdown-item" href="../../administration/battlesInvitations/index.php">Invitation de combat</a>
-							<a class="dropdown-item" href="../../administration/offerExperience/index.php">Offrir expérience</a>
-							<a class="dropdown-item" href="../../administration/offerGold/index.php">Offrir pièce(s) d'or</a>
-							<a class="dropdown-item" href="../../administration/offerItem/index.php">Offrir objet</a>
+							<a class="dropdown-item" href="../../administration/offerExperience/index.php">Expérience</a>
+							<a class="dropdown-item" href="../../administration/offerGold/index.php">Pièce(s) d'or</a>
+							<a class="dropdown-item" href="../../administration/offerItem/index.php">Objet</a>
 						</div>
 					</li>
 					<li class="nav-item dropdown">
@@ -82,6 +82,13 @@ require_once("../../kernel/place/index.php");
 						<div class="dropdown-menu" aria-labelledby="dropdown01">
 							<a class="dropdown-item" href="../../administration/configuration/index.php">Jeu</a>
 							<a class="dropdown-item" href="../../administration/itemsTypes/index.php">Types d'objets</a>
+						</div>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Débug</a>
+						<div class="dropdown-menu" aria-labelledby="dropdown01">
+							<a class="dropdown-item" href="../../administration/debugLevel/index.php">Modifier mon niveau</a>
+							<a class="dropdown-item" href="../../administration/debugMonster/index.php">Tester un monstre</a>
 						</div>
 					</li>
 				</ul>
