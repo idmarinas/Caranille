@@ -71,8 +71,8 @@ require_once("../../kernel/place/index.php");
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Événements</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown01">
-							<a class="dropdown-item" href="../../administration/battlesInvitationsRandom/index.php">Invitation de combat aléatoire</a>
 							<a class="dropdown-item" href="../../administration/battlesInvitationsNominative/index.php">Invitation de combat nominative</a>
+							<a class="dropdown-item" href="../../administration/battlesInvitationsRandom/index.php">Invitation de combat aléatoire</a>
 							<a class="dropdown-item" href="../../administration/offerExperience/index.php">Offrir expérience</a>
 							<a class="dropdown-item" href="../../administration/offerGold/index.php">Offrir pièce(s) d'or</a>
 							<a class="dropdown-item" href="../../administration/offerItem/index.php">Offrir objet</a>
