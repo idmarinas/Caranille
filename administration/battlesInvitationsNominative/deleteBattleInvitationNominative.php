@@ -41,7 +41,7 @@ if (isset($_POST['adminBattleInvitationId'])
 
             <hr>
                 
-            <form method="POST" action="deleteBattleInvitationEnd.php">
+            <form method="POST" action="deleteBattleInvitationNominativeEnd.php">
                 <input type="hidden" class="btn btn-default form-control" name="adminBattleInvitationId" value="<?php echo $adminBattleInvitationId ?>">
                 <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme la suppression">
             </form>

@@ -47,7 +47,6 @@ if (isset($_POST['adminBattleInvitationId'])
 	            while ($monster = $monsterQuery->fetch())
 	            {
 	                $adminBattleInvitationMonsterName = stripslashes($monster['monsterName']);
-	                echo "monstre" .$adminBattleInvitationMonsterName;
 	            }
 	        }
         	
