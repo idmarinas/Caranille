@@ -51,7 +51,7 @@ require_once("../../kernel/place/index.php");
 							<a class="dropdown-item" href="../../administration/items/index.php">Objets</a>
 							<a class="dropdown-item" href="../../administration/monsters/index.php">Monstres</a>
 							<a class="dropdown-item" href="../../administration/parchments/index.php">Parchemins</a>
-							<a class="dropdown-item" href="../../administration/places/index.php">lieux</a>
+							<a class="dropdown-item" href="../../administration/places/index.php">Lieux</a>
 							<a class="dropdown-item" href="../../administration/races/index.php">Classes</a>
 							<a class="dropdown-item" href="../../administration/shops/index.php">Magasins</a>
 						</div>
