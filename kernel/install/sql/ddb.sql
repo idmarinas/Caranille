@@ -334,7 +334,8 @@ CREATE TABLE IF NOT EXISTS `car_places`
   `placeName` varchar(30) NOT NULL,
   `placeDescription` text NOT NULL,
   `placePriceInn` int(10) NOT NULL,
-  `placeChapter` int(5) NOT NULL
+  `placeChapter` int(5) NOT NULL,
+  `placeAccess` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_places_monsters` 

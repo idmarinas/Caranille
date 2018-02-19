@@ -18,6 +18,8 @@ if ($characterPlaceId >= 1)
         $placeName = stripslashes($place['placeName']);
         $placeDescription = stripslashes(nl2br($place['placeDescription']));
         $placePriceInn = stripslashes($place['placePriceInn']);
+        $placeChapter = stripslashes($place['placeChapter']);
+        $placeAccess = stripslashes($place['placeAccess']);
     }
     $placeQuery->closeCursor();
 

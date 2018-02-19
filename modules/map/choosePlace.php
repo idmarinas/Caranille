@@ -32,19 +32,65 @@ if (isset($_POST['placeId'])
             $placeQuery->execute([$characterChapter, $placeId]);
             $placeRow = $placeQuery->rowCount();
 
-            //Si le lieu existe pour le joueur il y entre
+            //Si le lieu existe pour le joueur
             if ($placeRow >= 1) 
             {
-                //On met le personnage à jour
-                $updatecharacter = $bdd->prepare("UPDATE car_characters SET
-                characterPlaceId = :characterPlaceId
-                WHERE characterId = :characterId");
-                $updatecharacter->execute(array(
-                'characterPlaceId' => $placeId, 
-                'characterId' => $characterId));
-                $updatecharacter->closeCursor();
-
-                header("Location: ../../modules/place/index.php");
+            	while ($placeList = $placeQuery->fetch())
+            	{
+	                //on récupère les valeurs de chaque lieux qu'on va ensuite mettre dans le menu déroulant
+	                $placeId = stripslashes($placeList['placeId']); 
+	                $placeName = stripslashes($placeList['placeName']);
+	                $placeChapter = stripslashes($placeList['placeChapter']);
+	                $placeAccess = stripslashes($placeList['placeAccess']);
+            	}
+            	//On vérifie si le lieu est accessible
+            	if ($placeAccess == "Yes")
+            	{
+            		//On met le personnage à jour
+	                $updatecharacter = $bdd->prepare("UPDATE car_characters SET
+	                characterPlaceId = :characterPlaceId
+	                WHERE characterId = :characterId");
+	                $updatecharacter->execute(array(
+	                'characterPlaceId' => $placeId, 
+	                'characterId' => $characterId));
+	                $updatecharacter->closeCursor();
+	
+	                header("Location: ../../modules/place/index.php");
+            	}
+            	//Si le lieu n'est pas accessible
+            	else
+            	{
+            		//On vérifie si le jour est administrateur si oui il peut rentrer
+            		if ($accountAccess == 2)
+            		{
+            			//On met le personnage à jour
+		                $updatecharacter = $bdd->prepare("UPDATE car_characters SET
+		                characterPlaceId = :characterPlaceId
+		                WHERE characterId = :characterId");
+		                $updatecharacter->execute(array(
+		                'characterPlaceId' => $placeId, 
+		                'characterId' => $characterId));
+		                $updatecharacter->closeCursor();
+		
+		                header("Location: ../../modules/place/index.php");
+            		}
+            		//Sinon il peut pas rentrer
+            		else
+            		{
+            			?>
+            			
+            			Ce lieu est actuellement inaccessible
+            			
+            			<hr>
+	    
+						<form method="POST" action="index.php">
+						    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+						</form>
+						
+						<?php
+            		}
+            	}
+                
             }
             //Si le lieu n'exite pas pour le joueur on le prévient
             else

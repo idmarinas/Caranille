@@ -30,8 +30,18 @@ if ($placeRow >= 1)
                 $placeId = stripslashes($placeList['placeId']); 
                 $placeName = stripslashes($placeList['placeName']);
                 $placeChapter = stripslashes($placeList['placeChapter']);
+                $placeAccess = stripslashes($placeList['placeAccess']);
+                
+                if ($placeAccess == "Yes")
+                {
+                	$placeAccessValue = "Accessible";
+                }
+                else
+                {
+                	$placeAccessValue = "Inaccessible";
+                }
                 ?>
-                <option value="<?php echo $placeId ?>"><?php echo "Chapitre $placeChapter - $placeName" ?></option>
+                <option value="<?php echo $placeId ?>"><?php echo "Chapitre $placeChapter - $placeName ($placeAccessValue)" ?></option>
                 <?php
             }
             ?>

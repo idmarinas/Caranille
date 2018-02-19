@@ -13,6 +13,7 @@ if (isset($_POST['adminPlaceId'])
 && isset($_POST['adminplaceDescription'])
 && isset($_POST['adminplacePriceInn'])
 && isset($_POST['adminplaceChapter'])
+&& isset($_POST['adminplaceAccess'])
 && isset($_POST['finalEdit']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
@@ -30,6 +31,7 @@ if (isset($_POST['adminPlaceId'])
         $adminItemDescription = htmlspecialchars(addslashes($_POST['adminplaceDescription']));
         $adminplacePriceInn = htmlspecialchars(addslashes($_POST['adminplacePriceInn']));
         $adminplaceChapter = htmlspecialchars(addslashes($_POST['adminplaceChapter']));
+        $adminplaceAccess = htmlspecialchars(addslashes($_POST['adminplaceAccess']));
 
         //On fait une requête pour vérifier si le lieu choisit existe
         $placeQuery = $bdd->prepare('SELECT * FROM car_places 
@@ -40,13 +42,25 @@ if (isset($_POST['adminPlaceId'])
         //Si le lieu existe
         if ($placeRow == 1) 
         {
+        	//Si le lieu est ou devient innaccessible
+        	if ($adminplaceAccess == "No")
+        	{
+        		//On ejecte tous les joueurs présents dedans
+	            $updateCharacter = $bdd->prepare('UPDATE car_characters 
+	            SET characterPlaceId = 0
+	            WHERE characterPlaceId = :adminPlaceId');
+	            $updateCharacter->execute([
+	            'adminPlaceId' => $adminPlaceId]);
+	            $updateCharacter->closeCursor();
+        	}
             //On met à jour le lieu dans la base de donnée
             $updatePlace = $bdd->prepare('UPDATE car_places 
             SET placePicture = :adminplacePicture,
             placeName = :adminplaceName,
             placeDescription = :adminItemDescription,
             placePriceInn = :adminplacePriceInn,
-            placeChapter = :adminplaceChapter
+            placeChapter = :adminplaceChapter,
+            placeAccess = :adminplaceAccess
             WHERE placeId = :adminPlaceId');
             $updatePlace->execute([
             'adminplacePicture' => $adminplacePicture,
@@ -54,6 +68,7 @@ if (isset($_POST['adminPlaceId'])
             'adminItemDescription' => $adminItemDescription,
             'adminplacePriceInn' => $adminplacePriceInn,
             'adminplaceChapter' => $adminplaceChapter,
+            'adminplaceAccess' => $adminplaceAccess,
             'adminPlaceId' => $adminPlaceId]);
             $updatePlace->closeCursor();
             ?>

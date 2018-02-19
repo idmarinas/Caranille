@@ -35,6 +35,7 @@ if (isset($_POST['adminPlaceId'])
                 $adminplaceDescription = stripslashes($place['placeDescription']);
                 $adminplacePriceInn = stripslashes($place['placePriceInn']);
                 $adminplaceChapter = stripslashes($place['placeChapter']);
+                $adminplaceAccess = stripslashes($place['placeAccess']);
             }
             ?>
 
@@ -48,6 +49,28 @@ if (isset($_POST['adminPlaceId'])
                 Description : <br> <textarea class="form-control" name="adminplaceDescription" id="adminplaceDescription" rows="3"><?php echo $adminplaceDescription; ?></textarea>
                 Prix de l'auberge : <input type="number" name="adminplacePriceInn" class="form-control" placeholder="Prix de l'auberge" value="<?php echo $adminplacePriceInn ?>" required>
                 lieu disponible au chapitre : <input type="number" name="adminplaceChapter" class="form-control" placeholder="lieu disponible au chapitre" value="<?php echo $adminplaceChapter ?>" required>
+                Lieu accessible aux autres joueurs : <select name="adminplaceAccess" class="form-control">
+    
+			        <?php
+			        switch ($adminplaceAccess)
+			        {
+			            case "Yes":
+			                ?>
+			                <option selected="selected" value="Yes">Oui</option>
+			                <option value="No">Non</option>
+			                <?php
+			            break;
+			    
+			            case "No":
+			                ?>
+			                <option value="Yes">Oui</option>
+			                <option selected="selected" value="No">Non</option>
+			                <?php
+			            break;
+			        }
+			        ?>
+			    
+			    </select>
                 <input type="hidden" name="adminPlaceId" value="<?php echo $adminPlaceId ?>">
                 <input name="finalEdit" class="btn btn-default form-control" type="submit" value="Modifier">
             </form>

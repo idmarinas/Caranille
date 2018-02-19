@@ -12,6 +12,7 @@ if (isset($_POST['adminplacePicture'])
 && isset($_POST['adminplaceDescription'])
 && isset($_POST['adminplacePriceInn'])
 && isset($_POST['adminplaceChapter'])
+&& isset($_POST['adminplaceAccess'])
 && isset($_POST['finalAdd']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
@@ -26,6 +27,7 @@ if (isset($_POST['adminplacePicture'])
         $adminplaceDescription = htmlspecialchars(addslashes($_POST['adminplaceDescription']));
         $adminplacePriceInn = htmlspecialchars(addslashes($_POST['adminplacePriceInn']));
         $adminplaceChapter = htmlspecialchars(addslashes($_POST['adminplaceChapter']));
+        $adminplaceAccess = htmlspecialchars(addslashes($_POST['adminplaceAccess']));
 
         //On ajoute le lieu dans la base de donnée
         $addPlace = $bdd->prepare("INSERT INTO car_places VALUES(
@@ -34,13 +36,15 @@ if (isset($_POST['adminplacePicture'])
         :adminplaceName,
         :adminplaceDescription,
         :adminplacePriceInn,
-        :adminplaceChapter)");
+        :adminplaceChapter,
+        :adminplaceAccess)");
         $addPlace->execute([
         'adminplacePicture' => $adminplacePicture,
         'adminplaceName' => $adminplaceName,
         'adminplaceDescription' => $adminplaceDescription,
         'adminplacePriceInn' => $adminplacePriceInn,
-        'adminplaceChapter' => $adminplaceChapter]);
+        'adminplaceChapter' => $adminplaceChapter,
+        'adminplaceAccess' => $adminplaceAccess]);
         $addPlace->closeCursor();
         ?>
 

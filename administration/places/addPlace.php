@@ -19,6 +19,10 @@ if (isset($_POST['add']))
         Description : <br> <textarea class="form-control" name="adminplaceDescription" id="adminplaceDescription" rows="3"></textarea>
         Prix de l'auberge : <input type="number" name="adminplacePriceInn" class="form-control" placeholder="Prix de l'auberge" value="0" required>
         lieu disponible au chapitre : <input type="number" name="adminplaceChapter" class="form-control" placeholder="lieu disponible au chapitre" value="1" required>
+        Lieu accessible aux autres joueurs : <select name="adminplaceAccess" class="form-control">
+	        <option value="Yes">Oui</option>
+	        <option value="No">Non</option>
+	    </select>
         <input name="finalAdd" class="btn btn-default form-control" type="submit" value="Ajouter">
     </form>
     
