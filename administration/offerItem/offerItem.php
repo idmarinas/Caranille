@@ -8,17 +8,21 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminCharacterId'])
-&& isset($_POST['adminItemId']))
+&& isset($_POST['adminItemId'])
+&& isset($_POST['adminItemQuantity']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
     if (ctype_digit($_POST['adminCharacterId'])
     && ctype_digit($_POST['adminItemId'])
+    && ctype_digit($_POST['adminItemQuantity'])
     && $_POST['adminCharacterId'] >= 0
-    && $_POST['adminItemId'] >= 0)
+    && $_POST['adminItemId'] >= 0
+    && $_POST['adminItemQuantity'] >= 0)
     {
         //On récupère les informations du formulaire précédent
         $adminCharacterId = htmlspecialchars(addslashes($_POST['adminCharacterId']));
         $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
+        $adminItemQuantity = htmlspecialchars(addslashes($_POST['adminItemQuantity']));
         
         //Si l'objet à offrir est pour tous les joueurs
         if ($adminCharacterId == 0)
@@ -42,7 +46,7 @@ if (isset($_POST['adminCharacterId'])
                 ?>
                 
                 <p>ATTENTION</p> 
-                Vous êtes sur le point d'offrir l'objet <em><?php echo $adminItemName ?></em> à <em>tous les joueurs</em>.<br />
+                Vous êtes sur le point d'offrir l'objet <em><?php echo $adminItemName ?></em> en <?php echo $adminItemQuantity ?> quantité(s) à <em>tous les joueurs</em>.<br />
                 Confirmez-vous  ?
 
                 <hr>
@@ -50,6 +54,7 @@ if (isset($_POST['adminCharacterId'])
                 <form method="POST" action="offerItemEnd.php">
                     <input type="hidden" class="btn btn-default form-control" name="adminCharacterId" value="<?php echo $adminCharacterId ?>">
                     <input type="hidden" class="btn btn-default form-control" name="adminItemId" value="<?php echo $adminItemId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="adminItemQuantity" value="<?php echo $adminItemQuantity ?>">
                     <input type="submit" class="btn btn-default form-control" name="finalAdd" value="Je confirme">
                 </form>
                 
@@ -107,7 +112,7 @@ if (isset($_POST['adminCharacterId'])
                     
                     <p>ATTENTION</p>
 
-                    Vous êtes sur le point d'offrir l'objet <em><?php echo $adminItemName ?></em> à <em><?php echo $adminCharacterName ?></em>.<br />
+                    Vous êtes sur le point d'offrir l'objet <em><?php echo $adminItemName ?></em> en <?php echo $adminItemQuantity ?> quantité(s) à <em><?php echo $adminCharacterName ?></em>.<br />
                     Confirmez-vous ?
         
                     <hr>
@@ -115,6 +120,7 @@ if (isset($_POST['adminCharacterId'])
                     <form method="POST" action="offerItemEnd.php">
                         <input type="hidden" class="btn btn-default form-control" name="adminCharacterId" value="<?php echo $adminCharacterId ?>">
                         <input type="hidden" class="btn btn-default form-control" name="adminItemId" value="<?php echo $adminItemId ?>">
+                        <input type="hidden" class="btn btn-default form-control" name="adminItemQuantity" value="<?php echo $adminItemQuantity ?>">
                         <input type="submit" class="btn btn-default form-control" name="finalAdd" value="Je confirme">
                     </form>
                     

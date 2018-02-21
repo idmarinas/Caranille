@@ -2,7 +2,7 @@
 
 //S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
 if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
-//S'il y a actuellement un combat on redirige le joueur vers le module battle
+//S'il n'y a actuellement pas de combat on redirige le joueur vers l'accueil
 if ($battleRow == 0) { exit(header("Location: ../../modules/main/index.php")); }
 
 //On calcul les MP nécessaire au lancement d'une attaque magique
@@ -23,14 +23,14 @@ MP de <?php echo $opponentName ?> : <?php echo "$battleOpponentMpRemaining/$oppo
 
 <form method="POST" action="physicalAttack.php">
     <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-    <input type="submit" name="attack" class="btn btn-default form-control" value="Attaque physique"><br>
+    <input type="submit" class="btn btn-default form-control" name="attack" value="Attaque physique"><br>
 </form>
 
 <hr>
 
 <form method="POST" action="magicAttack.php">
     <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-    <input type="submit" name="magic" class="btn btn-default form-control" value="Attaque magique (<?php echo $mpNeed; ?> MP)"><br>
+    <input type="submit" class="btn btn-default form-control" name="magic" value="Attaque magique (<?php echo $mpNeed; ?> MP)"><br>
 </form>
 
 <hr>
@@ -51,7 +51,7 @@ if ($itemRow > 0)
     ?>
     
     <form method="POST" action="useItem.php">
-        <select name="itemId" class="form-control">
+        Objet(s) disponible : <select class="form-control" name="itemId" >
             
             <?php
             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
@@ -69,14 +69,14 @@ if ($itemRow > 0)
             
         </select>
         <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-        <input type="submit" name="useItem" class="btn btn-default form-control" value="Utiliser">
+        <input type="submit" class="btn btn-default form-control" name="useItem" value="Utiliser">
     </form>
     
     <?php
 }
 else 
 {
-    echo "Vous ne possédez aucun objets";
+    echo "Vous ne possédez aucun objet";
 }
 $itemQuery->closeCursor();
 ?>
@@ -85,7 +85,7 @@ $itemQuery->closeCursor();
 
 <form method="POST" action="escape.php">
     <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-    <input type="submit" name="escape" class="btn btn-default form-control" value="Abandonner le combat"><br />
+    <input type="submit" class="btn btn-default form-control" name="escape" value="Abandonner"><br />
 </form>
 
 <?php require_once("../../html/footer.php"); ?>

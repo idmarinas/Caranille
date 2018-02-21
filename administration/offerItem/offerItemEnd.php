@@ -9,17 +9,21 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminCharacterId'])
 && isset($_POST['adminItemId'])
+&& isset($_POST['adminItemQuantity'])
 && isset($_POST['finalAdd']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
     if (ctype_digit($_POST['adminCharacterId'])
     && ctype_digit($_POST['adminItemId'])
+    && ctype_digit($_POST['adminItemQuantity'])
     && $_POST['adminCharacterId'] >= 0
-    && $_POST['adminItemId'] >= 0)
+    && $_POST['adminItemId'] >= 0
+    && $_POST['adminItemQuantity'] >= 0)
     {
         //On récupère les informations du formulaire précédent
         $adminCharacterId = htmlspecialchars(addslashes($_POST['adminCharacterId']));
         $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
+        $adminItemQuantity = htmlspecialchars(addslashes($_POST['adminItemQuantity']));
         
         //Si l'objet à offrir est pour tous les joueurs
         if ($adminCharacterId == 0)
@@ -74,9 +78,10 @@ if (isset($_POST['adminCharacterId'])
 
                         //On met l'inventaire à jour
                         $updateInventory = $bdd->prepare("UPDATE car_inventory SET
-                        inventoryQuantity = inventoryQuantity + 1
+                        inventoryQuantity = inventoryQuantity + :itemQuantity
                         WHERE inventoryId = :inventoryId");
                         $updateInventory->execute(array(
+                        'itemQuantity' => $adminItemQuantity,
                         'inventoryId' => $inventoryId));
                         $updateInventory->closeCursor(); 
                     }
@@ -87,18 +92,19 @@ if (isset($_POST['adminCharacterId'])
                         NULL,
                         :adminCharacterId,
                         :adminItemId,
-                        '1',
+                        :adminItemQuantity,
                         '0')");
                         $addItem->execute([
                         'adminCharacterId' => $adminCharacterId,
-                        'adminItemId' => $adminItemId]);
+                        'adminItemId' => $adminItemId,
+                        'adminItemQuantity' => $adminItemQuantity]);
                         $addItem->closeCursor();  
                     }
                     $itemQuery->closeCursor();
                 }
                 ?>
                 
-                Vous venez d'offrir l'objet <em><?php echo $adminItemName ?></em> à <em>tous les joueurs</em>.<br />
+                Vous venez d'offrir l'objet <em><?php echo $adminItemName ?></em> en <?php echo $adminItemQuantity ?> quantité(s) à <em>tous les joueurs</em>.<br />
                 
                 <hr>
                     
@@ -173,9 +179,10 @@ if (isset($_POST['adminCharacterId'])
 
                         //On met l'inventaire à jour
                         $updateInventory = $bdd->prepare("UPDATE car_inventory SET
-                        inventoryQuantity = inventoryQuantity + 1
+                        inventoryQuantity = inventoryQuantity + :itemQuantity
                         WHERE inventoryId = :inventoryId");
                         $updateInventory->execute(array(
+                        'itemQuantity' => $adminItemQuantity,
                         'inventoryId' => $inventoryId));
                         $updateInventory->closeCursor(); 
                     }
@@ -186,17 +193,18 @@ if (isset($_POST['adminCharacterId'])
                         NULL,
                         :adminCharacterId,
                         :adminItemId,
-                        '1',
+                        :adminItemQuantity,
                         '0')");
                         $addItem->execute([
                         'adminCharacterId' => $adminCharacterId,
-                        'adminItemId' => $adminItemId]);
+                        'adminItemId' => $adminItemId,
+                        'adminItemQuantity' => $adminItemQuantity]);
                         $addItem->closeCursor();  
                     }
                     $itemQuery->closeCursor();
                     ?>
 
-                    Vous venez d'offrir l'objet <em><?php echo $adminItemName ?></em> à <em><?php echo $adminCharacterName ?></em>.<br />
+                    Vous venez d'offrir l'objet <em><?php echo $adminItemName ?></em> en <?php echo $adminItemQuantity ?> quantité(s) à <em><?php echo $adminCharacterName ?></em>.<br />
 
                     <hr>
                     

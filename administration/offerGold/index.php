@@ -10,7 +10,8 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 <p>Offrir de l'argent</p>
 
 <form method="POST" action="offerGold.php">
-    Liste des personnages <select name="adminCharacterId" class="form-control">
+    Pièces d'or à offrir : <input type="number" class="form-control" name="adminOfferGold" placeholder="Pièces d'or" required>
+    Liste des personnages <select class="form-control" name="adminCharacterId" >
         <option value="0">Tous les joueurs</option>
         
         <?php
@@ -31,8 +32,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
         ?>
     
     </select>
-    Pièces d'or à offrir : <input type="number" name="adminOfferGold" class="form-control" placeholder="Pièces d'or" required>
-    <input type="submit" name="manage" class="btn btn-default form-control" value="Offrir de l'argent">
+    <input type="submit" class="btn btn-default form-control" name="manage" value="Offrir de l'argent">
 </form>
 
 <?php require_once("../html/footer.php");

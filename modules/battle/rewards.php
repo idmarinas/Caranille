@@ -2,7 +2,7 @@
 
 //S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
 if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
-//S'il y a actuellement un combat on redirige le joueur vers le module battle
+//S'il n'y a actuellement pas de combat on redirige le joueur vers l'accueil
 if ($battleRow == 0) { exit(header("Location: ../../modules/main/index.php")); }
 
 //Si le monstre et le joueur on 0 HP

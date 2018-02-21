@@ -18,7 +18,7 @@ Accès : <?php echo $accountAccess ?><br />
 
 <form method="POST" action="changePassword.php">
     <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-    <input type="submit" name="changePassword" class="btn btn-default form-control" value="Changer mot de passe"><br>
+    <input type="submit" name="changePassword" class="btn btn-default form-control" value="Changer le mot de passe"><br>
 </form>
 
 <?php require_once("../../html/footer.php"); ?>

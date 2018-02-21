@@ -10,28 +10,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 <p>Offrir un objet</p>
 
 <form method="POST" action="offerItem.php">
-    Liste des personnages <select name="adminCharacterId" class="form-control">
-        <option value="0">Tous les joueurs</option>
-        
-        <?php
-        //On fait une recherche dans la base de donnée tous les personnages
-        $characterQuery = $bdd->query("SELECT * FROM car_characters
-        ORDER by characterName");
-        
-        //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-        while ($character = $characterQuery->fetch())
-        {
-            $adminCharacterId = stripslashes($character['characterId']);
-            $adminCharacterName =  stripslashes($character['characterName']);
-            ?>
-            <option value="<?php echo $adminCharacterId ?>"><?php echo "$adminCharacterName"; ?></option>
-            <?php
-        }
-        $characterQuery->closeCursor();
-        ?>
-    
-    </select>
-    Liste des objets <select name="adminItemId" class="form-control">
+    Liste des objets <select class="form-control" name="adminItemId">
 
         <?php
         //On fait une recherche dans la base de donnée tous les objets
@@ -55,7 +34,29 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
         ?>
     
     </select>
-    <input type="submit" name="manage" class="btn btn-default form-control" value="Offrir cet objet">
+    Quantité à offrir : <input type="number" class="form-control" name="adminItemQuantity" placeholder="Quantité à offrir" required>
+    Liste des personnages <select class="form-control" name="adminCharacterId">
+        <option value="0">Tous les joueurs</option>
+        
+        <?php
+        //On fait une recherche dans la base de donnée tous les personnages
+        $characterQuery = $bdd->query("SELECT * FROM car_characters
+        ORDER by characterName");
+        
+        //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+        while ($character = $characterQuery->fetch())
+        {
+            $adminCharacterId = stripslashes($character['characterId']);
+            $adminCharacterName =  stripslashes($character['characterName']);
+            ?>
+            <option value="<?php echo $adminCharacterId ?>"><?php echo "$adminCharacterName"; ?></option>
+            <?php
+        }
+        $characterQuery->closeCursor();
+        ?>
+    
+    </select>
+    <input type="submit" class="btn btn-default form-control" name="manage" value="Offrir cet objet">
 </form>
 
 <?php require_once("../html/footer.php");

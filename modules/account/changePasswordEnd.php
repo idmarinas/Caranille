@@ -61,6 +61,7 @@ if (isset($_POST['oldPassword'])
             {
                 echo "L'ancien mot de passe saisit est incorrect";
             }
+            $accountQuery->closeCursor();
         }
         //Si les deux mots de passe ne sont pas identique
         else 

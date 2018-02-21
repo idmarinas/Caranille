@@ -10,7 +10,8 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 <p>Offrir de l'expérience</p>
 
 <form method="POST" action="offerExperience.php">
-    Liste des personnages <select name="adminCharacterId" class="form-control">
+    Expérience à offrir : <input type="number" class="form-control" name="adminOfferExperience" placeholder="Experience" required>
+    Liste des personnages <select class="form-control" name="adminCharacterId" >
         <option value="0">Tous les joueurs</option>
         
         <?php
@@ -31,8 +32,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
         ?>
     
     </select>
-    Expérience à offrir : <input type="number" name="adminOfferExperience" class="form-control" placeholder="Experience" required>
-    <input type="submit" name="manage" class="btn btn-default form-control" value="Offrir de l'expérience">
+    <input type="submit" class="btn btn-default form-control" name="manage" value="Offrir de l'expérience">
 </form>
 
 <?php require_once("../html/footer.php");

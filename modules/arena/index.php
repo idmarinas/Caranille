@@ -17,13 +17,13 @@ if ($opponentRow > 0)
     ?>
     
     <form method="POST" action="selectedOpponent.php">
-        Liste des joueurs : <select name="opponentCharacterId" class="form-control">
+        Liste des joueurs : <select class="form-control" name="opponentCharacterId">
                 
             <?php
             //On fait une boucle sur tous les résultats
             while ($opponent = $opponentQuery->fetch())
             {
-                //On récupère les informations du personnage
+                //On récupère les informations de l'adversaire
                 $characterId = stripslashes($opponent['characterId']); 
                 $characterName = stripslashes($opponent['characterName']);
                 ?>
@@ -34,7 +34,7 @@ if ($opponentRow > 0)
             
         </select>
         <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-        <input type="submit" name="enter" class="btn btn-default form-control" value="Lancer le combat">
+        <input type="submit" class="btn btn-default form-control" name="enter" value="Lancer le combat">
     </form>
     
     <?php

@@ -2,7 +2,7 @@
 
 //S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
 if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
-//S'il y a actuellement un combat on redirige le joueur vers le module battle
+//S'il n'y a actuellement pas de combat on redirige le joueur vers l'accueil
 if ($battleRow == 0) { exit(header("Location: ../../modules/main/index.php")); }
 
 //Si les variables $_POST suivantes existent
@@ -56,32 +56,9 @@ if (isset($_POST['token'])
                     }
                     $itemQuery->closeCursor();
                     
-                    /*
-                    VARIABLES GLOBALES
-                    */
-                    $characterMinStrength = $characterStrengthTotal / 2;
-                    $characterMaxStrength = $characterStrengthTotal * 2;    
-                    $characterMinMagic = $characterMagicTotal / 2;
-                    $characterMaxMagic = $characterMagicTotal * 4;
-                
-                    $opponentMinStrength = $opponentStrength / 2;
-                    $opponentMaxStrength = $opponentStrength * 2;    
-                    $opponentMinMagic = $opponentMagic / 2;
-                    $opponentMaxMagic = $opponentMagic * 4;
-                
-                    $opponentMinDefense = $opponentDefense / 2;
-                    $opponentMaxDefense = $opponentDefense * 2;
-                    $opponentMinDefenseMagic = $opponentDefenseMagic / 2;
-                    $opponentMaxDefenseMagic = $opponentDefenseMagic * 2;
-                
-                    $characterMinDefense = $characterDefenseTotal / 2;
-                    $characterMaxDefense = $characterDefenseTotal * 2;
-                    $characterMinDefenseMagic = $characterDefenseMagicTotal / 2;
-                    $characterMaxDefenseMagic = $characterDefenseMagicTotal * 2;
-                    
                     echo "$characterName vient d'utiliser l'objet $itemName<br />";
                     echo "+ $itemHpEffect HP<br />";
-                    echo "+ $itemMpEffect MP<br />";
+                    echo "+ $itemMpEffect MP<br /><br />";
                 
                     //On met à jour les HP et MP du joueur
                     $characterHpMin = $characterHpMin  + $itemHpEffect;
@@ -105,17 +82,33 @@ if (isset($_POST['token'])
                     if ($opponentStrength >= $opponentMagic)
                     {
                         //On calcule les dégats de l'adversaire
-                        $positiveDamagesOpponent = mt_rand($opponentMinStrength, $opponentMaxStrength);
-                        $negativeDamagesOpponent = mt_rand($characterMinDefense, $characterMaxDefense);
-                        $totalDamagesOpponent = $positiveDamagesOpponent - $negativeDamagesOpponent;
+                        $totalDamagesOpponent = $opponentStrength * 4 - $characterDefenseTotal * 2;
+
+                        echo "$opponentName lance une attaque physique<br />";
                     }
                     //Sinon il fera une attaque magique
                     else
                     {
-                        //On calcule les dégats de l'adversaire
-                        $positiveDamagesOpponent = mt_rand($opponentMinMagic, $opponentMaxMagic);
-                        $negativeDamagesOpponent = mt_rand($characterMinDefenseMagic, $characterMaxDefenseMagic);
-                        $totalDamagesOpponent = $positiveDamagesOpponent - $negativeDamagesOpponent;
+                        //On vérifie si l'adversaire a suffisament de MP pour faire une attaque magique
+                        $mpNeed = round($opponentMagic / 10);
+                        if ($battleOpponentMpRemaining >= $mpNeed)
+                        {
+                            //On calcule les dégats de l'adversaire
+                            $totalDamagesOpponent = $opponentMagic * 4 - $characterDefenseMagic * 2;
+
+                            //On met les MP de l'adversaire à jour
+                            $battleOpponentMpRemaining = $battleOpponentMpRemaining - $mpNeed;
+
+                            echo "$opponentName lance une attaque magique<br />";
+                        }
+                        //Si l'adversaire n'a pas assez de MP pour faire une attaque magique il fera une attaque physique
+                        else
+                        {
+                            //On calcule les dégats de l'adversaire
+                            $totalDamagesOpponent = $opponentStrength * 4 - $characterDefenseTotal * 2;
+
+                            echo "$opponentName n'a plus assez de MP, il lance une attaque physique<br />";
+                        }
                     }
                 
                     //Si l'adversaire a fait des dégats négatif ont bloque à zéro pour ne pas soigner le personnage (Car moins et moins fait plus)
@@ -196,10 +189,12 @@ if (isset($_POST['token'])
                 
                     //On met l'adversaire à jour dans la base de donnée
                     $updateBattle = $bdd->prepare("UPDATE car_battles
-                    SET battleOpponentHpRemaining = :battleOpponentHpRemaining
+                    SET battleOpponentHpRemaining = :battleOpponentHpRemaining,
+                    battleOpponentMpRemaining = :battleOpponentMpRemaining
                     WHERE battleId = :battleId");
                     $updateBattle->execute([
                     'battleOpponentHpRemaining' => $battleOpponentHpRemaining,
+                    'battleOpponentMpRemaining' => $battleOpponentMpRemaining,
                     'battleId' => $battleId]);
                     $updateBattle->closeCursor();
                     
@@ -211,7 +206,7 @@ if (isset($_POST['token'])
                         <hr>
                         
                         <form method="POST" action="rewards.php">
-                            <input type="submit" name="escape" class="btn btn-default form-control" value="Continuer"><br />
+                            <input type="submit" class="btn btn-default form-control" name="escape" value="Continuer"><br />
                         </form>
                         <?php
                     }
@@ -224,7 +219,7 @@ if (isset($_POST['token'])
                         <hr>
                 
                         <form method="POST" action="index.php">
-                            <input type="submit" name="magic" class="btn btn-default form-control" value="Continuer"><br>
+                            <input type="submit" class="btn btn-default form-control" name="magic" value="Continuer"><br>
                         </form>
                         
                         <?php
