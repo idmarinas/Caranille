@@ -28,9 +28,10 @@ if ($battleInvitationRow > 0)
                 $battleInvitationId = stripslashes($battleInvitation['battleInvitationId']);
                 $battleInvitationName = stripslashes($battleInvitation['battleInvitationName']);
                 $battleInvitationMonsterName = stripslashes($battleInvitation['monsterName']);
+                $battleInvitationMonsterLevel = stripslashes($battleInvitation['monsterLevel']);
                 $battleInvitationCharacterId = stripslashes($battleInvitation['battleInvitationCharacterId']);
                 ?>
-                <option value="<?php echo $battleInvitationCharacterId ?>"><?php echo "$battleInvitationName ($battleInvitationMonsterName)"; ?></option>
+                <option value="<?php echo $battleInvitationCharacterId ?>"><?php echo "$battleInvitationName (Monstre : $battleInvitationMonsterName - Niveau : $battleInvitationMonsterLevel)"; ?></option>
                 <?php
             }
             ?>

@@ -32,9 +32,17 @@ if (isset($_POST['battleInvitationCharacterId'])
             while ($battleInvitation = $battleInvitationQuery->fetch())
             {
                 $battleInvitationName = stripslashes($battleInvitation['battleInvitationName']);
+                $battleInvitationDescription = stripslashes(nl2br($battleInvitation['battleInvitationDescription']));
                 $battleInvitationMonsterName = stripslashes($battleInvitation['monsterName']);
+                $battleInvitationMonsterLevel = stripslashes($battleInvitation['monsterLevel']);
             }
             ?>
+
+            <p>Nom : <?php echo $battleInvitationName ?></p>
+            <p>Description : <?php echo $battleInvitationDescription ?></p>
+            <p>Niveau recommandé : <?php echo $battleInvitationMonsterLevel ?></p>
+
+            <hr>
             
             ATTENTION : Vous êtes sur le point de lancer un combat contre <?php echo $battleInvitationMonsterName ?><br /><br />
             
