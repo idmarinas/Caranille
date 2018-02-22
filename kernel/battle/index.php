@@ -23,7 +23,8 @@ if ($battleRow == 1)
     //S'il s'agit d'un combat de Donjon, de mission ou d'histoire
     if ($battleType == "Dungeon"
     || $battleType == "Mission"
-    || $battleType == "Story")
+    || $battleType == "Story"
+    || $battleType == "battleInvitation")
     {
         //On récupère toutes les informations du monstre que nous sommes en train de combattre
         $opponentQuery = $bdd->prepare("SELECT * FROM car_monsters 

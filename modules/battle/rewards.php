@@ -69,7 +69,8 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
     //S'il s'agit d'un combat de Donjon, de mission ou d'histoire
     if ($battleType == "Dungeon"
     || $battleType == "Mission"
-    || $battleType == "Story")
+    || $battleType == "Story"
+    || $battleType == "battleInvitation")
     {
         ?>
 
