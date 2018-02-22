@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `car_battles_invitations` (
   `battleInvitationMonsterId` int(11) NOT NULL,
   `battleInvitationPicture` varchar(50) NOT NULL,
   `battleInvitationName` varchar(30) NOT NULL,
-  `battleInvitationDescription` varchar(30) NOT NULL,
+  `battleInvitationDescription` text NOT NULL,
   `battleInvitationDateBegin` datetime NOT NULL,
   `battleInvitationDateEnd` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
