@@ -16,7 +16,7 @@ if (isset($_POST['battleInvitationCharacterId'])
         //On récupère l'id du formulaire précédent
         $battleInvitationCharacterId = htmlspecialchars(addslashes($_POST['battleInvitationCharacterId']));
 
-        //On fait une requête pour vérifier si l'invitation de combnat choisit existe
+        //On fait une requête pour vérifier si l'invitation de combat choisit existe
         $battleInvitationQuery = $bdd->prepare('SELECT * FROM car_battles_invitations, car_battles_invitations_characters, car_monsters
 		WHERE battleInvitationId = battleInvitationCharacterBattleInvitationId
 		AND battleInvitationMonsterId = monsterId
@@ -28,16 +28,17 @@ if (isset($_POST['battleInvitationCharacterId'])
         //Si l'invitation de combat existe
         if ($battleInvitationRow == 1) 
         {
-            //On fait une recherche dans la base de donnée de toutes les lieux
+            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
             while ($battleInvitation = $battleInvitationQuery->fetch())
             {
+                //On récupère les informations de l'invitation de combat
             	$battleInvitationId = stripslashes($battleInvitation['battleInvitationId']);
                 $battleInvitationName = stripslashes($battleInvitation['battleInvitationName']);
                 $battleInvitationMonsterId = stripslashes($battleInvitation['monsterId']);
                 $battleInvitationMonsterName = stripslashes($battleInvitation['monsterName']);
             }
     
-            //On fait une requête pour vérifier si le monstre est bien disponible dans le lieu du joueur
+            //On fait une requête pour vérifier si l'adversaire est bien disponible dans le lieu du joueur
             $opponentQuery = $bdd->prepare("SELECT * FROM car_monsters
             WHERE monsterId = ?");
             $opponentQuery->execute([$battleInvitationMonsterId]);
@@ -46,9 +47,10 @@ if (isset($_POST['battleInvitationCharacterId'])
             //Si le monstre existe
             if ($opponentRow == 1) 
             {
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                 while ($opponent = $opponentQuery->fetch())
                 {
-                    //On récupère les informations du monstre
+                    //On récupère les informations de l'adversaire
                     $opponentHp = stripslashes($opponent['monsterHp']);
                     $opponentMp = stripslashes($opponent['monsterMp']);
                     $monsterLimited = stripslashes($opponent['monsterLimited']);
@@ -84,9 +86,10 @@ if (isset($_POST['battleInvitationCharacterId'])
 				$battleInvitationQuery->execute([$battleInvitationId]);
 				$battleInvitationRow = $battleInvitationQuery->rowCount();
 				
-				//S'il n'existe plus d'invitation de combat pour ce monstre on supprime l'invitation
+				//S'il n'existe plus d'invitation de combat pour ce adversaire
 				if ($battleInvitationRow == 0) 
 				{
+                    //On supprime l'invitation
 					$deleteBattleInvitation = $bdd->prepare("DELETE FROM car_battles_invitations 
 				    WHERE battleInvitationId = :battleInvitationId");
 				    $deleteBattleInvitation->execute(array('battleInvitationId' => $battleInvitationId));
@@ -96,9 +99,10 @@ if (isset($_POST['battleInvitationCharacterId'])
                 //On redirige le joueur vers le combat
                 header("Location: ../../modules/battle/index.php");
             }
+            //Si le monstre n'existe pas
             else
             {
-            	echo "Erreur : Le monstre n'existe pas";
+            	echo "Erreur : Le adversaire n'existe pas";
             }
         }
         //Si l'invitation de combat n'exite pas

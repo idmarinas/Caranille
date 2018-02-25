@@ -16,7 +16,7 @@ if (isset($_POST['battleInvitationCharacterId'])
         //On récupère l'id du formulaire précédent
         $battleInvitationCharacterId = htmlspecialchars(addslashes($_POST['battleInvitationCharacterId']));
 
-        //On fait une requête pour vérifier si l'invitation de combnat choisit existe
+        //On fait une requête pour vérifier si l'invitation de combat choisit existe
         $battleInvitationQuery = $bdd->prepare('SELECT * FROM car_battles_invitations, car_battles_invitations_characters, car_monsters
 		WHERE battleInvitationId = battleInvitationCharacterBattleInvitationId
 		AND battleInvitationMonsterId = monsterId
@@ -28,9 +28,10 @@ if (isset($_POST['battleInvitationCharacterId'])
         //Si l'invitation de combat existe
         if ($battleInvitationRow == 1) 
         {
-            //On fait une recherche dans la base de donnée de toutes les lieux
+            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
             while ($battleInvitation = $battleInvitationQuery->fetch())
             {
+                //On récupère les informations de l'invitation de combat
                 $battleInvitationName = stripslashes($battleInvitation['battleInvitationName']);
                 $battleInvitationDescription = stripslashes(nl2br($battleInvitation['battleInvitationDescription']));
                 $battleInvitationMonsterName = stripslashes($battleInvitation['monsterName']);

@@ -5,7 +5,7 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 //S'il y a actuellement un combat on redirige le joueur vers le module battle
 if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); }
 
-//On fait une recherche dans la base de donnée de toutes les lieux
+//On fait une recherche dans la base de donnée de toutes les invitations de combat
 $battleInvitationQuery = $bdd->prepare("SELECT * FROM car_battles_invitations, car_battles_invitations_characters, car_monsters
 WHERE battleInvitationId = battleInvitationCharacterBattleInvitationId
 AND battleInvitationMonsterId = monsterId
@@ -19,12 +19,13 @@ if ($battleInvitationRow > 0)
     ?>
     
     <form method="POST" action="launchInvitation.php">
-        Liste de vos invitations : <select name="battleInvitationCharacterId" class="form-control">
+        Liste de vos invitations : <select class="form-control" name="battleInvitationCharacterId" >
 
             <?php
             //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
             while ($battleInvitation = $battleInvitationQuery->fetch())
             {
+                //On récupère les informations de l'invitation de combat
                 $battleInvitationId = stripslashes($battleInvitation['battleInvitationId']);
                 $battleInvitationName = stripslashes($battleInvitation['battleInvitationName']);
                 $battleInvitationMonsterName = stripslashes($battleInvitation['monsterName']);
@@ -37,7 +38,7 @@ if ($battleInvitationRow > 0)
             ?>
         
         </select>
-        <input type="submit" name="open" class="btn btn-default form-control" value="Ouvrir l'invitation">
+        <input type="submit" class="btn btn-default form-control" name="open" value="Ouvrir l'invitation">
     </form>
     
     <?php
@@ -45,9 +46,9 @@ if ($battleInvitationRow > 0)
 //S'il n'y a aucune invitation de combat on prévient le joueur
 else
 {
-    echo "Erreur : Vous n'avez aucune invitation de combat";
+    //On redirige le joueur vers l'accueil
+    header("Location: ../../modules/main/index.php");
 }
 $battleInvitationQuery->closeCursor();
-?>
 
-<?php require_once("../../html/footer.php"); ?>
+require_once("../../html/footer.php"); ?>
