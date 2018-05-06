@@ -79,7 +79,7 @@ if (isset($_POST['battleInvitationCharacterId'])
 			    $deleteBattleInvitationCharacter->execute(array('battleInvitationCharacterId' => $battleInvitationCharacterId));
 			    $deleteBattleInvitationCharacter->closeCursor();
 			    
-			    //On vérifie si il reste encore des joueurs en attente pour cette invitation
+			    //On vérifie s'il reste encore des joueurs en attente pour cette invitation
 				$battleInvitationQuery = $bdd->prepare("SELECT * FROM car_battles_invitations, car_battles_invitations_characters
 				WHERE battleInvitationId = battleInvitationCharacterBattleInvitationId
 				AND battleInvitationId = ?");

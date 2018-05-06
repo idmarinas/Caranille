@@ -48,15 +48,17 @@ if (isset($_POST['token'])
                 $monsterQuery->execute([$monsterId]);
                 $monsterRow = $monsterQuery->rowCount();
                 
+                //Si le monstre existe
                 if ($monsterRow == 1)
                 {
+                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                     while ($monster = $monsterQuery->fetch())
                     {
                         //On récupère les informations du monstre
                         $monsterId = stripslashes($monster['monsterId']);
                         $monsterCategoryId = stripslashes($monster['monsterCategoryId']);
-				                $monsterCategoryName = stripslashes($monster['monsterCategoryName']);
-				                $monsterCategoryNameShow = stripslashes($monster['monsterCategoryNameShow']);
+				        $monsterCategoryName = stripslashes($monster['monsterCategoryName']);
+				        $monsterCategoryNameShow = stripslashes($monster['monsterCategoryNameShow']);
                         $monsterPicture = stripslashes($monster['monsterPicture']);
                         $monsterName = stripslashes($monster['monsterName']);
                         $monsterDescription = stripslashes($monster['monsterDescription']);
@@ -234,7 +236,7 @@ if (isset($_POST['token'])
                                 //S'il existe une ou plusieurs lieu pour ce monstre
                                 if ($monsterPlaceRow > 0) 
                                 {
-                                    //On va tester si le joueur l'obtient
+                                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                                     while ($monsterPlace = $monsterPlaceQuery->fetch())
                                     {
                                         $monsterplaceName = stripslashes($monsterPlace['placeName']);
@@ -283,7 +285,7 @@ if (isset($_POST['token'])
                                 //S'il existe un ou plusieurs objet pour ce monstre
                                 if ($monsterDropRow > 0) 
                                 {
-                                    //On va tester si le joueur l'obtient
+                                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                                     while ($monsterDrop = $monsterDropQuery->fetch())
                                     {
                                         $monsterDropItemId = stripslashes($monsterDrop['itemId']);
@@ -344,6 +346,7 @@ if (isset($_POST['token'])
                 }
                 $monsterQuery->closeCursor();
             }
+            //Si le monstre n'est pas dans le bestiaire du joueur
             else
             {
                 ?>

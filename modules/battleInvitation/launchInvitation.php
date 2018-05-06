@@ -66,7 +66,7 @@ if (isset($_POST['battleInvitationCharacterId'])
             
             <?php
         }
-        //Si l'invitation de combat n'exite pas
+        //Si l'invitation de combat n'existe pas
         else
         {
             echo "Erreur : Cette invitation de combat n'existe pas";
