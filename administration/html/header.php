@@ -92,6 +92,18 @@ require_once("../../kernel/place/index.php");
 							<a class="dropdown-item" href="../../administration/debugMonster/index.php">Tester un monstre</a>
 						</div>
 					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Galerie</a>
+						<div class="dropdown-menu" aria-labelledby="dropdown01">
+							<a class="dropdown-item" href="../../administration/equipmentsPicture/index.php">Equipements</a>
+							<a class="dropdown-item" href="../../administration/itemsPicture/index.php">Objets</a>
+							<a class="dropdown-item" href="../../administration/monstersPicture/index.php">Monstres</a>
+							<a class="dropdown-item" href="../../administration/parchmentsPicture/index.php">Parchemins</a>
+							<a class="dropdown-item" href="../../administration/placesPicture/index.php">Lieux</a>
+							<a class="dropdown-item" href="../../administration/racesPicture/index.php">Classes</a>
+							<a class="dropdown-item" href="../../administration/shopsPicture/index.php">Magasins</a>
+						</div>
+					</li>
 				</ul>
 				<ul class="navbar-nav pull-right"> 
 					<li class="nav-item dropdown">
