@@ -40,7 +40,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 <form method="POST" action="addEquipmentsPicture.php" enctype="multipart/form-data">
     <!-- On limite le fichier à 1000Ko -->
     <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
-    Fichier : <br> <input type="file" name="picture">
+    <input type="file" name="picture">
     <input name="upload" class="btn btn-default form-control" type="submit" value="Envoyer le fichier">
 </form>
 
