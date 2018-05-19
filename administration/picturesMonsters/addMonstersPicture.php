@@ -3,7 +3,7 @@ require_once("../html/header.php");
 
 if(isset($_FILES['picture']))
 {
-    $dossier = '../../img/equipments/';
+    $dossier = '../../img/monsters/';
     $fichier = basename($_FILES['picture']['name']);
     $taille_maxi = 1000000;
     $taille = filesize($_FILES['picture']['tmp_name']);

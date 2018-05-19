@@ -14,7 +14,7 @@ if (isset($_POST['finalDelete']))
 
     if ($adminFile != "default.png")
     {
-        unlink("../../img/equipments/" . $adminFile);
+        unlink("../../img/items/" . $adminFile);
 
         ?>
 

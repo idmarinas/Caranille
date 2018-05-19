@@ -7,56 +7,25 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['viewPicture']))
-{
-    //On récupère le nom de l'image du formulaire précédent
-    $adminFile = htmlspecialchars(addslashes($_POST['pictureFile']));
-    ?>
-    
-    <p><img src="../../img/equipments/<?php echo $adminFile ?>"></p>
-
-    Pour utiliser cette image veuillez copier/coller le texte ci-dessous dans le champs image : <br/>
-
-    ../../img/equipments/<?php echo $adminFile ?>
-    
-    <hr>
-
-    <form method="POST" action="index.php">
-        <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-    </form>
-    
-    <?php
-}
-else if (isset($_POST['deletePicture']))
+if (isset($_POST['finalDelete']))
 {
     //On récupère le nom de l'image du formulaire précédent
     $adminFile = htmlspecialchars(addslashes($_POST['pictureFile']));
 
     if ($adminFile != "default.png")
     {
+        unlink("../../img/parchments/" . $adminFile);
+
         ?>
 
-        <p>ATTENTION</p> 
-
-        Vous êtes sur le point de supprimer cette image : 
+        L'image a bien été supprimée
     
-        <p><img src="../../img/equipments/<?php echo $adminFile ?>"></p>
-    
-        Confirmez-vous la suppression ?
-    
-        <hr>
-            
-        <form method="POST" action="deleteEquipmentPicture.php">
-            <input type="hidden" class="btn btn-default form-control" name="pictureFile" value="<?php echo $adminFile ?>">
-            <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme la suppression">
-        </form>
-        
         <hr>
     
         <form method="POST" action="index.php">
             <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
         </form>
-    
+
         <?php
     }
     else

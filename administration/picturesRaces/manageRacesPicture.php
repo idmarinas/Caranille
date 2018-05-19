@@ -13,11 +13,11 @@ if (isset($_POST['viewPicture']))
     $adminFile = htmlspecialchars(addslashes($_POST['pictureFile']));
     ?>
     
-    <p><img src="../../img/equipments/<?php echo $adminFile ?>"></p>
+    <p><img src="../../img/races/<?php echo $adminFile ?>"></p>
 
     Pour utiliser cette image veuillez copier/coller le texte ci-dessous dans le champs image : <br/>
 
-    ../../img/equipments/<?php echo $adminFile ?>
+    ../../img/races/<?php echo $adminFile ?>
     
     <hr>
 
@@ -40,13 +40,13 @@ else if (isset($_POST['deletePicture']))
 
         Vous êtes sur le point de supprimer cette image : 
     
-        <p><img src="../../img/equipments/<?php echo $adminFile ?>"></p>
+        <p><img src="../../img/races/<?php echo $adminFile ?>"></p>
     
         Confirmez-vous la suppression ?
     
         <hr>
             
-        <form method="POST" action="deleteEquipmentPicture.php">
+        <form method="POST" action="deleteRacesPicture.php">
             <input type="hidden" class="btn btn-default form-control" name="pictureFile" value="<?php echo $adminFile ?>">
             <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme la suppression">
         </form>

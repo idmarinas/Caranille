@@ -7,11 +7,11 @@ if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 ?>
     
-<form method="POST" action="manageEquipmentsPicture.php">
+<form method="POST" action="manageRacesPicture.php">
     Images d'équipements : <select name="pictureFile" class="form-control">
             
         <?php
-        $dir = '../../img/equipments/';
+        $dir = '../../img/races/';
         //On ouvre le dossier
         if ($dh = opendir($dir)) 
         {
@@ -38,7 +38,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 
 <hr>
 
-<form method="POST" action="addEquipmentsPicture.php" enctype="multipart/form-data">
+<form method="POST" action="addRacesPicture.php" enctype="multipart/form-data">
     <!-- On limite le fichier à 1000Ko -->
     <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
     <input type="file" name="picture">
