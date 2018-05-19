@@ -32,7 +32,8 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
         ?>
 
     </select>
-    <input type="submit" name="manage" class="btn btn-default form-control" value="Gérer l'image">
+    <input type="submit" name="viewPicture" class="btn btn-default form-control" value="Afficher l'image">
+    <input type="submit" name="deletePicture" class="btn btn-default form-control" value="Supprimer l'image">
 </form>
 
 <hr>
@@ -41,7 +42,7 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
     <!-- On limite le fichier à 1000Ko -->
     <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
     <input type="file" name="picture">
-    <input name="upload" class="btn btn-default form-control" type="submit" value="Envoyer le fichier">
+    <input name="upload" class="btn btn-default form-control" type="submit" value="Envoyer l'image">
 </form>
 
 <?php require_once("../html/footer.php");

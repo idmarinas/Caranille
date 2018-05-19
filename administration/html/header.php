@@ -95,13 +95,13 @@ require_once("../../kernel/place/index.php");
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Galerie</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown01">
-							<a class="dropdown-item" href="../../administration/equipmentsPicture/index.php">Equipements</a>
-							<a class="dropdown-item" href="../../administration/itemsPicture/index.php">Objets</a>
-							<a class="dropdown-item" href="../../administration/monstersPicture/index.php">Monstres</a>
-							<a class="dropdown-item" href="../../administration/parchmentsPicture/index.php">Parchemins</a>
-							<a class="dropdown-item" href="../../administration/placesPicture/index.php">Lieux</a>
-							<a class="dropdown-item" href="../../administration/racesPicture/index.php">Classes</a>
-							<a class="dropdown-item" href="../../administration/shopsPicture/index.php">Magasins</a>
+							<a class="dropdown-item" href="../../administration/picturesEquipments/index.php">Equipements</a>
+							<a class="dropdown-item" href="../../administration/picturesItems/index.php">Objets</a>
+							<a class="dropdown-item" href="../../administration/picturesMonsters/index.php">Monstres</a>
+							<a class="dropdown-item" href="../../administration/picturesParchments/index.php">Parchemins</a>
+							<a class="dropdown-item" href="../../administration/picturesPlaces/index.php">Lieux</a>
+							<a class="dropdown-item" href="../../administration/picturesRaces/index.php">Classes</a>
+							<a class="dropdown-item" href="../../administration/picturesShops/index.php">Magasins</a>
 						</div>
 					</li>
 				</ul>
