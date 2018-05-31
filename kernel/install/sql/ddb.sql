@@ -298,6 +298,13 @@ CREATE TABLE IF NOT EXISTS `car_monsters_categories` (
   `monsterCategoryNameShow` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `car_monsters_defeated` (
+  `monsterDefeatedId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `monsterDefeatedMonsterId` int(11) NOT NULL,
+  `monsterDefeatedCharacterId` int(11) NOT NULL,
+  `monsterDefeatedDateTime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `car_monsters_drops`
 (
   `monsterDropID` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
