@@ -290,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `car_monsters` (
   `monsterGold` int(11) NOT NULL,
   `monsterLimited` varchar(30) NOT NULL,
   `monsterQuantityBattle` int(11) NOT NULL,
-  `monsterQuantityEscaped` int(11) NOT NULL
+  `monsterQuantityEscaped` int(11) NOT NULL,
   `monsterQuantityVictory` int(11) NOT NULL,
   `monsterQuantityDefeated` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
