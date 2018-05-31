@@ -295,18 +295,18 @@ CREATE TABLE IF NOT EXISTS `car_monsters` (
   `monsterQuantityDefeated` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `car_monsters_categories` (
-  `monsterCategoryId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `monsterCategoryName` varchar(30) NOT NULL,
-  `monsterCategoryNameShow` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `car_monsters_battles_stats` (
   `monsterBattleStatsId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `monsterBattleStatsMonsterId` int(11) NOT NULL,
   `monsterBattleStatsCharacterId` int(11) NOT NULL,
   `monsterBattleStatsType` varchar(30) NOT NULL,
   `monsterBattleStatsDateTime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `car_monsters_categories` (
+  `monsterCategoryId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `monsterCategoryName` varchar(30) NOT NULL,
+  `monsterCategoryNameShow` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_monsters_drops`
