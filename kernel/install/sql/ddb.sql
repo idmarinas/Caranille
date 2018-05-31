@@ -289,7 +289,10 @@ CREATE TABLE IF NOT EXISTS `car_monsters` (
   `monsterExperience` int(11) NOT NULL,
   `monsterGold` int(11) NOT NULL,
   `monsterLimited` varchar(30) NOT NULL,
-  `monsterQuantity` int(11) NOT NULL
+  `monsterQuantityBattle` int(11) NOT NULL,
+  `monsterQuantityEscaped` int(11) NOT NULL
+  `monsterQuantityVictory` int(11) NOT NULL,
+  `monsterQuantityDefeated` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_monsters_categories` (
@@ -298,11 +301,12 @@ CREATE TABLE IF NOT EXISTS `car_monsters_categories` (
   `monsterCategoryNameShow` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `car_monsters_defeated` (
-  `monsterDefeatedId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `monsterDefeatedMonsterId` int(11) NOT NULL,
-  `monsterDefeatedCharacterId` int(11) NOT NULL,
-  `monsterDefeatedDateTime` datetime NOT NULL
+CREATE TABLE IF NOT EXISTS `car_monsters_battles_stats` (
+  `monsterBattleStatsId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `monsterBattleStatsMonsterId` int(11) NOT NULL,
+  `monsterBattleStatsCharacterId` int(11) NOT NULL,
+  `monsterBattleStatsType` varchar(30) NOT NULL,
+  `monsterBattleStatsDateTime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_monsters_drops`
