@@ -50,6 +50,11 @@ if (isset($_POST['adminMonsterId'])
                 $adminMonsterGold = stripslashes($monster['monsterGold']);
                 $adminMonsterLimited = stripslashes($monster['monsterLimited']);
                 $adminMonsterQuantity = stripslashes($monster['monsterQuantity']);
+                $adminMonsterQuantityBattle = stripslashes($monster['monsterQuantityBattle']);
+                $adminMonsterQuantityEscaped = stripslashes($monster['monsterQuantityEscaped']);
+                $adminMonsterQuantityVictory = stripslashes($monster['monsterQuantityVictory']);
+                $adminMonsterQuantityDefeated = stripslashes($monster['monsterQuantityDefeated']);
+                $adminMonsterQuantityDraw = stripslashes($monster['monsterQuantityDraw']);
             }
             ?>
 
@@ -132,6 +137,16 @@ if (isset($_POST['adminMonsterId'])
                 <input type="hidden" name="adminMonsterId" value="<?php echo $adminMonsterId ?>">
                 <input name="finalEdit" class="btn btn-default form-control" type="submit" value="Modifier">
             </form>
+
+            <hr>
+
+            <p>STATISTIQUES DE COMBAT</p>
+
+            Nombre de combat lancé contre ce monstre : <?php echo $adminMonsterQuantityBattle ?><br />
+            Nombre de combat fuit contre ce monstre : <?php echo $adminMonsterQuantityEscaped ?><br />
+            Nombre de combat gagné contre ce monstre : <?php echo $adminMonsterQuantityVictory ?><br />
+            Nombre de combat perdu contre ce monstre : <?php echo $adminMonsterQuantityDefeated ?><br />
+            Nombre de combat match nul contre ce monstre : <?php echo $adminMonsterQuantityDraw ?><br />
 
             <hr>
 

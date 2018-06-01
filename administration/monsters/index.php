@@ -26,6 +26,11 @@ if ($monsterRow > 0)
                 $adminMonsterName = stripslashes($monster['monsterName']);
                 $adminMonsterLimited = stripslashes($monster['monsterLimited']);
                 $adminMonsterQuantity = stripslashes($monster['monsterQuantity']);
+                $adminMonsterQuantityBattle = stripslashes($monster['monsterQuantityBattle']);
+                $adminMonsterQuantityEscaped = stripslashes($monster['monsterQuantityEscaped']);
+                $adminMonsterQuantityVictory = stripslashes($monster['monsterQuantityVictory']);
+                $adminMonsterQuantityDefeated = stripslashes($monster['monsterQuantityDefeated']);
+                $adminMonsterQuantityDraw = stripslashes($monster['monsterQuantityDraw']);
 
                 if ($adminMonsterLimited == "No")
                 {
