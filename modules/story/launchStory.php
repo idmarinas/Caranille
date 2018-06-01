@@ -51,6 +51,29 @@ if (isset($_POST['continue']))
             'opponentMp' => $opponentMp]);
             $addBattle->closeCursor();
 
+            //On met à jour les stats du monstre
+            $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+            SET monsterQuantityBattle = monsterQuantityBattle + 1
+            WHERE monsterId = :opponentId');
+            $updateMonsterStats->execute(['opponentId' => $opponentId]);
+            $updateMonsterStats->closeCursor();  
+            
+            //On définit une date
+            $date = date('Y-m-d H:i:s');
+
+            //Insertion des stats du combat dans la base de donnée avec les données
+            $addBattleStats = $bdd->prepare("INSERT INTO car_monsters_battles_stats VALUES(
+            NULL,
+            :monsterBattleStatsMonsterId,
+            :monsterBattleStatsCharacterId,
+            'LaunchBattle',
+            :monsterBattleStatsDateTime)");
+            $addBattleStats->execute([
+            'monsterBattleStatsMonsterId' => $opponentId,
+            'monsterBattleStatsCharacterId' => $characterId,
+            'monsterBattleStatsDateTime' => $date]);
+            $addBattleStats->closeCursor();
+
             //On redirige le joueur vers le combat du monstre
             header("Location: ../../modules/battle/index.php");
         }

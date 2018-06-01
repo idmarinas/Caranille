@@ -26,6 +26,32 @@ if (isset($_POST['token'])
             'characterId' => $characterId]);
             $updateCharacter->closeCursor();
         }
+        //Si il ne s'agit pas d'un combat d'arène on met à jours les stats du combat
+        else
+        {
+            //On met à jour les stats du monstre
+            $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+            SET monsterQuantityEscaped = monsterQuantityEscaped + 1
+            WHERE monsterId = :opponentId');
+            $updateMonsterStats->execute(['opponentId' => $opponentId]);
+            $updateMonsterStats->closeCursor();  
+
+            //On définit une date
+            $date = date('Y-m-d H:i:s');
+
+            //Insertion des stats du combat dans la base de donnée avec les données
+            $addBattleStats = $bdd->prepare("INSERT INTO car_monsters_battles_stats VALUES(
+            NULL,
+            :monsterBattleStatsMonsterId,
+            :monsterBattleStatsCharacterId,
+            'EscapeBattle',
+            :monsterBattleStatsDateTime)");
+            $addBattleStats->execute([
+            'monsterBattleStatsMonsterId' => $opponentId,
+            'monsterBattleStatsCharacterId' => $characterId,
+            'monsterBattleStatsDateTime' => $date]);
+            $addBattleStats->closeCursor();
+        }
         
         //On détruit le combat en cours
         $deleteBattle = $bdd->prepare("DELETE FROM car_battles 

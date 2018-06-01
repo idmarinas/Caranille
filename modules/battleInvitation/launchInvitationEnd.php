@@ -72,6 +72,29 @@ if (isset($_POST['battleInvitationCharacterId'])
                 'opponentHp' => $opponentHp,
                 'opponentMp' => $opponentMp]);
                 $addBattle->closeCursor();
+
+                //On met à jour les stats du monstre
+                $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+                SET monsterQuantityBattle = monsterQuantityBattle + 1
+                WHERE monsterId = :opponentId');
+                $updateMonsterStats->execute(['opponentId' => $opponentId]);
+                $updateMonsterStats->closeCursor();  
+                
+                //On définit une date
+                $date = date('Y-m-d H:i:s');
+
+                //Insertion des stats du combat dans la base de donnée avec les données
+                $addBattleStats = $bdd->prepare("INSERT INTO car_monsters_battles_stats VALUES(
+                NULL,
+                :monsterBattleStatsMonsterId,
+                :monsterBattleStatsCharacterId,
+                'LaunchBattle',
+                :monsterBattleStatsDateTime)");
+                $addBattleStats->execute([
+                'monsterBattleStatsMonsterId' => $opponentId,
+                'monsterBattleStatsCharacterId' => $characterId,
+                'monsterBattleStatsDateTime' => $date]);
+                $addBattleStats->closeCursor();
                 
                 //On supprime l'invitation
 			    $deleteBattleInvitationCharacter = $bdd->prepare("DELETE FROM car_battles_invitations_characters 

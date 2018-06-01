@@ -293,7 +293,8 @@ CREATE TABLE IF NOT EXISTS `car_monsters` (
   `monsterQuantityBattle` int(11) NOT NULL,
   `monsterQuantityEscaped` int(11) NOT NULL,
   `monsterQuantityVictory` int(11) NOT NULL,
-  `monsterQuantityDefeated` int(11) NOT NULL
+  `monsterQuantityDefeated` int(11) NOT NULL,
+  `monsterQuantityDraw` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_monsters_battles_stats` (

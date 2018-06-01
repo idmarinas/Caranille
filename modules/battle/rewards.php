@@ -29,6 +29,33 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin <= 0)
     WHERE battleId = :battleId");
     $deleteBattle->execute(array('battleId' => $battleId));
     $deleteBattle->closeCursor();
+
+    //Si il ne s'agit pas d'un combat d'arène on met à jour les stats du combat
+    if ($battleType != "Arena")
+    {
+        //On met à jour les stats du monstre
+        $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+        SET monsterQuantityDraw = monsterQuantityDraw + 1
+        WHERE monsterId = :opponentId');
+        $updateMonsterStats->execute(['opponentId' => $opponentId]);
+        $updateMonsterStats->closeCursor();  
+
+        //On définit une date
+        $date = date('Y-m-d H:i:s');
+            
+        //Insertion des stats du combat dans la base de donnée avec les données
+        $addBattleStats = $bdd->prepare("INSERT INTO car_monsters_battles_stats VALUES(
+        NULL,
+        :monsterBattleStatsMonsterId,
+        :monsterBattleStatsCharacterId,
+        'DrawBattle',
+        :monsterBattleStatsDateTime)");
+        $addBattleStats->execute([
+        'monsterBattleStatsMonsterId' => $opponentId,
+        'monsterBattleStatsCharacterId' => $characterId,
+        'monsterBattleStatsDateTime' => $date]);
+        $addBattleStats->closeCursor();
+    }
     ?>
 
     <hr>
@@ -285,6 +312,29 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
             $addBestiary->closeCursor(); 
         }
         $bestiaryQuery->closeCursor(); 
+
+        //On met à jour les stats du monstre
+        $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+        SET monsterQuantityVictory = monsterQuantityVictory + 1
+        WHERE monsterId = :opponentId');
+        $updateMonsterStats->execute(['opponentId' => $opponentId]);
+        $updateMonsterStats->closeCursor();  
+
+        //On définit une date
+        $date = date('Y-m-d H:i:s');
+            
+        //Insertion des stats du combat dans la base de donnée avec les données
+        $addBattleStats = $bdd->prepare("INSERT INTO car_monsters_battles_stats VALUES(
+        NULL,
+        :monsterBattleStatsMonsterId,
+        :monsterBattleStatsCharacterId,
+        'VictoryBattle',
+        :monsterBattleStatsDateTime)");
+        $addBattleStats->execute([
+        'monsterBattleStatsMonsterId' => $opponentId,
+        'monsterBattleStatsCharacterId' => $characterId,
+        'monsterBattleStatsDateTime' => $date]);
+        $addBattleStats->closeCursor();
     }
     //S'il s'agit d'un combat contre un autre joueur
     else if ($battleType == "Arena")
@@ -344,6 +394,31 @@ if ($characterHpMin <= 0 && $battleOpponentHpRemaining > 0)
         $updateCharacter->execute([
         'characterId' => $characterId]);
         $updateCharacter->closeCursor();
+    }
+    else
+    {
+        //On met à jour les stats du monstre
+        $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+        SET monsterQuantityDefeated = monsterQuantityDefeated + 1
+        WHERE monsterId = :opponentId');
+        $updateMonsterStats->execute(['opponentId' => $opponentId]);
+        $updateMonsterStats->closeCursor();  
+
+        //On définit une date
+        $date = date('Y-m-d H:i:s');
+            
+        //Insertion des stats du combat dans la base de donnée avec les données
+        $addBattleStats = $bdd->prepare("INSERT INTO car_monsters_battles_stats VALUES(
+        NULL,
+        :monsterBattleStatsMonsterId,
+        :monsterBattleStatsCharacterId,
+        'DefeatedBattle',
+        :monsterBattleStatsDateTime)");
+        $addBattleStats->execute([
+        'monsterBattleStatsMonsterId' => $opponentId,
+        'monsterBattleStatsCharacterId' => $characterId,
+        'monsterBattleStatsDateTime' => $date]);
+        $addBattleStats->closeCursor();
     }
 
     //On met fin au combat en cours
