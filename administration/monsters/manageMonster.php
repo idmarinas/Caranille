@@ -52,6 +52,10 @@ if (isset($_POST['adminMonsterId'])
                 <input type="hidden" class="btn btn-default form-control" name="adminMonsterDropMonsterId" value="<?php echo $adminMonsterId ?>">
                 <input type="submit" class="btn btn-default form-control" name="manage" value="Objet(s) du monstre">
             </form>
+            <form method="POST" action="../monstersStats/manageMonsterStats.php">
+                <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterId ?>">
+                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques du monstre">
+            </form>
 
             <hr>
 
