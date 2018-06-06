@@ -30,14 +30,6 @@ if (isset($_POST['adminMonsterId'])
             $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters
             WHERE monsterId = ?");
             $monsterQuery->execute([$adminMonsterId]);
-            
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($monster = $monsterQuery->fetch())
-            {
-                //On récupère les informations du monstre
-                $adminMonsterName = stripslashes($monster['monsterName']);
-            }
-            $monsterQuery->closeCursor();
             ?>
             
             Que souhaitez-vous faire du monstre <em><?php echo $adminMonsterName ?></em> ?
@@ -52,9 +44,9 @@ if (isset($_POST['adminMonsterId'])
                 <input type="hidden" class="btn btn-default form-control" name="adminMonsterDropMonsterId" value="<?php echo $adminMonsterId ?>">
                 <input type="submit" class="btn btn-default form-control" name="manage" value="Objet(s) du monstre">
             </form>
-            <form method="POST" action="../monstersStats/manageMonsterStats.php">
+            <form method="POST" action="../monstersBattlesStats/manageMonsterStats.php">
                 <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterId ?>">
-                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques du monstre">
+                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques de combat">
             </form>
 
             <hr>
