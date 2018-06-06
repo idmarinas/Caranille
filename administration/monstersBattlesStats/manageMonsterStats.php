@@ -57,7 +57,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             {
                 echo "Aucune lancement de combat<br />";
             }
-            ?><br />
+            ?>
+            
+            <hr>
 
             <p>Match nul :</p>
 
@@ -88,7 +90,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             {
                 echo "Aucune match nul de combat<br />";
             }
-            ?><br />
+            ?>
+
+            <hr>
 
             <p>Victoire de combat :</p>
 
@@ -119,7 +123,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             {
                 echo "Aucune victoire de combat<br />";
             }
-            ?><br />
+            ?>
+
+            <hr>
 
             <p>Défaite de combat :</p>
 
@@ -150,7 +156,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             {
                 echo "Aucune défaite de combat<br />";
             }
-            ?><br />
+            ?>
+
+            <hr>
 
             <p>Fuite de combat :</p>
 
