@@ -35,22 +35,29 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND adminMonsterBattleStatsType = 'LaunchBattle'");
+            AND monsterBattleStatsType = 'LaunchBattle'");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+            if ($monsterBattlesStatsRow >= 1)
             {
-                //On récupère les informations du monstre
-                $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                
-                $dateFr = strftime('%d-%m-%Y',strtotime($news['monsterBattleStatsDateTime']));
-                echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                {
+                    //On récupère les informations du monstre
+                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                    
+                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                }
+                $monsterBattlesStatsQuery->closeCursor();
             }
-            $monsterBattlesStatsQuery->closeCursor();
-
-            ?>
+            else
+            {
+                echo "Aucune lancement de combat<br />";
+            }
+            ?><br />
 
             <p>Match nul :</p>
 
@@ -59,22 +66,29 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND adminMonsterBattleStatsType = 'DrawBattle'");
+            AND monsterBattleStatsType = 'DrawBattle'");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
-            {
-                //On récupère les informations du monstre
-                $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                
-                $dateFr = strftime('%d-%m-%Y',strtotime($news['monsterBattleStatsDateTime']));
-                echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+            if ($monsterBattlesStatsRow >= 1)
+            {           
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                {
+                    //On récupère les informations du monstre
+                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                    
+                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                }
+                $monsterBattlesStatsQuery->closeCursor();
             }
-            $monsterBattlesStatsQuery->closeCursor();
-
-            ?>
+            else
+            {
+                echo "Aucune match nul de combat<br />";
+            }
+            ?><br />
 
             <p>Victoire de combat :</p>
 
@@ -83,22 +97,29 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND adminMonsterBattleStatsType = 'VictoryBattle'");
+            AND monsterBattleStatsType = 'VictoryBattle'");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+            if ($monsterBattlesStatsRow >= 1)
             {
-                //On récupère les informations du monstre
-                $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                
-                $dateFr = strftime('%d-%m-%Y',strtotime($news['monsterBattleStatsDateTime']));
-                echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                {
+                    //On récupère les informations du monstre
+                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                    
+                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                }
+                $monsterBattlesStatsQuery->closeCursor();
             }
-            $monsterBattlesStatsQuery->closeCursor();
-
-            ?>
+            else
+            {
+                echo "Aucune victoire de combat<br />";
+            }
+            ?><br />
 
             <p>Défaite de combat :</p>
 
@@ -107,22 +128,29 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND adminMonsterBattleStatsType = 'DefeatedBattle'");
+            AND monsterBattleStatsType = 'DefeatedBattle'");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+            if ($monsterBattlesStatsRow >= 1)
             {
-                //On récupère les informations du monstre
-                $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                
-                $dateFr = strftime('%d-%m-%Y',strtotime($news['monsterBattleStatsDateTime']));
-                echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                {
+                    //On récupère les informations du monstre
+                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                    
+                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                }
+                $monsterBattlesStatsQuery->closeCursor();
             }
-            $monsterBattlesStatsQuery->closeCursor();
-
-            ?>
+            else
+            {
+                echo "Aucune défaite de combat<br />";
+            }
+            ?><br />
 
             <p>Fuite de combat :</p>
 
@@ -131,20 +159,29 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND adminMonsterBattleStatsType = 'EscapeBattle'");
+            AND monsterBattleStatsType = 'EscapeBattle'");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+            if ($monsterBattlesStatsRow >= 1)
             {
-                //On récupère les informations du monstre
-                $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                
-                $dateFr = strftime('%d-%m-%Y',strtotime($news['monsterBattleStatsDateTime']));
-                echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                {
+                    //On récupère les informations du monstre
+                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                    
+                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                }
+                $monsterBattlesStatsQuery->closeCursor();
             }
-            $monsterBattlesStatsQuery->closeCursor();
+            else
+            {
+                echo "Aucune fuite de combat<br />";
+            }
         }
         //Si le monstre n'exite pas
         else
