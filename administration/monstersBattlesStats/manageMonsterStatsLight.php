@@ -28,6 +28,11 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
         {
             ?>
 
+            <h2>Statistiques classique du monstre</h2>
+            <h4>Limité au 10 derniers résultats par catégorie</h4>
+
+            <hr>
+
             <p>Lancement de combat :</p>
 
             <?php
@@ -37,7 +42,7 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             AND monsterBattleStatsCharacterId = characterId
             AND monsterBattleStatsType = 'LaunchBattle'
             ORDER BY monsterBattleStatsId desc
-            LIMIT 0,19");
+            LIMIT 0,10");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -72,7 +77,7 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             AND monsterBattleStatsCharacterId = characterId
             AND monsterBattleStatsType = 'DrawBattle'
             ORDER BY monsterBattleStatsId desc
-            LIMIT 0,19");
+            LIMIT 0,10");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -107,7 +112,7 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             AND monsterBattleStatsCharacterId = characterId
             AND monsterBattleStatsType = 'VictoryBattle'
             ORDER BY monsterBattleStatsId desc
-            LIMIT 0,19");
+            LIMIT 0,10");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -142,7 +147,7 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             AND monsterBattleStatsCharacterId = characterId
             AND monsterBattleStatsType = 'DefeatedBattle'
             ORDER BY monsterBattleStatsId desc
-            LIMIT 0,19");
+            LIMIT 0,10");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -177,7 +182,7 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             AND monsterBattleStatsCharacterId = characterId
             AND monsterBattleStatsType = 'EscapeBattle'
             ORDER BY monsterBattleStatsId desc
-            LIMIT 0,19");
+            LIMIT 0,10");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -200,6 +205,16 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             {
                 echo "Aucune fuite de combat<br />";
             }
+            ?>
+
+            <hr>
+
+            <form method="POST" action="../monstersBattlesStats/manageMonsterStatsFull.php">
+                <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
+                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
+            </form>
+
+            <?php
         }
         //Si le monstre n'exite pas
         else
