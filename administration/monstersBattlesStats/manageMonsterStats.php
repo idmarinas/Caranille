@@ -35,7 +35,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'LaunchBattle'");
+            AND monsterBattleStatsType = 'LaunchBattle'
+            ORDER BY monsterBattleStatsId desc
+            LIMIT 0,19");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -68,7 +70,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'DrawBattle'");
+            AND monsterBattleStatsType = 'DrawBattle'
+            ORDER BY monsterBattleStatsId desc
+            LIMIT 0,19");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -101,7 +105,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'VictoryBattle'");
+            AND monsterBattleStatsType = 'VictoryBattle'
+            ORDER BY monsterBattleStatsId desc
+            LIMIT 0,19");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -134,7 +140,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'DefeatedBattle'");
+            AND monsterBattleStatsType = 'DefeatedBattle'
+            ORDER BY monsterBattleStatsId desc
+            LIMIT 0,19");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
@@ -167,7 +175,9 @@ if (isset($_POST['adminMonsterStatsMonsterId'])
             $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
             WHERE monsterBattleStatsMonsterId = ?
             AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'EscapeBattle'");
+            AND monsterBattleStatsType = 'EscapeBattle'
+            ORDER BY monsterBattleStatsId desc
+            LIMIT 0,19");
             $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
             $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
 
