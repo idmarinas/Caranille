@@ -31,14 +31,14 @@ if (isset($_POST['token'])
             $shopQueryList = $bdd->prepare("SELECT * FROM car_shops, car_places, car_places_shops
             WHERE placeShopShopId = shopId
             AND placeShopPlaceId = placeId
-            AND placeId = ?");
+            AND shopId = ?");
             $shopQueryList->execute([$shopId]);
             $shopRow = $shopQueryList->rowCount();
 
             //Si plusieurs magasins ont été trouvé
             if ($shopRow > 0)
             {
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
                 while ($shop = $shopQueryList->fetch())
                 {
                     //On récupère les informations du magasin
