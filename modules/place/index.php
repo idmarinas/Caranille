@@ -19,7 +19,7 @@ if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); 
 if ($shopPlaceRow > 0)
 {
     ?>
-    <a href="../../modules/shops/index.php">Magasin(s)</a>
+    <a href="../../modules/shop/index.php">Magasin(s)</a>
     <?php
 }
 ?>
