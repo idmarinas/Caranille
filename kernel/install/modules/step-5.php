@@ -145,36 +145,36 @@ if (isset($_POST['accountPseudo'])
                             '0', //characterMpEquipments
                             '0', //characterMpGuild
                             '10', //characterMpTotal
-                            '1', //characterStrength
+                            '2', //characterStrength
                             '0', //characterStrengthSkillPoints
                             '0', //characterStrengthParchment
                             '0', //characterStrengthEquipments
                             '0', //characterStrengthGuild
-                            '1', //characterStrengthTotal
-                            '1', //characterMagic
+                            '2', //characterStrengthTotal
+                            '2', //characterMagic
                             '0', //characterMagicSkillPoints
                             '0', //characterMagicParchment
                             '0', //characterMagicEquipments
                             '0', //characterMagicGuild
-                            '1', //characterMagicTotal
-                            '1', //characterAgility
+                            '2', //characterMagicTotal
+                            '2', //characterAgility
                             '0', //characterAgilitySkillPoints
                             '0', //characterAgilityParchment
                             '0', //characterAgilityEquipments
                             '0', //characterAgilityGuild
-                            '1', //characterAgilityTotal
-                            '1', //characterDefense
+                            '2', //characterAgilityTotal
+                            '2', //characterDefense
                             '0', //characterDefenseSkillPoints
                             '0', //characterDefenseParchment
                             '0', //characterDefenseEquipments
                             '0', //characterDefenseGuild
-                            '1', //characterDefenseTotal
-                            '1', //characterDefenseMagic
+                            '2', //characterDefenseTotal
+                            '2', //characterDefenseMagic
                             '0', //characterDefenseMagicSkillPoints
                             '0', //characterDefenseMagicParchment
                             '0', //characterDefenseMagicEquipments
                             '0', //characterDefenseMagicGuild
-                            '1', //characterDefenseMagicTotal
+                            '2', //characterDefenseMagicTotal
                             '0', //characterWisdom
                             '0', //characterWisdomSkillPoints
                             '0', //characterWisdomParchment
@@ -222,36 +222,36 @@ if (isset($_POST['accountPseudo'])
                             '0',
                             '0',
                             '10',
-                            '1',
+                            '2',
                             '0',
                             '0',
                             '0',
                             '0',
-                            '1',
-                            '1',
+                            '2',
+                            '2',
                             '0',
                             '0',
                             '0',
                             '0',
-                            '1',
-                            '1',
+                            '2',
+                            '2',
                             '0',
                             '0',
                             '0',
                             '0',
-                            '1',
-                            '1',
+                            '2',
+                            '2',
                             '0',
                             '0',
                             '0',
                             '0',
-                            '1',
-                            '1',
+                            '2',
+                            '2',
                             '0',
                             '0',
                             '0',
                             '0',
-                            '1',
+                            '2',
                             '0',
                             '0',
                             '0',
