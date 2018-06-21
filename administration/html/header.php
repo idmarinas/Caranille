@@ -1,5 +1,8 @@
 <?php
 ob_start();
+//On définit un emplacement de sauvegarde des sessions
+$sessionPath = $_SERVER['DOCUMENT_ROOT'] . '/sessions';
+ini_set('session.save_path', $sessionPath);
 //On démarre le module des sessions de PHP
 session_start();
 //On récupère le temps Unix actuel une première fois
