@@ -22,7 +22,7 @@ if (isset($_POST['token'])
         if ($characterMpMin >= $mpNeed)
         {
             //On calcule les dégats du joueur
-            $totalDamagesCharacter = $characterMagicTotal * 4 - $opponentDefenseMagic * 2;
+            $totalDamagesCharacter = $characterMagicTotal * 2 - $opponentDefenseMagic;
             
             //Si le joueur a fait des dégats négatif ont bloque à zéro pour ne pas soigner l'adversaire
             if ($totalDamagesCharacter < 0)
@@ -69,7 +69,7 @@ if (isset($_POST['token'])
             if ($opponentStrength >= $opponentMagic)
             {
                 //On calcule les dégats de l'adversaire
-                $totalDamagesOpponent = $opponentStrength * 4 - $characterDefenseTotal * 2;
+                $totalDamagesOpponent = $opponentStrength - $characterDefenseTotal;
 
                 echo "$opponentName lance une attaque physique<br />";
             }
@@ -81,7 +81,7 @@ if (isset($_POST['token'])
                 if ($battleOpponentMpRemaining >= $mpNeed)
                 {
                     //On calcule les dégats de l'adversaire
-                    $totalDamagesOpponent = $opponentMagic * 4 - $characterDefenseMagic * 2;
+                    $totalDamagesOpponent = $opponentMagic * 2 - $characterDefenseMagic;
 
                     //On met les MP de l'adversaire à jour
                     $battleOpponentMpRemaining = $battleOpponentMpRemaining - $mpNeed;
@@ -92,7 +92,7 @@ if (isset($_POST['token'])
                 else
                 {
                     //On calcule les dégats de l'adversaire
-                    $totalDamagesOpponent = $opponentStrength * 4 - $characterDefenseTotal * 2;
+                    $totalDamagesOpponent = $opponentStrength - $characterDefenseTotal;
 
                     echo "$opponentName n'a plus assez de MP, il lance une attaque physique<br />";
                 }
