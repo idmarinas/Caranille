@@ -33,7 +33,7 @@ if (isset($_POST['token'])
             echo "$characterName lance une attaque magique<br />";
 
             //On vérifie si l'adversaire esquive l'attaque du joueur
-            if ($opponentAgility >= $characterAgilityTotal)
+            if ($opponentAgility > $characterAgilityTotal)
             {
                 $totalDifference = $opponentAgility - $characterAgilityTotal;
                 $percentage = $totalDifference/$opponentAgility * 100;
@@ -105,7 +105,7 @@ if (isset($_POST['token'])
             }
         
             //On vérifie si le joueur esquive l'attaque de l'adversaire
-            if ($characterAgilityTotal >= $opponentAgility)
+            if ($characterAgilityTotal > $opponentAgility)
             {
                 $totalDifference = $characterAgilityTotal - $opponentAgility;
                 $percentage = $totalDifference/$characterAgilityTotal * 100;
