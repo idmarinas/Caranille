@@ -18,7 +18,7 @@ if (isset($_POST['token']))
         $_SESSION['token'] = uniqid();
 		
         //On fait une requête pour avoir la liste des équipements du personnage
-        $equipmentQuery = $bdd->prepare("SELECT * FROM  car_items, car_items_types, car_inventory 
+        $equipmentEquippedQuery = $bdd->prepare("SELECT * FROM  car_items, car_items_types, car_inventory 
         WHERE itemItemTypeId = itemTypeId
         AND itemId = inventoryItemId
         AND (itemTypeName = 'Armor' 
@@ -26,29 +26,30 @@ if (isset($_POST['token']))
         OR itemTypeName = 'Gloves' 
         OR itemTypeName = 'Helmet' 
         OR itemTypeName = 'Weapon')
+        AND inventoryEquipped = 1
         AND inventoryCharacterId = ?
 		ORDER BY itemItemTypeId, itemName");
-        $equipmentQuery->execute([$characterId]);
-        $equipmentRow = $equipmentQuery->rowCount();
+        $equipmentEquippedQuery->execute([$characterId]);
+        $equipmentEquippedRow = $equipmentEquippedQuery->rowCount();
         
         //Si un ou plusieurs équipements ont été trouvé
-        if ($equipmentRow > 0)
+        if ($equipmentEquippedRow > 0)
         {
             ?>
             
             <form method="POST" action="viewEquipment.php">
-                Liste des équipements : <select name="itemId" class="form-control">
+                Actuellement équippé : <select name="itemId" class="form-control">
                         
                     <?php
                     //on récupère les valeurs de chaque joueurs qu'on va ensuite mettre dans le menu déroulant
-                    while ($equipment = $equipmentQuery->fetch())
+                    while ($equipmentEquipped = $equipmentEquippedQuery->fetch())
                     {
                         //On récupère les informations de l'équippement
-                        $equipmentId = stripslashes($equipment['itemId']); 
-                        $equipmentName = stripslashes($equipment['itemName']);
-                        $equipmentQuantity = stripslashes($equipment['inventoryQuantity']);
-                        $equipmentTypeName = stripslashes($equipment['itemTypeName']);
-                        $equipmentTypeNameShow = stripslashes($equipment['itemTypeNameShow']);
+                        $equipmentId = stripslashes($equipmentEquipped['itemId']); 
+                        $equipmentName = stripslashes($equipmentEquipped['itemName']);
+                        $equipmentQuantity = stripslashes($equipmentEquipped['inventoryQuantity']);
+                        $equipmentTypeName = stripslashes($equipmentEquipped['itemTypeName']);
+                        $equipmentTypeNameShow = stripslashes($equipmentEquipped['itemTypeNameShow']);
                         ?>
                         <option value="<?php echo $equipmentId ?>"><?php echo "[$equipmentTypeNameShow] - $equipmentName (Quantité: $equipmentQuantity)" ?></option>
                         <?php
@@ -57,7 +58,7 @@ if (isset($_POST['token']))
                         
                 </select>
                 <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-                <center><input type="submit" name="viewEquipment" class="btn btn-default form-control" value="Plus d'information"></center>
+                <center><input type="submit" name="viewEquipment" class="btn btn-default form-control" value="Plus d'informations"></center>
             </form>
             
             <?php
@@ -65,9 +66,64 @@ if (isset($_POST['token']))
         //Si toutes les variables $_POST n'existent pas
         else
         {
-            echo "Vous ne possédez aucun équipements.";
+            echo "Vous ne possédez aucun équipements équipé";
         }
-        $equipmentQuery->closeCursor();
+        $equipmentEquippedQuery->closeCursor();
+
+        echo "<hr>";
+
+        //On fait une requête pour avoir la liste des équipements du personnage
+        $equipmentNoEquippedQuery = $bdd->prepare("SELECT * FROM  car_items, car_items_types, car_inventory 
+        WHERE itemItemTypeId = itemTypeId
+        AND itemId = inventoryItemId
+        AND (itemTypeName = 'Armor' 
+        OR itemTypeName = 'Boots' 
+        OR itemTypeName = 'Gloves' 
+        OR itemTypeName = 'Helmet' 
+        OR itemTypeName = 'Weapon')
+        AND inventoryEquipped = 0
+        AND inventoryCharacterId = ?
+		ORDER BY itemItemTypeId, itemName");
+        $equipmentNoEquippedQuery->execute([$characterId]);
+        $equipmentNoEquippedRow = $equipmentNoEquippedQuery->rowCount();
+        
+        //Si un ou plusieurs équipements ont été trouvé
+        if ($equipmentNoEquippedRow > 0)
+        {
+            ?>
+            
+            <form method="POST" action="viewEquipment.php">
+                Actuellement non équippé : <select name="itemId" class="form-control">
+                        
+                    <?php
+                    //on récupère les valeurs de chaque joueurs qu'on va ensuite mettre dans le menu déroulant
+                    while ($equipmentNoEquipped = $equipmentNoEquippedQuery->fetch())
+                    {
+                        //On récupère les informations de l'équippement
+                        $equipmentId = stripslashes($equipmentNoEquipped['itemId']); 
+                        $equipmentName = stripslashes($equipmentNoEquipped['itemName']);
+                        $equipmentQuantity = stripslashes($equipmentNoEquipped['inventoryQuantity']);
+                        $equipmentTypeName = stripslashes($equipmentNoEquipped['itemTypeName']);
+                        $equipmentTypeNameShow = stripslashes($equipmentNoEquipped['itemTypeNameShow']);
+                        ?>
+                        <option value="<?php echo $equipmentId ?>"><?php echo "[$equipmentTypeNameShow] - $equipmentName (Quantité: $equipmentQuantity)" ?></option>
+                        <?php
+                    }
+                    ?>
+                        
+                </select>
+                <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                <center><input type="submit" name="viewEquipment" class="btn btn-default form-control" value="Plus d'informations"></center>
+            </form>
+            
+            <?php
+        }
+        //Si toutes les variables $_POST n'existent pas
+        else
+        {
+            echo "Vous ne possédez aucun équipements non équipé";
+        }
+        $equipmentNoEquippedQuery->closeCursor();
         
     }
     //Si le token de sécurité n'est pas correct
