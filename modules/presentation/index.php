@@ -1,4 +1,6 @@
-<?php require_once("../../html/header.php");
+<?php 
+require_once("../../kernel/kernel.php");
+require_once("../../html/header.php");
 ?>
 
 <?php echo $gameName; ?>

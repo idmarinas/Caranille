@@ -1,9 +1,12 @@
-<?php require_once("../../html/header.php");
+<?php 
+require_once("../../kernel/kernel.php");
 
 //S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
 if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 //S'il n'y a actuellement pas de combat on redirige le joueur vers l'accueil
 if ($battleRow == 0) { exit(header("Location: ../../modules/main/index.php")); }
+
+require_once("../../html/header.php");
 
 //Si le monstre et le joueur on 0 HP
 if ($battleOpponentHpRemaining <= 0 && $characterHpMin <= 0)
@@ -440,7 +443,7 @@ if ($characterHpMin <= 0 && $battleOpponentHpRemaining > 0)
 //Si le monstre et le joueur ont plus de zéro HP le joueur n'a pas a être ici
 if ($battleOpponentHpRemaining > 0 && $characterHpMin > 0 )
 {
-    header("Location: index.php");
+    echo "Erreur : Une erreur est survenue";
 }
 
 require_once("../../html/footer.php"); ?>

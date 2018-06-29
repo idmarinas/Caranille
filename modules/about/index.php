@@ -1,4 +1,7 @@
-<?php require_once("../../html/header.php"); ?>
+<?php
+require_once("../../kernel/kernel.php");
+require_once("../../html/header.php");
+?>
 
 <h1>A propos</h1>
 Caranille est un logiciel écrit en PHP qui va vous permettre de créer votre propre RPG en HTML5<br />

@@ -1,4 +1,6 @@
-<?php require_once("../../html/header.php");
+<?php 
+require_once("../../kernel/kernel.php");
+require_once("../../html/header.php");
 
 //On recherche la liste des races dans la base de donnée
 $raceQuery = $bdd->query('SELECT * FROM car_races');

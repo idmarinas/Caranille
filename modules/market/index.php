@@ -1,9 +1,12 @@
-<?php require_once("../../html/header.php");
- 
+<?php 
+require_once("../../kernel/kernel.php");
+
 //S'il n'y a aucune session c'est que le joueur n'est pas connecté alors on le redirige vers l'accueil
 if (empty($_SESSION['account'])) { exit(header("Location: ../../index.php")); }
 //S'il y a actuellement un combat on redirige le joueur vers le module battle
 if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); }
+
+require_once("../../html/header.php");
 
 //On fait une requête pour récupérer tous les objets du jeu qui ont une ou plusieurs offre en cours
 $marketQuery = $bdd->query("SELECT * FROM car_items, car_items_types
