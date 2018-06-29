@@ -1,5 +1,5 @@
 <?php 
-require_once("../../kernel/includes.php");
+require_once("../../kernel/kernel.php");
 require_once("../../html/header.php");
 
 //On recherche la liste des news dans la base de donnée
