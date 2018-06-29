@@ -1,28 +1,3 @@
-<?php
-ob_start();
-//On définit un emplacement de sauvegarde des sessions
-$sessionPath = $_SERVER['DOCUMENT_ROOT'] . '/sessions';
-ini_set('session.save_path', $sessionPath);
-//On démarre le module des sessions de PHP
-session_start();
-//On récupère le temps Unix actuel une première fois
-$timeStart = microtime(true);
-require_once("../../kernel/config.php");
-
-//On récupère les informations de configuration du jeu
-require_once("../../kernel/configuration/index.php");
-//On récupère toutes les informations du compte
-require_once("../../kernel/account/index.php");
-//On récupère toutes les informations du personnage grâce au compte
-require_once("../../kernel/character/index.php");
-//On récupère toutes les informations des type d'équipement
-require_once("../../kernel/equipmentType/index.php");
-//On vérifie si le personnage est actuellement dans un combat
-require_once("../../kernel/battle/index.php");
-//On vérifie si le personnage est actuellement dans un lieu. Si c'est le cas on récupère toutes les informations du lieu
-require_once("../../kernel/place/index.php");
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
