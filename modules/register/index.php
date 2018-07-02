@@ -1,4 +1,7 @@
-<?php require_once("../../html/header.php"); ?>
+<?php
+require_once("../../kernel/kernel.php");
+require_once("../../html/header.php");
+?>
 
 <form method="POST" action="completeRegistration.php">
     Pseudo : <input type="text" class="form-control" name="accountPseudo" required>
@@ -35,7 +38,7 @@
         <option value="1">Homme</option>
         <option value="0">Femme</option>
     </select>
-    Nom du personnage : <input type="text" class="form-control" name="characterName" required>
+    Nom du personnage : <input type="text" class="form-control" name="characterName" required><br />
     <iframe src="../../CGU.txt" width="100%" height="100%"></iframe>
     En vous inscrivant vous acceptez le présent règlement !
     <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">

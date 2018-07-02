@@ -211,6 +211,7 @@ if (isset($_POST['token'])
                         <form method="POST" action="rewards.php">
                             <input type="submit" class="btn btn-default form-control" name="escape" value="Continuer"><br />
                         </form>
+                        
                         <?php
                     }
                 
