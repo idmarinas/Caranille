@@ -1,4 +1,6 @@
-<?php require_once("../../html/header.php");
+<?php
+require_once("../../kernel/kernel.php");
+require_once("../../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['accountPseudo']) 
