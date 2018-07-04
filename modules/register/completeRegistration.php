@@ -94,8 +94,8 @@ if (isset($_POST['accountPseudo'])
                             :accountPassword,
                             :accountEmail,
                             '0',
-                            '0',
-                            'None',
+                            '1',
+                            'Vous devez valider votre inscription à l\'aide du lien de confirmation que vous avez reçu par Email',
                             :accountLastAction,
                             :accountLastConnection,
                             :accountIp)");
@@ -119,6 +119,34 @@ if (isset($_POST['accountPseudo'])
                                 $accountId = $account['accountId'];
                             }
                             $accountQuery->closeCursor();
+
+                            //On génère un code de vérification
+                            $codeAccountVerification = time();
+
+                            $addCharacter = $bdd->prepare("INSERT INTO car_accounts_verifications VALUES(
+                            NULL,
+                            :accountId,
+                            :accountEmail,
+                            :codeAccountVerification)");
+                            $addCharacter->execute([
+                            'accountId' => $accountId,
+                            'accountEmail' => $accountEmail,
+                            'codeAccountVerification' => $codeAccountVerification]);
+                            $addCharacter->closeCursor();
+
+                            $from = "noreply@caranille.com";
+
+                            $to = $accountEmail;
+                            
+                            $subject = "Caranille - Validation de votre inscription";
+                            
+                            $message = "Voici votre code à saisir dans Mon compte -> Valider mon inscription $codeAccountVerification";
+                            
+                            $headers = "From:" . $from;
+                            
+                            mail($to,$subject,$message, $headers);
+                            
+                            echo "L'email a été envoyé.";
     
                             /*
                             Add character model

@@ -3,16 +3,16 @@ require_once("../../kernel/kernel.php");
 require_once("../../html/header.php");
 
 //Si les variables $_POST suivantes existent
-if (isset($_GET['accountEmail']) 
-&& isset($_GET['codeAccountVerification']))
+if (isset($_POST['accountEmail']) 
+&& isset($_POST['codeAccountVerification']))
 {
     //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_GET['codeAccountVerification'])
-    && $_GET['codeAccountVerification'] >= 0)
+    if (ctype_digit($_POST['codeAccountVerification'])
+    && $_POST['codeAccountVerification'] >= 0)
     {
         //On récupère les valeurs du formulaire dans une variable
-        $accountEmail = htmlspecialchars(addslashes($_GET['accountEmail']));
-        $codeAccountVerification = htmlspecialchars(addslashes($_GET['codeAccountVerification']));
+        $accountEmail = htmlspecialchars(addslashes($_POST['accountEmail']));
+        $codeAccountVerification = htmlspecialchars(addslashes($_POST['codeAccountVerification']));
 
         //On fait une requête pour vérifier si une demande de vérification est en cours
         $accountVerificationQuery = $bdd->prepare('SELECT * FROM car_accounts_verifications 
