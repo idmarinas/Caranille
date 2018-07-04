@@ -132,7 +132,7 @@ if (isset($_POST['privateConversationId'])
                                 if ($privateConversationMessageRead == "No")
                                 {
                                     //On peut enfin le mettre lu car on vient de le lire
-                                    $updatePrivateConversationMessage = $bdd->prepare("UPDATE car_private_conversation_message
+                                    $updatePrivateConversationMessage = $bdd->prepare("UPDATE pokemongo_private_conversation_message
                                     SET privateConversationMessageRead = 'Yes'
                                     WHERE privateConversationMessageId = :privateConversationMessageId");
                                     $updatePrivateConversationMessage->execute([
@@ -141,11 +141,25 @@ if (isset($_POST['privateConversationId'])
                                 }
                             }
                             
-                            //Si $privateConversationMessageCharacterId == $characterId c'est nous qui avons envoyé le message
+                            //Si l'id de la personne qui a posté le message et celui du personnage sinon il s'agira de l'autre personnage
                             if ($privateConversationMessageCharacterId == $characterId)
                             {
-                                //On définit notre pseudo dans l'expéditeur du message
                                 $privateConversationCharacterName = $characterName;
+                            }
+                            else
+                            {
+                                //On fait une requête pour vérifier la liste des conversations dans la base de données
+                                $characterQuery = $bdd->prepare("SELECT * FROM pokemongo_characters
+                                WHERE characterId = ?");
+                                $characterQuery->execute([$privateConversationMessageCharacterId]);
+                                
+                                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                                while ($character = $characterQuery->fetch())
+                                {
+                                    //On récupère les informations du personnage
+                                    $privateConversationCharacterName = stripslashes($character['characterName']);
+                                }
+                                $characterQuery->closeCursor(); 
                             }
                             ?>
                             
