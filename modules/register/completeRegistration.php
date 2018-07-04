@@ -140,7 +140,7 @@ if (isset($_POST['accountPseudo'])
                             
                             $subject = "Caranille - Validation de votre inscription";
                             
-                            $message = "Voici votre code à saisir dans Mon compte -> Valider mon inscription $codeAccountVerification";
+                            $message = "Voici les informations à saisir dans \"Mon compte -> Finaliser\" afin de commencer à jouer\n\nEmail : $accountEmail\nCode : $codeAccountVerification\n\nBon jeu à vous";
                             
                             $headers = "From:" . $from;
                             

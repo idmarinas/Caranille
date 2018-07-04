@@ -149,7 +149,7 @@
 
 								<a class="dropdown-item" href="../../modules/login/index.php">Connexion</a>
 								<a class="dropdown-item" href="../../modules/register/index.php">Inscription</a>
-								<a class="dropdown-item" href="../../modules/verifyRegister/index.php">Valider mon inscription</a>
+								<a class="dropdown-item" href="../../modules/verifyRegister/index.php">Finaliser</a>
 									
 								<?php
 							}
