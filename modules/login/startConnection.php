@@ -33,33 +33,14 @@ if (isset($_POST['accountPseudo'])
                 //On récupère les informations du compte comme l'id et les accès (joueur, modérateur, administrateur)
                 $accountId = stripslashes($account['accountId']);
                 $accountAccess = stripslashes($account['accountAccess']);
-                
-                //Si le jeu est ouvert au public
-                if ($gameAccess == "Opened")
+                $accountStatus = stripslashes($account['accountStatus']);
+                $accountReason = stripslashes($account['accountReason']);
+
+                //Si le joueur peut se connecter
+                if ($accountStatus == 0)
                 {
-                    //On définit une date pour mettre à jour la dernière connexion du compte
-                    $date = date('Y-m-d H:i:s');
-                    
-                    //On créer une session qui ne contiendra que l'id du compte
-                    $_SESSION['account']['id'] = stripslashes($account['accountId']);
-                    $accountId = $_SESSION['account']['id'];
-                    
-                    //On met la date de connexion à jour
-                    $updateAccount = $bdd->prepare("UPDATE car_accounts SET 
-                    accountLastConnection = :accountLastConnection
-                    WHERE accountId = :accountId");
-                    $updateAccount->execute(array(
-                    'accountLastConnection' => $date,   
-                    'accountId' => $accountId));
-                    $updateAccount->closeCursor();
-                    
-                    header("Location: ../../index.php");
-                }
-                //Si le jeu est fermé au public
-                else
-                {
-                    //Si le joueur est administrateur il peut se connecter
-                    if ($accountAccess == 2)
+                    //Si le jeu est ouvert au public
+                    if ($gameAccess == "Opened")
                     {
                         //On définit une date pour mettre à jour la dernière connexion du compte
                         $date = date('Y-m-d H:i:s');
@@ -79,11 +60,51 @@ if (isset($_POST['accountPseudo'])
                         
                         header("Location: ../../index.php");
                     }
-                    //Si le joueur n'est pas administrateur on lui refuse l'accès
+                    //Si le jeu est fermé au public
                     else
                     {
-                        echo "Une maintenance est actuellement en cours, merci de réessayer plus tard.";
+                        //Si le joueur est administrateur il peut se connecter
+                        if ($accountAccess == 2)
+                        {
+                            //On définit une date pour mettre à jour la dernière connexion du compte
+                            $date = date('Y-m-d H:i:s');
+                            
+                            //On créer une session qui ne contiendra que l'id du compte
+                            $_SESSION['account']['id'] = stripslashes($account['accountId']);
+                            $accountId = $_SESSION['account']['id'];
+                            
+                            //On met la date de connexion à jour
+                            $updateAccount = $bdd->prepare("UPDATE car_accounts SET 
+                            accountLastConnection = :accountLastConnection
+                            WHERE accountId = :accountId");
+                            $updateAccount->execute(array(
+                            'accountLastConnection' => $date,   
+                            'accountId' => $accountId));
+                            $updateAccount->closeCursor();
+                            
+                            header("Location: ../../index.php");
+                        }
+                        //Si le joueur n'est pas administrateur on lui refuse l'accès
+                        else
+                        {
+                            echo "Une maintenance est actuellement en cours, merci de réessayer plus tard.";
+                        }
                     }
+                }
+                //Si le joueur ne peut se connecter
+                else
+                {
+                    ?>
+
+                    <?php echo $accountReason ?>
+
+                    <hr>
+
+                    <form method="POST" action="../../modules/main/index.php">
+                        <input type="submit" name="continue" class="btn btn-default form-control" value="Recommencer">
+                    </form>
+
+                    <?php
                 }
             }
         }
