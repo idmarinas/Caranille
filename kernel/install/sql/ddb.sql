@@ -15,6 +15,14 @@ CREATE TABLE IF NOT EXISTS `car_accounts` (
   `accountLastIp` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `car_accounts_verifications` 
+(
+  `accountVerificationId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `accountVerificationAccountId` int(5) NOT NULL,
+  `accountVerificationEmailAdresse` varchar(100) NOT NULL,
+  `accountVerificationEmailCode` bigint(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `car_battles` (
   `battleId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `battleCharacterId` int(11) NOT NULL,
