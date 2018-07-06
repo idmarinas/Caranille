@@ -94,8 +94,8 @@ if (isset($_POST['accountPseudo'])
                             :accountPassword,
                             :accountEmail,
                             '0',
-                            '1',
-                            'Vous devez valider votre inscription à l\'aide du lien de confirmation que vous avez reçu par Email',
+                            '0',
+                            'None',
                             :accountLastAction,
                             :accountLastConnection,
                             :accountIp)");
@@ -120,6 +120,7 @@ if (isset($_POST['accountPseudo'])
                             }
                             $accountQuery->closeCursor();
 
+                            /*
                             //On génère un code de vérification
                             $codeAccountVerification = time();
 
@@ -147,6 +148,7 @@ if (isset($_POST['accountPseudo'])
                             mail($to,$subject,$message, $headers);
                             
                             echo "L'email a été envoyé.";
+                            */
     
                             /*
                             Add character model
