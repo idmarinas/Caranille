@@ -93,6 +93,8 @@ if (isset($_POST['accountPseudo'])
                             :accountPseudo,
                             :accountPassword,
                             :accountEmail,
+                            '',
+                            '',
                             '0',
                             '0',
                             'None',

@@ -113,8 +113,8 @@
 							{
 								?>
 								
-								<a class="dropdown-item" href="../../modules/account/index.php">Informations</a>
 								<a class="dropdown-item" href="../../modules/notification/index.php">Notifications (<?php echo $notificationNumberRow ?>)</a>
+								<a class="dropdown-item" href="../../modules/security/index.php">Sécurité</a>
 								
 								<?php
 								switch ($accountAccess)
@@ -149,7 +149,6 @@
 
 								<a class="dropdown-item" href="../../modules/login/index.php">Connexion</a>
 								<a class="dropdown-item" href="../../modules/register/index.php">Inscription</a>
-								<a class="dropdown-item" href="../../modules/verifyRegister/index.php">Finaliser</a>
 									
 								<?php
 							}

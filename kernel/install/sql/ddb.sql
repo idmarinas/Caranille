@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS `car_accounts` (
   `accountPseudo` varchar(50) NOT NULL,
   `accountPassword` varchar(255) NOT NULL,
   `accountEmail` varchar(50) NOT NULL,
+  `accountSecretQuestion` varchar(100) NOT NULL,
+  `accountSecretAnswer` varchar(100) NOT NULL,
   `accountAccess` int(11) NOT NULL,
   `accountStatus` int(11) NOT NULL,
   `accountReason` varchar(100) NOT NULL,
@@ -196,6 +198,14 @@ CREATE TABLE IF NOT EXISTS `car_configuration`
   `configurationGoldBonus` int(11) NOT NULL,
   `configurationDropBonus` int(11) NOT NULL,
   `configurationAccess` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `car_forgets_passwords` 
+(
+  `accountForgetPasswordId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `accountForgetPasswordAccountId` int(5) NOT NULL,
+  `accountForgetPasswordEmailAdress` varchar(100) NOT NULL,
+  `accountForgetPasswordEmailCode` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_guilds` 

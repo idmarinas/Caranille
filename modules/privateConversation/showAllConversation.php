@@ -129,7 +129,7 @@ if (isset($_POST['privateConversationId'])
                                 if ($privateConversationMessageRead == "No")
                                 {
                                     //On peut enfin le mettre lu car on vient de le lire
-                                    $updatePrivateConversationMessage = $bdd->prepare("UPDATE pokemongo_private_conversation_message
+                                    $updatePrivateConversationMessage = $bdd->prepare("UPDATE car_private_conversation_message
                                     SET privateConversationMessageRead = 'Yes'
                                     WHERE privateConversationMessageId = :privateConversationMessageId");
                                     $updatePrivateConversationMessage->execute([
@@ -146,7 +146,7 @@ if (isset($_POST['privateConversationId'])
                             else
                             {
                                 //On fait une requête pour vérifier la liste des conversations dans la base de données
-                                $characterQuery = $bdd->prepare("SELECT * FROM pokemongo_characters
+                                $characterQuery = $bdd->prepare("SELECT * FROM car_characters
                                 WHERE characterId = ?");
                                 $characterQuery->execute([$privateConversationMessageCharacterId]);
                                 

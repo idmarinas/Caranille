@@ -1,0 +1,111 @@
+<?php 
+require_once("../../kernel/kernel.php");
+require_once("../../html/header.php");
+
+//Si les variables $_POST suivantes existent
+if (isset($_POST['accountPseudo'])
+&& isset($_POST['accountEmail'])
+&& isset($_POST['token'])
+&& isset($_POST['sendPassword']))
+{
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
+    {
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
+
+        //On récupère les valeurs du formulaire dans une variable
+        $accountPseudo = htmlspecialchars(addslashes($_POST['accountPseudo']));
+        $accountEmail = htmlspecialchars(addslashes($_POST['accountEmail']));
+
+        //On fait une requête pour vérifier si la combinaison pseudo et adresse Email est bonne
+        $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
+        WHERE accountPseudo = ?
+        AND accountEmail = ?');
+        $accountQuery->execute([$accountPseudo, $accountEmail]);
+        $accountRow = $accountQuery->rowCount();
+
+        //Si le pseudo est disponible
+        if ($accountRow == 1) 
+        {
+            //On fait une boucle pour récupérer les résultats
+            while ($account = $accountQuery->fetch())
+            {
+                //On récupère les informations du compte
+                $accountId = stripslashes($account['accountId']);
+            }
+
+            //On génère un code
+            $characters = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+
+            for($i=0;$i<100;$i++)
+            {
+                $codeForgetPassword .= ($i%2) ? strtoupper($characters[array_rand($characters)]) : $characters[array_rand($characters)];
+            }
+
+            $addForgetPassword = $bdd->prepare("INSERT INTO car_forgets_passwords VALUES(
+            NULL,
+            :accountId,
+            :accountEmail,
+            :codeForgetPassword)");
+            $addForgetPassword->execute([
+            'accountId' => $accountId,
+            'accountEmail' => $accountEmail,
+            'codeForgetPassword' => $codeForgetPassword]);
+            $addForgetPassword->closeCursor();
+
+            /*
+            $from = "noreply@caranille.com";
+
+            $to = $accountEmail;
+            
+            $subject = "Caranille - Mot de passe oublié";
+            
+            $message = "Pour valider votre demande de nouveau mot de passe veuillez cliquer sur le lien suivant : \n";
+            
+            $headers = "From:" . $from;
+            
+            mail($to,$subject,$message, $headers);
+            */
+            ?>
+
+            Un lien pour générer un nouveau mot de passe vous a été envoyé
+
+            <hr>
+
+            <form method="POST" action="../../index.php">
+                <input type="submit" name="continue" class="btn btn-default form-control" value="Continuer">
+            </form>
+                
+            <?php
+        }
+        //Si la combinaison pseudo/email est incorrecte
+        else 
+        {
+            ?>
+
+            Erreur : La combinaison pseudo/email est incorrecte
+
+            <hr>
+
+            <form method="POST" action="../../modules/forgetPassword/index.php">
+                <input type="submit" name="continue" class="btn btn-default form-control" value="Recommencer">
+            </form>
+
+            <?php
+        }
+        $accountQuery->closeCursor();
+    }
+    //Si le token de sécurité n'est pas correct
+    else
+    {
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
+    }
+}
+//Si toutes les variables $_POST n'existent pas
+else 
+{
+    echo "Tous les champs n'ont pas été rempli";
+}
+
+require_once("../../html/footer.php"); ?>
