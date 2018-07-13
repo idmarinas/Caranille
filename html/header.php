@@ -149,6 +149,7 @@
 
 								<a class="dropdown-item" href="../../modules/login/index.php">Connexion</a>
 								<a class="dropdown-item" href="../../modules/register/index.php">Inscription</a>
+								<a class="dropdown-item" href="../../modules/forgetPassword/enterCode.php">Code</a>
 									
 								<?php
 							}

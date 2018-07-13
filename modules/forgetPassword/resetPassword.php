@@ -3,19 +3,16 @@ require_once("../../kernel/kernel.php");
 require_once("../../html/header.php");
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['accountCode']) 
-&& isset($_POST['accountEmail'])
+if (isset($_POST['accountCode'])
 && isset($_POST['resetPassword']))
 {
     //On récupère les valeurs du formulaire dans une variable
     $accountCode = htmlspecialchars(addslashes($_POST['accountCode']));
-    $accountEmail = htmlspecialchars(addslashes($_POST['accountEmail']));
 
     //On fait une requête pour vérifier si une demande de vérification est en cours
     $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
-    WHERE accountForgetPasswordEmailAdress = ?
-    AND accountForgetPasswordEmailCode = ?');
-    $accountForgetPasswordQuery->execute([$accountEmail, $accountCode]);
+    WHERE accountForgetPasswordEmailCode = ?');
+    $accountForgetPasswordQuery->execute([$accountCode]);
     $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();
 
     //Si une vérification est en cours
@@ -27,6 +24,7 @@ if (isset($_POST['accountCode'])
             //On récupère les informations de la demande de vérification
             $accountForgetPasswordId = stripslashes($accountForgetPassword['accountForgetPasswordId']);
             $accountForgetPasswordAccountId = stripslashes($accountForgetPassword['accountForgetPasswordAccountId']);
+            $accountForgetPasswordEmailAdress = stripslashes($accountForgetPassword['accountForgetPasswordEmailAdress']);
         }
 
         //On supprime la demande de réinitialisation du mot de passe
@@ -57,7 +55,7 @@ if (isset($_POST['accountCode'])
 
         $from = "noreply@caranille.com";
 
-        $to = $accountEmail;
+        $to = $accountForgetPasswordEmailAdress;
         
         $subject = "Caranille - Mot de passe oublié";
         
@@ -83,11 +81,11 @@ if (isset($_POST['accountCode'])
     {
         ?>
 
-        Erreur : Aucune demande de vérification en cours
+        Erreur : Ce code ne correspond à aucune demande de réinitialisation de mot de passe
 
         <hr>
 
-        <form method="POST" action="../../modules/register/index.php">
+        <form method="POST" action="../../modules/forgetPassword/enterCode.php">
             <input type="submit" name="continue" class="btn btn-default form-control" value="Recommencer">
         </form>
 
