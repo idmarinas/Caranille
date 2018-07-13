@@ -3,18 +3,19 @@ require_once("../../kernel/kernel.php");
 require_once("../../html/header.php");
 
 //Si les variables $_POST suivantes existent
-if (isset($_GET['accountEmail']) 
-&& isset($_GET['codeForgetPassword']))
+if (isset($_POST['accountCode']) 
+&& isset($_POST['accountEmail'])
+&& isset($_POST['resetPassword']))
 {
     //On récupère les valeurs du formulaire dans une variable
-    $accountEmail = htmlspecialchars(addslashes($_GET['accountEmail']));
-    $codeForgetPassword = htmlspecialchars(addslashes($_GET['codeForgetPassword']));
+    $accountCode = htmlspecialchars(addslashes($_POST['accountCode']));
+    $accountEmail = htmlspecialchars(addslashes($_POST['accountEmail']));
 
     //On fait une requête pour vérifier si une demande de vérification est en cours
     $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
     WHERE accountForgetPasswordEmailAdress = ?
     AND accountForgetPasswordEmailCode = ?');
-    $accountForgetPasswordQuery->execute([$accountEmail, $codeForgetPassword]);
+    $accountForgetPasswordQuery->execute([$accountEmail, $accountCode]);
     $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();
 
     //Si une vérification est en cours
@@ -34,9 +35,40 @@ if (isset($_GET['accountEmail'])
         $deleteForgetPasswordQuery->execute(array(
         'accountForgetPasswordId' => $accountForgetPasswordId));
         $deleteForgetPasswordQuery->closeCursor();
+
+        //On génère un nouveau mot de passe
+        $characters = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+
+        for($i=0;$i<20;$i++)
+        {
+            $newPasswordEmail .= ($i%2) ? strtoupper($characters[array_rand($characters)]) : $characters[array_rand($characters)];
+        }
+
+        $newPassword = sha1($newPasswordEmail);
+
+        //On met à jour le mot de passe dans la base de donnée
+        $updateAccount = $bdd->prepare('UPDATE car_accounts 
+        SET accountPassword = :newPassword
+        WHERE accountId = :accountForgetPasswordAccountId');
+        $updateAccount->execute(array(
+        'newPassword' => $newPassword,
+        'accountForgetPasswordAccountId' => $accountForgetPasswordAccountId));
+        $updateAccount->closeCursor();
+
+        $from = "noreply@caranille.com";
+
+        $to = $accountEmail;
+        
+        $subject = "Caranille - Mot de passe oublié";
+        
+        $message = "Voici votre nouveau mot de passe : \n$newPasswordEmail";
+        
+        $headers = "From:" . $from;
+        
+        mail($to,$subject,$message, $headers);
         ?>
 
-        La demande de nouveau mot de passe a été annulée
+        Un nouveau mot de passe vous a été envoyé par Email
 
         <hr>
 

@@ -1,0 +1,69 @@
+<?php 
+require_once("../../kernel/kernel.php");
+require_once("../../html/header.php");
+
+//Si les variables $_POST suivantes existent
+if (isset($_POST['accountEmail']) 
+&& isset($_POST['token'])
+&& isset($_POST['enterCode']))
+{
+    //On récupère les valeurs du formulaire dans une variable
+    $accountEmail = htmlspecialchars(addslashes($_POST['accountEmail']));
+
+    //On fait une requête pour vérifier si une demande de vérification est en cours
+    $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
+    WHERE accountForgetPasswordEmailAdress = ?');
+    $accountForgetPasswordQuery->execute([$accountEmail]);
+    $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();
+
+    echo $accountEmail;
+
+    //Si une vérification est en cours
+    if ($accountForgetPasswordRow > 0) 
+    {
+        //Dans ce cas on boucle pour récupérer le tableau retourné par la base de donnée pour récupérer les informations du compte
+        while ($accountForgetPassword = $accountForgetPasswordQuery->fetch())
+        {
+            //On récupère les informations de la demande de vérification
+            $accountForgetPasswordId = stripslashes($accountForgetPassword['accountForgetPasswordId']);
+            $accountForgetPasswordAccountId = stripslashes($accountForgetPassword['accountForgetPasswordAccountId']);
+        }
+        ?>
+
+        Veuillez saisir le code reçu par Email
+
+        <hr>
+
+        <form method="POST" action="enterCodeEnd.php">
+            Code reçu : <input type="text" class="form-control" name="accountCode" required>
+            <input type="hidden" class="btn btn-default form-control" name="accountEmail" value="<?php echo $accountEmail ?>">
+            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+            <input type="submit" name="resetPassword" class="btn btn-default form-control" value="Se connecter">
+        </form>
+
+        <?php
+    }
+    //Si le pseudo est déjà utilisé
+    else 
+    {
+        ?>
+
+        Erreur : Aucune demande de vérification en cours
+
+        <hr>
+
+        <form method="POST" action="../../modules/register/index.php">
+            <input type="submit" name="continue" class="btn btn-default form-control" value="Recommencer">
+        </form>
+
+        <?php
+    }
+    $accountForgetPasswordQuery->closeCursor();
+}
+//Si toutes les variables $_POST n'existent pas
+else 
+{
+    echo "Tous les champs n'ont pas été rempli";
+}
+
+require_once("../../html/footer.php"); ?>

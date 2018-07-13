@@ -6,7 +6,7 @@ require_once("../../html/header.php");
 if (isset($_POST['accountPseudo'])
 && isset($_POST['accountEmail'])
 && isset($_POST['token'])
-&& isset($_POST['sendPassword']))
+&& isset($_POST['continue']))
 {
     //Si le token de sécurité est correct
     if ($_POST['token'] == $_SESSION['token'])
@@ -38,7 +38,7 @@ if (isset($_POST['accountPseudo'])
             //On génère un code
             $characters = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
 
-            for($i=0;$i<100;$i++)
+            for($i=0;$i<20;$i++)
             {
                 $codeForgetPassword .= ($i%2) ? strtoupper($characters[array_rand($characters)]) : $characters[array_rand($characters)];
             }
@@ -54,27 +54,27 @@ if (isset($_POST['accountPseudo'])
             'codeForgetPassword' => $codeForgetPassword]);
             $addForgetPassword->closeCursor();
 
-            /*
             $from = "noreply@caranille.com";
 
             $to = $accountEmail;
             
-            $subject = "Caranille - Mot de passe oublié";
+            $subject = "Mot de passe oublié";
             
-            $message = "Pour valider votre demande de nouveau mot de passe veuillez cliquer sur le lien suivant : \n";
+            $message = "Voici votre code à saisir pour réinitialiser votre nouveau mot de passe :$codeForgetPassword\n\nSi vous n'êtes pas à l'origine de cette demande veuillez ne pas tenir compte de ce mail.";
             
             $headers = "From:" . $from;
             
             mail($to,$subject,$message, $headers);
-            */
             ?>
 
-            Un lien pour générer un nouveau mot de passe vous a été envoyé
+            Un code vous a été envoyé, veuillez cliquer sur "Saisir le code" ci-dessous afin de continuer
 
             <hr>
 
-            <form method="POST" action="../../index.php">
-                <input type="submit" name="continue" class="btn btn-default form-control" value="Continuer">
+            <form method="POST" action="enterCode.php">
+                <input type="hidden" class="btn btn-default form-control" name="accountEmail" value="<?php echo $accountEmail ?>">
+                <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                <input type="submit" name="enterCode" class="btn btn-default form-control" value="Saisir le code">
             </form>
                 
             <?php
