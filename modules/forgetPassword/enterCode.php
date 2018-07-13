@@ -3,7 +3,7 @@ require_once("../../kernel/kernel.php");
 require_once("../../html/header.php");
 ?>
 
-Veuillez saisir le code que vous avez reçu par Email
+Afin de réinitialiser votre mot de passe, veuillez saisir le code que vous avez reçu par Email
         
 <hr>
 
