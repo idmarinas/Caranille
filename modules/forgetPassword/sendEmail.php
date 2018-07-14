@@ -64,7 +64,7 @@ if (isset($_POST['accountPseudo'])
             
             $subject = "Mot de passe oublié";
             
-            $message = "Voici votre code à saisir pour réinitialiser votre nouveau mot de passe :$codeForgetPasswordFinal\n\nSi vous n'êtes pas à l'origine de cette demande veuillez ne pas tenir compte de ce mail.";
+            $message = "Voici votre code à saisir dans \Mon comppte -> Code\" pour réinitialiser votre nouveau mot de passe :$codeForgetPasswordFinal\n\nSi vous n'êtes pas à l'origine de cette demande veuillez ne pas tenir compte de ce mail.";
             
             $headers = "From:" . $from;
             
