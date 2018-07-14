@@ -8,80 +8,95 @@ if (isset($_POST['accountCode'])
 && isset($_POST['accountPasswordConfirm'])
 && isset($_POST['changePasswordEnd']))
 {
-    //On récupère les valeurs du formulaire dans une variable
-    $accountCode = htmlspecialchars(addslashes($_POST['accountCode']));
-    $accountPassword = sha1(htmlspecialchars(addslashes($_POST['accountPassword'])));
-    $accountPasswordConfirm = sha1(htmlspecialchars(addslashes($_POST['accountPasswordConfirm'])));
-
-    //On vérifie si les deux mots de passes sont identiques
-    if ($accountPassword == $accountPasswordConfirm) 
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On fait une requête pour vérifier si une demande de vérification est en cours
-        $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
-        WHERE accountForgetPasswordEmailCode = ?');
-        $accountForgetPasswordQuery->execute([$accountCode]);
-        $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //Si une vérification est en cours
-        if ($accountForgetPasswordRow == 1) 
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
+
+        //On récupère les valeurs du formulaire dans une variable
+        $accountCode = htmlspecialchars(addslashes($_POST['accountCode']));
+        $accountPassword = sha1(htmlspecialchars(addslashes($_POST['accountPassword'])));
+        $accountPasswordConfirm = sha1(htmlspecialchars(addslashes($_POST['accountPasswordConfirm'])));
+
+        //On vérifie si les deux mots de passes sont identiques
+        if ($accountPassword == $accountPasswordConfirm) 
         {
-            //Dans ce cas on boucle pour récupérer le tableau retourné par la base de donnée pour récupérer les informations du compte
-            while ($accountForgetPassword = $accountForgetPasswordQuery->fetch())
+            //On fait une requête pour vérifier si une demande de vérification est en cours
+            $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
+            WHERE accountForgetPasswordEmailCode = ?');
+            $accountForgetPasswordQuery->execute([$accountCode]);
+            $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();
+
+            //Si une vérification est en cours
+            if ($accountForgetPasswordRow == 1) 
             {
-                //On récupère les informations de la demande de vérification
-                $accountForgetPasswordId = stripslashes($accountForgetPassword['accountForgetPasswordId']);
-                $accountForgetPasswordAccountId = stripslashes($accountForgetPassword['accountForgetPasswordAccountId']);
-                $accountForgetPasswordEmailAdress = stripslashes($accountForgetPassword['accountForgetPasswordEmailAdress']);
+                //Dans ce cas on boucle pour récupérer le tableau retourné par la base de donnée pour récupérer les informations du compte
+                while ($accountForgetPassword = $accountForgetPasswordQuery->fetch())
+                {
+                    //On récupère les informations de la demande de vérification
+                    $accountForgetPasswordId = stripslashes($accountForgetPassword['accountForgetPasswordId']);
+                    $accountForgetPasswordAccountId = stripslashes($accountForgetPassword['accountForgetPasswordAccountId']);
+                    $accountForgetPasswordEmailAdress = stripslashes($accountForgetPassword['accountForgetPasswordEmailAdress']);
+                }
+
+                //On supprime la demande de réinitialisation du mot de passe
+                $deleteForgetPasswordQuery = $bdd->prepare("DELETE FROM car_forgets_passwords
+                WHERE accountForgetPasswordId = :accountForgetPasswordId");
+                $deleteForgetPasswordQuery->execute(array(
+                'accountForgetPasswordId' => $accountForgetPasswordId));
+                $deleteForgetPasswordQuery->closeCursor();
+
+                //On met à jour le mot de passe dans la base de donnée
+                $updateAccount = $bdd->prepare('UPDATE car_accounts 
+                SET accountPassword = :accountPassword
+                WHERE accountId = :accountForgetPasswordAccountId');
+                $updateAccount->execute(array(
+                'accountPassword' => $accountPassword,
+                'accountForgetPasswordAccountId' => $accountForgetPasswordAccountId));
+                $updateAccount->closeCursor();
+                ?>
+
+                Votre mot de passe a bien été changé
+
+                <hr>
+
+                <form method="POST" action="../../modules/login/index.php">
+                    <input type="submit" name="continue" class="btn btn-default form-control" value="Se connecter">
+                </form>
+
+                <?php
             }
+            //Si le pseudo est déjà utilisé
+            else 
+            {
+                ?>
 
-            //On supprime la demande de réinitialisation du mot de passe
-            $deleteForgetPasswordQuery = $bdd->prepare("DELETE FROM car_forgets_passwords
-            WHERE accountForgetPasswordId = :accountForgetPasswordId");
-            $deleteForgetPasswordQuery->execute(array(
-            'accountForgetPasswordId' => $accountForgetPasswordId));
-            $deleteForgetPasswordQuery->closeCursor();
+                Erreur : Ce code ne correspond à aucune demande de réinitialisation de mot de passe
 
-            //On met à jour le mot de passe dans la base de donnée
-            $updateAccount = $bdd->prepare('UPDATE car_accounts 
-            SET accountPassword = :accountPassword
-            WHERE accountId = :accountForgetPasswordAccountId');
-            $updateAccount->execute(array(
-            'accountPassword' => $accountPassword,
-            'accountForgetPasswordAccountId' => $accountForgetPasswordAccountId));
-            $updateAccount->closeCursor();
-            ?>
+                <hr>
 
-            Votre mot de passe a bien été changé
+                <form method="POST" action="../../modules/forgetPassword/enterCode.php">
+                    <input type="submit" name="continue" class="btn btn-default form-control" value="Recommencer">
+                </form>
 
-            <hr>
-
-            <form method="POST" action="../../modules/login/index.php">
-                <input type="submit" name="continue" class="btn btn-default form-control" value="Se connecter">
-            </form>
-
-            <?php
+                <?php
+            }
+            $accountForgetPasswordQuery->closeCursor();
         }
-        //Si le pseudo est déjà utilisé
+        //Si les deux mots de passe ne sont pas identique
         else 
         {
-            ?>
-
-            Erreur : Ce code ne correspond à aucune demande de réinitialisation de mot de passe
-
-            <hr>
-
-            <form method="POST" action="../../modules/forgetPassword/enterCode.php">
-                <input type="submit" name="continue" class="btn btn-default form-control" value="Recommencer">
-            </form>
-
-            <?php
+            echo "Les deux mots de passe ne sont pas identiques";
         }
-        $accountForgetPasswordQuery->closeCursor();
     }
-    //Si les deux mots de passe ne sont pas identique
-    else 
+    //Si le token de sécurité n'est pas correct
+    else
     {
-        echo "Les deux mots de passe ne sont pas identiques";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

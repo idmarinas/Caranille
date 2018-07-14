@@ -6,50 +6,65 @@ require_once("../../html/header.php");
 if (isset($_POST['accountCode'])
 && isset($_POST['resetPassword']))
 {
-    //On récupère les valeurs du formulaire dans une variable
-    $accountCode = htmlspecialchars(addslashes($_POST['accountCode']));
-
-    //On fait une requête pour vérifier si une demande de vérification est en cours
-    $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
-    WHERE accountForgetPasswordEmailCode = ?');
-    $accountForgetPasswordQuery->execute([$accountCode]);
-    $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();
-
-    //Si une vérification est en cours
-    if ($accountForgetPasswordRow == 1) 
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        ?>
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        Veuillez saisir un nouveau mot de passe et le confirmer
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
+        
+        //On récupère les valeurs du formulaire dans une variable
+        $accountCode = htmlspecialchars(addslashes($_POST['accountCode']));
 
-        <hr>
+        //On fait une requête pour vérifier si une demande de vérification est en cours
+        $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
+        WHERE accountForgetPasswordEmailCode = ?');
+        $accountForgetPasswordQuery->execute([$accountCode]);
+        $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();
 
-        <form method="POST" action="../../modules/forgetPassword/changePasswordEnd.php">
-            Mot de passe : <input type="password" class="form-control" name="accountPassword" required>
-            Confirmez : <input type="password" class="form-control" name="accountPasswordConfirm" required>
-            <input type="hidden" class="btn btn-default form-control" name="accountCode" value="<?php echo $accountCode ?>">
-            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-            <input type="submit" name="changePasswordEnd" class="btn btn-default form-control" value="Se connecter">
-        </form>
+        //Si une vérification est en cours
+        if ($accountForgetPasswordRow == 1) 
+        {
+            ?>
 
-        <?php
+            Veuillez saisir un nouveau mot de passe et le confirmer
+
+            <hr>
+
+            <form method="POST" action="../../modules/forgetPassword/changePasswordEnd.php">
+                Mot de passe : <input type="password" class="form-control" name="accountPassword" required>
+                Confirmez : <input type="password" class="form-control" name="accountPasswordConfirm" required>
+                <input type="hidden" class="btn btn-default form-control" name="accountCode" value="<?php echo $accountCode ?>">
+                <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                <input type="submit" name="changePasswordEnd" class="btn btn-default form-control" value="Se connecter">
+            </form>
+
+            <?php
+        }
+        //Si le pseudo est déjà utilisé
+        else 
+        {
+            ?>
+
+            Erreur : Ce code ne correspond à aucune demande de réinitialisation de mot de passe
+
+            <hr>
+
+            <form method="POST" action="../../modules/forgetPassword/enterCode.php">
+                <input type="submit" name="continue" class="btn btn-default form-control" value="Recommencer">
+            </form>
+
+            <?php
+        }
+        $accountForgetPasswordQuery->closeCursor();
     }
-    //Si le pseudo est déjà utilisé
-    else 
+    //Si le token de sécurité n'est pas correct
+    else
     {
-        ?>
-
-        Erreur : Ce code ne correspond à aucune demande de réinitialisation de mot de passe
-
-        <hr>
-
-        <form method="POST" action="../../modules/forgetPassword/enterCode.php">
-            <input type="submit" name="continue" class="btn btn-default form-control" value="Recommencer">
-        </form>
-
-        <?php
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
-    $accountForgetPasswordQuery->closeCursor();
 }
 //Si toutes les variables $_POST n'existent pas
 else 
