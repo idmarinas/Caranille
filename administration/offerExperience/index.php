@@ -35,7 +35,7 @@ require_once("../html/header.php");
     
     </select>
     <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-    <input type="submit" class="btn btn-default form-control" name="manage" value="Offrir de l'expérience">
+    <input type="submit" class="btn btn-default form-control" name="offerExperience" value="Offrir de l'expérience">
 </form>
 
 <?php require_once("../html/footer.php");

@@ -35,7 +35,7 @@ require_once("../html/header.php");
     
     </select>
     <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-    <input type="submit" class="btn btn-default form-control" name="manage" value="Offrir de l'argent">
+    <input type="submit" class="btn btn-default form-control" name="offerGold" value="Offrir de l'argent">
 </form>
 
 <?php require_once("../html/footer.php");

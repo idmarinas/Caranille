@@ -10,8 +10,9 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminCharacterId'])
+&& isset($_POST['adminOfferGold'])
 && isset($_POST['token'])
-&& isset($_POST['adminOfferGold']))
+&& isset($_POST['offerGold']))
 {
     //Si le token de sécurité est correct
     if ($_POST['token'] == $_SESSION['token'])
