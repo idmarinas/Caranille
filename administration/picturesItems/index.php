@@ -13,7 +13,7 @@ require_once("../html/header.php");
     Images d'équipements : <select name="pictureFile" class="form-control">
             
         <?php
-        $dir = '../../img/equipments/';
+        $dir = '../../img/items/';
         //On ouvre le dossier
         if ($dh = opendir($dir)) 
         {
