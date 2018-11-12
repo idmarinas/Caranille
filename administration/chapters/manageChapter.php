@@ -10,62 +10,79 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminChapterId'])
+&& isset($_POST['token'])
 && isset($_POST['manage']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminChapterId'])
-    && $_POST['adminChapterId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminChapterId = htmlspecialchars(addslashes($_POST['adminChapterId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le chapitre choisit existe
-        $chapterQuery = $bdd->prepare('SELECT * FROM car_chapters 
-        WHERE chapterId = ?
-		ORDER By chapterId');
-        $chapterQuery->execute([$adminChapterId]);
-        $chapterRow = $chapterQuery->rowCount();
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
 
-        //Si le chapitre existe
-        if ($chapterRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminChapterId'])
+        && $_POST['adminChapterId'] >= 1)
         {
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($chapter = $chapterQuery->fetch())
+            //On récupère l'id du formulaire précédent
+            $adminChapterId = htmlspecialchars(addslashes($_POST['adminChapterId']));
+
+            //On fait une requête pour vérifier si le chapitre choisit existe
+            $chapterQuery = $bdd->prepare('SELECT * FROM car_chapters 
+            WHERE chapterId = ?
+            ORDER By chapterId');
+            $chapterQuery->execute([$adminChapterId]);
+            $chapterRow = $chapterQuery->rowCount();
+
+            //Si le chapitre existe
+            if ($chapterRow == 1) 
             {
-                //On récupère les informations du chapitre
-                $adminChapterId = stripslashes($chapter['chapterId']);
-                $adminChapterTitle = stripslashes($chapter['chapterTitle']);
-            }
-            ?>
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($chapter = $chapterQuery->fetch())
+                {
+                    //On récupère les informations du chapitre
+                    $adminChapterId = stripslashes($chapter['chapterId']);
+                    $adminChapterTitle = stripslashes($chapter['chapterTitle']);
+                }
+                ?>
 
-            Que souhaitez-vous faire du chapitre <em><?php echo "$adminChapterId - $adminChapterTitle"; ?></em> ?
+                Que souhaitez-vous faire du chapitre <em><?php echo "$adminChapterId - $adminChapterTitle"; ?></em> ?
 
-            <hr>
+                <hr>
+                    
+                <form method="POST" action="editChapter.php">
+                    <input type="hidden" class="btn btn-default form-control" name="adminChapterId" value="<?php echo $adminChapterId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="edit" value="Afficher/Modifier le chapitre">
+                </form>
                 
-            <form method="POST" action="editChapter.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminChapterId" value="<?php echo $adminChapterId ?>">
-                <input type="submit" class="btn btn-default form-control" name="edit" value="Afficher/Modifier le chapitre">
-            </form>
-            
-            <hr>
+                <hr>
 
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
 
-            <?php
+                <?php
+            }
+            //Si le chapitre n'exite pas
+            else
+            {
+                echo "Erreur : Chapitre indisponible";
+            }
+            $chapterQuery->closeCursor();
         }
-        //Si le chapitre n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Chapitre indisponible";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $chapterQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si l'utilisateur n'a pas cliqué sur le bouton manage
