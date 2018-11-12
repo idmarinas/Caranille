@@ -44,6 +44,7 @@ if ($equipmentRow > 0)
             ?>
             
         </select>
+        <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
         <input type="submit" name="manage" class="btn btn-default form-control" value="Gérer l'équipement">
     </form>
     
@@ -59,6 +60,7 @@ else
 <hr>
 
 <form method="POST" action="addEquipment.php">
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" class="btn btn-default form-control" name="add" value="Créer un équipement">
 </form>
 
