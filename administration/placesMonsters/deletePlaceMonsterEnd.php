@@ -11,89 +11,103 @@ require_once("../html/header.php");
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminplaceMonsterPlaceId'])
 && isset($_POST['adminplaceMonsterMonsterId'])
+&& isset($_POST['token'])
 && isset($_POST['finalDelete']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminplaceMonsterPlaceId'])
-    && ctype_digit($_POST['adminplaceMonsterMonsterId'])
-    && $_POST['adminplaceMonsterPlaceId'] >= 1
-    && $_POST['adminplaceMonsterMonsterId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminplaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminplaceMonsterPlaceId']));
-        $adminplaceMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminplaceMonsterMonsterId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le lieu choisie existe
-        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
-        WHERE placeId = ?');
-        $placeQuery->execute([$adminplaceMonsterPlaceId]);
-        $placeRow = $placeQuery->rowCount();
-
-        //Si le lieu existe
-        if ($placeRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminplaceMonsterPlaceId'])
+        && ctype_digit($_POST['adminplaceMonsterMonsterId'])
+        && $_POST['adminplaceMonsterPlaceId'] >= 1
+        && $_POST['adminplaceMonsterMonsterId'] >= 1)
         {
-            //On fait une requête pour vérifier si le monstre choisit existe
-            $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
-            WHERE monsterId = ?');
-            $monsterQuery->execute([$adminplaceMonsterMonsterId]);
-            $monsterRow = $monsterQuery->rowCount();
+            //On récupère l'id du formulaire précédent
+            $adminplaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminplaceMonsterPlaceId']));
+            $adminplaceMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminplaceMonsterMonsterId']));
 
-            //Si le monstre choisit  exite
-            if ($monsterRow == 1) 
+            //On fait une requête pour vérifier si le lieu choisie existe
+            $placeQuery = $bdd->prepare('SELECT * FROM car_places 
+            WHERE placeId = ?');
+            $placeQuery->execute([$adminplaceMonsterPlaceId]);
+            $placeRow = $placeQuery->rowCount();
+
+            //Si le lieu existe
+            if ($placeRow == 1) 
             {
-                //On fait une requête pour vérifier si le monstre choisit  existe bien dans le lieu
-                $monsterQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
-                WHERE placeMonsterPlaceId = ?
-                AND placeMonsterMonsterId = ?');
-                $monsterQuery->execute([$adminplaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
+                //On fait une requête pour vérifier si le monstre choisit existe
+                $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
+                WHERE monsterId = ?');
+                $monsterQuery->execute([$adminplaceMonsterMonsterId]);
                 $monsterRow = $monsterQuery->rowCount();
 
-                //Si l'équipement existe
+                //Si le monstre choisit  exite
                 if ($monsterRow == 1) 
                 {
-                    //On supprime l'équipement de la base de donnée
-                    $placeMonsterDeleteQuery = $bdd->prepare("DELETE FROM car_places_monsters
-                    WHERE placeMonsterMonsterId = ?");
-                    $placeMonsterDeleteQuery->execute([$adminplaceMonsterMonsterId]);
-                    $placeMonsterDeleteQuery->closeCursor();
-                    ?>
+                    //On fait une requête pour vérifier si le monstre choisit  existe bien dans le lieu
+                    $monsterQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
+                    WHERE placeMonsterPlaceId = ?
+                    AND placeMonsterMonsterId = ?');
+                    $monsterQuery->execute([$adminplaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
+                    $monsterRow = $monsterQuery->rowCount();
 
-                    Le monstre a bien été retiré du lieu
+                    //Si l'équipement existe
+                    if ($monsterRow == 1) 
+                    {
+                        //On supprime l'équipement de la base de donnée
+                        $placeMonsterDeleteQuery = $bdd->prepare("DELETE FROM car_places_monsters
+                        WHERE placeMonsterMonsterId = ?");
+                        $placeMonsterDeleteQuery->execute([$adminplaceMonsterMonsterId]);
+                        $placeMonsterDeleteQuery->closeCursor();
+                        ?>
 
-                    <hr>
+                        Le monstre a bien été retiré du lieu
+
+                        <hr>
+                            
+                        <form method="POST" action="managePlaceMonster.php">
+                            <input type="hidden" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
+                            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                            <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
+                        </form>
                         
-                    <form method="POST" action="managePlaceMonster.php">
-                        <input type="hidden" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
-                        <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
-                    </form>
-                    
-                    <?php
+                        <?php
+                    }
+                    //Si le monstre n'exite pas
+                    else
+                    {
+                        echo "Erreur : Monstre indisponible";
+                    }
+                    $monsterQuery->closeCursor();
                 }
-                //Si le monstre n'exite pas
+                //Si le monstre existe pas
                 else
                 {
-                    echo "Erreur : Monstre indisponible";
+                    echo "Erreur : Ce monstre n'existe pas";
                 }
                 $monsterQuery->closeCursor();
             }
-            //Si le monstre existe pas
+            //Si le lieu existe pas
             else
             {
-                echo "Erreur : Ce monstre n'existe pas";
+                echo "Erreur : Cette lieu n'existe pas";
             }
-            $monsterQuery->closeCursor();
+            $placeQuery->closeCursor();
         }
-        //Si le lieu existe pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Cette lieu n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $placeQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

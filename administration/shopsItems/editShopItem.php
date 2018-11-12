@@ -12,121 +12,140 @@ require_once("../html/header.php");
 if (isset($_POST['adminShopItemShopId'])
 && isset($_POST['adminShopItemItemId'])
 && isset($_POST['adminShopItemDiscount'])
+&& isset($_POST['token'])
 && isset($_POST['finalEdit']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminShopItemShopId'])
-    && ctype_digit($_POST['adminShopItemItemId'])
-    && ctype_digit($_POST['adminShopItemDiscount'])
-    && $_POST['adminShopItemShopId'] >= 1
-    && $_POST['adminShopItemItemId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminShopItemShopId = htmlspecialchars(addslashes($_POST['adminShopItemShopId']));
-        $adminShopItemItemId = htmlspecialchars(addslashes($_POST['adminShopItemItemId']));
-        $adminShopItemDiscount = htmlspecialchars(addslashes($_POST['adminShopItemDiscount']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //Si la réduction est entre 0 et 100 on ajoute l'objet
-        if ($adminShopItemDiscount >= 0 && $adminShopItemDiscount <= 100)
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
+
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminShopItemShopId'])
+        && ctype_digit($_POST['adminShopItemItemId'])
+        && ctype_digit($_POST['adminShopItemDiscount'])
+        && $_POST['adminShopItemShopId'] >= 1
+        && $_POST['adminShopItemItemId'] >= 1)
         {
-            //On fait une requête pour vérifier si le magasin choisit existe
-            $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
-            WHERE shopId = ?');
-            $shopQuery->execute([$adminShopItemShopId]);
-            $shopRow = $shopQuery->rowCount();
+            //On récupère l'id du formulaire précédent
+            $adminShopItemShopId = htmlspecialchars(addslashes($_POST['adminShopItemShopId']));
+            $adminShopItemItemId = htmlspecialchars(addslashes($_POST['adminShopItemItemId']));
+            $adminShopItemDiscount = htmlspecialchars(addslashes($_POST['adminShopItemDiscount']));
 
-            //Si le magasin existe
-            if ($shopRow == 1) 
+            //Si la réduction est entre 0 et 100 on ajoute l'objet
+            if ($adminShopItemDiscount >= 0 && $adminShopItemDiscount <= 100)
             {
-                //On fait une requête pour vérifier si l'objet choisit existe
-                $itemQuery = $bdd->prepare('SELECT * FROM car_items 
-                WHERE itemId = ?');
-                $itemQuery->execute([$adminShopItemItemId]);
-                $itemRow = $itemQuery->rowCount();
+                //On fait une requête pour vérifier si le magasin choisit existe
+                $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
+                WHERE shopId = ?');
+                $shopQuery->execute([$adminShopItemShopId]);
+                $shopRow = $shopQuery->rowCount();
 
-                //Si l'objet existe
-                if ($itemRow == 1) 
+                //Si le magasin existe
+                if ($shopRow == 1) 
                 {
-                    //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette lieu
-                    $shopItemQuery = $bdd->prepare('SELECT * FROM car_shops_items
-                    WHERE shopItemShopId = ?
-                    AND shopItemItemId = ?');
-                    $shopItemQuery->execute([$adminShopItemShopId, $adminShopItemItemId]);
-                    $shopItemRow = $shopItemQuery->rowCount();
+                    //On fait une requête pour vérifier si l'objet choisit existe
+                    $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+                    WHERE itemId = ?');
+                    $itemQuery->execute([$adminShopItemItemId]);
+                    $itemRow = $itemQuery->rowCount();
 
-                    //Si l'objet est dans ce magasin
-                    if ($shopItemRow == 1) 
+                    //Si l'objet existe
+                    if ($itemRow == 1) 
                     {
-                        //On met à jour le magasin dans la base de donnée
-                        $updateShopItem = $bdd->prepare("UPDATE car_shops_items
-                        SET shopItemDiscount = :adminShopItemDiscount
-                        WHERE shopItemItemId = :adminShopItemItemId");
-                        $updateShopItem->execute([
-                        'adminShopItemDiscount' => $adminShopItemDiscount,
-                        'adminShopItemItemId' => $adminShopItemItemId]);
-                        $updateShopItem->closeCursor();
-                        ?>
+                        //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette lieu
+                        $shopItemQuery = $bdd->prepare('SELECT * FROM car_shops_items
+                        WHERE shopItemShopId = ?
+                        AND shopItemItemId = ?');
+                        $shopItemQuery->execute([$adminShopItemShopId, $adminShopItemItemId]);
+                        $shopItemRow = $shopItemQuery->rowCount();
 
-                        L'article a bien été mit à jour
+                        //Si l'objet est dans ce magasin
+                        if ($shopItemRow == 1) 
+                        {
+                            //On met à jour le magasin dans la base de donnée
+                            $updateShopItem = $bdd->prepare("UPDATE car_shops_items
+                            SET shopItemDiscount = :adminShopItemDiscount
+                            WHERE shopItemItemId = :adminShopItemItemId");
+                            $updateShopItem->execute([
+                            'adminShopItemDiscount' => $adminShopItemDiscount,
+                            'adminShopItemItemId' => $adminShopItemItemId]);
+                            $updateShopItem->closeCursor();
+                            ?>
 
-                        <hr>
+                            L'article a bien été mit à jour
+
+                            <hr>
+                                
+                            <form method="POST" action="manageShopItem.php">
+                                <input type="hidden" name="adminShopItemShopId" value="<?php echo $adminShopItemShopId ?>">
+                                <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                                <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
+                            </form>
                             
-                        <form method="POST" action="manageShopItem.php">
-                            <input type="hidden" name="adminShopItemShopId" value="<?php echo $adminShopItemShopId ?>">
-                            <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
-                        </form>
-                        
-                        <?php
+                            <?php
+                        }
+                        //Si l'objet est déjà dans ce magasin
+                        else
+                        {
+                            ?>
+                            
+                            Erreur : Cet objet est déjà dans ce magasin
+
+                            <form method="POST" action="manageShopItem.php">
+                                <input type="hidden" name="adminShopItemShopId" value="<?php echo $adminShopItemShopId ?>">
+                                <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                                <input type="submit" class="btn btn-default form-control" name="manage" value="Retour">
+                            </form>
+                            
+                            <?php
+                        }
+                        $shopItemQuery->closeCursor();
                     }
-                    //Si l'objet est déjà dans ce magasin
+                    //Si l'objet existe pas
                     else
                     {
-                        ?>
-                        
-                        Erreur : Cet objet est déjà dans ce magasin
-
-                        <form method="POST" action="manageShopItem.php">
-                            <input type="hidden" name="adminShopItemShopId" value="<?php echo $adminShopItemShopId ?>">
-                            <input type="submit" class="btn btn-default form-control" name="manage" value="Retour">
-                        </form>
-                        
-                        <?php
+                        echo "Erreur : Objet indisponible";
                     }
-                    $shopItemQuery->closeCursor();
+                    $itemQuery->closeCursor();
                 }
-                //Si l'objet existe pas
+                //Si le magasin existe pas
                 else
                 {
-                    echo "Erreur : Objet indisponible";
+                    echo "Erreur : Magasin indisponible";
                 }
-                $itemQuery->closeCursor();
+                $shopQuery->closeCursor();
             }
-            //Si le magasin existe pas
+            //Si la réduction de l'objet est inférieur à 0 ou est supérieur à 100
             else
             {
-                echo "Erreur : Magasin indisponible";
+                ?>
+                
+                Erreur : Le taux d'obtention doit être de 0 à 100
+                
+                <form method="POST" action="manageShopItem.php">
+                    <input type="hidden" name="adminShopItemShopId" value="<?php echo $adminShopItemShopId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
+                </form>
+                
+                <?php
             }
-            $shopQuery->closeCursor();
         }
-        //Si la réduction de l'objet est inférieur à 0 ou est supérieur à 100
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            ?>
-            
-            Erreur : Le taux d'obtention doit être de 0 à 100
-            
-            <form method="POST" action="manageShopItem.php">
-                <input type="hidden" name="adminShopItemShopId" value="<?php echo $adminShopItemShopId ?>">
-                <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
-            </form>
-            
-            <?php
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

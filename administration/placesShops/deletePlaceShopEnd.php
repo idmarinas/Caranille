@@ -11,89 +11,103 @@ require_once("../html/header.php");
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminplaceShopPlaceId'])
 && isset($_POST['adminPlaceShopShopId'])
+&& isset($_POST['token'])
 && isset($_POST['finalDelete']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminplaceShopPlaceId'])
-    && ctype_digit($_POST['adminPlaceShopShopId'])
-    && $_POST['adminplaceShopPlaceId'] >= 1
-    && $_POST['adminPlaceShopShopId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminplaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminplaceShopPlaceId']));
-        $adminPlaceShopShopId = htmlspecialchars(addslashes($_POST['adminPlaceShopShopId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le lieu choisie existe
-        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
-        WHERE placeId = ?');
-        $placeQuery->execute([$adminplaceShopPlaceId]);
-        $placeRow = $placeQuery->rowCount();
-
-        //Si le lieu existe
-        if ($placeRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminplaceShopPlaceId'])
+        && ctype_digit($_POST['adminPlaceShopShopId'])
+        && $_POST['adminplaceShopPlaceId'] >= 1
+        && $_POST['adminPlaceShopShopId'] >= 1)
         {
-            //On fait une requête pour vérifier si le magasin choisit existe
-            $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
-            WHERE shopId = ?');
-            $shopQuery->execute([$adminPlaceShopShopId]);
-            $shopRow = $shopQuery->rowCount();
+            //On récupère l'id du formulaire précédent
+            $adminplaceShopPlaceId = htmlspecialchars(addslashes($_POST['adminplaceShopPlaceId']));
+            $adminPlaceShopShopId = htmlspecialchars(addslashes($_POST['adminPlaceShopShopId']));
 
-            //Si le magasin existe
-            if ($shopRow == 1) 
+            //On fait une requête pour vérifier si le lieu choisie existe
+            $placeQuery = $bdd->prepare('SELECT * FROM car_places 
+            WHERE placeId = ?');
+            $placeQuery->execute([$adminplaceShopPlaceId]);
+            $placeRow = $placeQuery->rowCount();
+
+            //Si le lieu existe
+            if ($placeRow == 1) 
             {
-                //On fait une requête pour vérifier si le magasin n'est pas déjà dans cette lieu
-                $placeShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
-                WHERE placeShopPlaceId = ?
-                AND placeShopShopId = ?');
-                $placeShopQuery->execute([$adminplaceShopPlaceId, $adminPlaceShopShopId]);
-                $placeShopRow = $placeShopQuery->rowCount();
+                //On fait une requête pour vérifier si le magasin choisit existe
+                $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
+                WHERE shopId = ?');
+                $shopQuery->execute([$adminPlaceShopShopId]);
+                $shopRow = $shopQuery->rowCount();
 
-                //Si le magasin est dans le lieu
-                if ($placeShopRow == 1) 
+                //Si le magasin existe
+                if ($shopRow == 1) 
                 {
-                    //On supprime l'équipement de la base de donnée
-                    $placeShopDeleteQuery = $bdd->prepare("DELETE FROM car_places_shops
-                    WHERE placeShopShopId = ?");
-                    $placeShopDeleteQuery->execute([$adminPlaceShopShopId]);
-                    $placeShopDeleteQuery->closeCursor();
-                    ?>
+                    //On fait une requête pour vérifier si le magasin n'est pas déjà dans cette lieu
+                    $placeShopQuery = $bdd->prepare('SELECT * FROM car_places_shops 
+                    WHERE placeShopPlaceId = ?
+                    AND placeShopShopId = ?');
+                    $placeShopQuery->execute([$adminplaceShopPlaceId, $adminPlaceShopShopId]);
+                    $placeShopRow = $placeShopQuery->rowCount();
 
-                    Le magasin a bien été retiré du lieu
+                    //Si le magasin est dans le lieu
+                    if ($placeShopRow == 1) 
+                    {
+                        //On supprime l'équipement de la base de donnée
+                        $placeShopDeleteQuery = $bdd->prepare("DELETE FROM car_places_shops
+                        WHERE placeShopShopId = ?");
+                        $placeShopDeleteQuery->execute([$adminPlaceShopShopId]);
+                        $placeShopDeleteQuery->closeCursor();
+                        ?>
 
-                    <hr>
+                        Le magasin a bien été retiré du lieu
+
+                        <hr>
+                            
+                        <form method="POST" action="managePlaceShop.php">
+                            <input type="hidden" name="adminplaceShopPlaceId" value="<?php echo $adminplaceShopPlaceId ?>">
+                            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                            <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
+                        </form>
                         
-                    <form method="POST" action="managePlaceShop.php">
-                        <input type="hidden" name="adminplaceShopPlaceId" value="<?php echo $adminplaceShopPlaceId ?>">
-                        <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
-                    </form>
-                    
-                    <?php
+                        <?php
+                    }
+                    //Si le magasin n'est pas dans le lieu disponible
+                    else
+                    {
+                        echo "Erreur : Ce magasin n'est pas dans cette lieu";
+                    }
+                    $placeShopQuery->closeCursor();
                 }
-                //Si le magasin n'est pas dans le lieu disponible
+                //Si le magasin existe pas
                 else
                 {
-                    echo "Erreur : Ce magasin n'est pas dans cette lieu";
+                    echo "Erreur : Ce magasin n'existe pas";
                 }
                 $placeShopQuery->closeCursor();
             }
-            //Si le magasin existe pas
+            //Si le lieu existe pas
             else
             {
-                echo "Erreur : Ce magasin n'existe pas";
+                echo "Erreur : Cette lieu n'existe pas";
             }
-            $placeShopQuery->closeCursor();
+            $shopQuery->closeCursor();
         }
-        //Si le lieu existe pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Cette lieu n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $shopQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

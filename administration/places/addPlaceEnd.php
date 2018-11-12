@@ -15,55 +15,68 @@ if (isset($_POST['adminplacePicture'])
 && isset($_POST['adminplacePriceInn'])
 && isset($_POST['adminplaceChapter'])
 && isset($_POST['adminplaceAccess'])
+&& isset($_POST['token'])
 && isset($_POST['finalAdd']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminplacePriceInn'])
-    && ctype_digit($_POST['adminplaceChapter'])
-    && $_POST['adminplacePriceInn'] >= 0
-    && $_POST['adminplaceChapter'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère les informations du formulaire
-        $adminplacePicture = htmlspecialchars(addslashes($_POST['adminplacePicture']));
-        $adminplaceName = htmlspecialchars(addslashes($_POST['adminplaceName']));
-        $adminplaceDescription = htmlspecialchars(addslashes($_POST['adminplaceDescription']));
-        $adminplacePriceInn = htmlspecialchars(addslashes($_POST['adminplacePriceInn']));
-        $adminplaceChapter = htmlspecialchars(addslashes($_POST['adminplaceChapter']));
-        $adminplaceAccess = htmlspecialchars(addslashes($_POST['adminplaceAccess']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
+    
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminplacePriceInn'])
+        && ctype_digit($_POST['adminplaceChapter'])
+        && $_POST['adminplacePriceInn'] >= 0
+        && $_POST['adminplaceChapter'] >= 1)
+        {
+            //On récupère les informations du formulaire
+            $adminplacePicture = htmlspecialchars(addslashes($_POST['adminplacePicture']));
+            $adminplaceName = htmlspecialchars(addslashes($_POST['adminplaceName']));
+            $adminplaceDescription = htmlspecialchars(addslashes($_POST['adminplaceDescription']));
+            $adminplacePriceInn = htmlspecialchars(addslashes($_POST['adminplacePriceInn']));
+            $adminplaceChapter = htmlspecialchars(addslashes($_POST['adminplaceChapter']));
+            $adminplaceAccess = htmlspecialchars(addslashes($_POST['adminplaceAccess']));
 
-        //On ajoute le lieu dans la base de donnée
-        $addPlace = $bdd->prepare("INSERT INTO car_places VALUES(
-        NULL,
-        :adminplacePicture,
-        :adminplaceName,
-        :adminplaceDescription,
-        :adminplacePriceInn,
-        :adminplaceChapter,
-        :adminplaceAccess)");
-        $addPlace->execute([
-        'adminplacePicture' => $adminplacePicture,
-        'adminplaceName' => $adminplaceName,
-        'adminplaceDescription' => $adminplaceDescription,
-        'adminplacePriceInn' => $adminplacePriceInn,
-        'adminplaceChapter' => $adminplaceChapter,
-        'adminplaceAccess' => $adminplaceAccess]);
-        $addPlace->closeCursor();
-        ?>
+            //On ajoute le lieu dans la base de donnée
+            $addPlace = $bdd->prepare("INSERT INTO car_places VALUES(
+            NULL,
+            :adminplacePicture,
+            :adminplaceName,
+            :adminplaceDescription,
+            :adminplacePriceInn,
+            :adminplaceChapter,
+            :adminplaceAccess)");
+            $addPlace->execute([
+            'adminplacePicture' => $adminplacePicture,
+            'adminplaceName' => $adminplaceName,
+            'adminplaceDescription' => $adminplaceDescription,
+            'adminplacePriceInn' => $adminplacePriceInn,
+            'adminplaceChapter' => $adminplaceChapter,
+            'adminplaceAccess' => $adminplaceAccess]);
+            $addPlace->closeCursor();
+            ?>
 
-        le lieu a bien été crée
+            le lieu a bien été crée
 
-        <hr>
-            
-        <form method="POST" action="index.php">
-            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-        </form>
-            
-        <?php
+            <hr>
+                
+            <form method="POST" action="index.php">
+                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+            </form>
+                
+            <?php
+        }
+        //Si tous les champs numérique ne contiennent pas un nombre
+        else
+        {
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        }
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

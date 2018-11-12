@@ -12,35 +12,48 @@ require_once("../html/header.php");
 if (isset($_POST['adminShopPicture'])
 && isset($_POST['adminShopName'])
 && isset($_POST['adminShopDescription'])
+&& isset($_POST['token'])
 && isset($_POST['finalAdd']))
 {
-    //On récupère les informations du formulaire
-    $adminShopPicture = htmlspecialchars(addslashes($_POST['adminShopPicture']));
-    $adminShopName = htmlspecialchars(addslashes($_POST['adminShopName']));
-    $adminShopDescription = htmlspecialchars(addslashes($_POST['adminShopDescription']));
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
+    {
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-    //On ajoute le magasin dans la base de donnée
-    $addShop = $bdd->prepare("INSERT INTO car_shops VALUES(
-    NULL,
-    :adminShopPicture,
-    :adminShopName,
-    :adminShopDescription)");
-    $addShop->execute([
-    'adminShopPicture' => $adminShopPicture,
-    'adminShopName' => $adminShopName,
-    'adminShopDescription' => $adminShopDescription]);
-    $addShop->closeCursor();
-    ?>
+        //On récupère les informations du formulaire
+        $adminShopPicture = htmlspecialchars(addslashes($_POST['adminShopPicture']));
+        $adminShopName = htmlspecialchars(addslashes($_POST['adminShopName']));
+        $adminShopDescription = htmlspecialchars(addslashes($_POST['adminShopDescription']));
 
-    Le magasin a bien été crée
+        //On ajoute le magasin dans la base de donnée
+        $addShop = $bdd->prepare("INSERT INTO car_shops VALUES(
+        NULL,
+        :adminShopPicture,
+        :adminShopName,
+        :adminShopDescription)");
+        $addShop->execute([
+        'adminShopPicture' => $adminShopPicture,
+        'adminShopName' => $adminShopName,
+        'adminShopDescription' => $adminShopDescription]);
+        $addShop->closeCursor();
+        ?>
 
-    <hr>
-        
-    <form method="POST" action="index.php">
-        <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-    </form>
-        
-    <?php
+        Le magasin a bien été crée
+
+        <hr>
+            
+        <form method="POST" action="index.php">
+            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+        </form>
+            
+        <?php
+    }
+    //Si le token de sécurité n'est pas correct
+    else
+    {
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
+    }
 }
 //Si toutes les variables $_POST n'existent pas
 else

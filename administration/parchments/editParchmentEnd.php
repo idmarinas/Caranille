@@ -24,120 +24,133 @@ if (isset($_POST['adminItemId'])
 && isset($_POST['adminItemProspectingEffect'])
 && isset($_POST['adminItemPurchasePrice'])
 && isset($_POST['adminItemSalePrice'])
+&& isset($_POST['token'])
 && isset($_POST['finalEdit']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminItemId'])
-    && ctype_digit($_POST['adminItemHpEffects'])
-    && ctype_digit($_POST['adminItemMpEffect'])
-    && ctype_digit($_POST['adminItemStrengthEffect'])
-    && ctype_digit($_POST['adminItemMagicEffect'])
-    && ctype_digit($_POST['adminItemAgilityEffect'])
-    && ctype_digit($_POST['adminItemDefenseEffect'])
-    && ctype_digit($_POST['adminItemDefenseMagicEffect'])
-    && ctype_digit($_POST['adminItemWisdomEffect'])
-    && ctype_digit($_POST['adminItemProspectingEffect'])
-    && ctype_digit($_POST['adminItemPurchasePrice'])
-    && ctype_digit($_POST['adminItemSalePrice'])
-    && $_POST['adminItemId'] >= 0
-    && $_POST['adminItemHpEffects'] >= 0
-    && $_POST['adminItemMpEffect'] >= 0
-    && $_POST['adminItemStrengthEffect'] >= 0
-    && $_POST['adminItemMagicEffect'] >= 0
-    && $_POST['adminItemAgilityEffect'] >= 0
-    && $_POST['adminItemDefenseEffect'] >= 0
-    && $_POST['adminItemDefenseMagicEffect'] >= 0
-    && $_POST['adminItemWisdomEffect'] >= 0
-    && $_POST['adminItemProspectingEffect'] >= 0
-    && $_POST['adminItemPurchasePrice'] >= 0
-    && $_POST['adminItemSalePrice'] >= 0)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
-        
-        //On fait une requête pour vérifier si le parchemin choisit existe
-        $itemQuery = $bdd->prepare('SELECT * FROM car_items 
-        WHERE itemId = ?');
-        $itemQuery->execute([$adminItemId]);
-        $itemRow = $itemQuery->rowCount();
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //Si le parchemin existe
-        if ($itemRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminItemId'])
+        && ctype_digit($_POST['adminItemHpEffects'])
+        && ctype_digit($_POST['adminItemMpEffect'])
+        && ctype_digit($_POST['adminItemStrengthEffect'])
+        && ctype_digit($_POST['adminItemMagicEffect'])
+        && ctype_digit($_POST['adminItemAgilityEffect'])
+        && ctype_digit($_POST['adminItemDefenseEffect'])
+        && ctype_digit($_POST['adminItemDefenseMagicEffect'])
+        && ctype_digit($_POST['adminItemWisdomEffect'])
+        && ctype_digit($_POST['adminItemProspectingEffect'])
+        && ctype_digit($_POST['adminItemPurchasePrice'])
+        && ctype_digit($_POST['adminItemSalePrice'])
+        && $_POST['adminItemId'] >= 0
+        && $_POST['adminItemHpEffects'] >= 0
+        && $_POST['adminItemMpEffect'] >= 0
+        && $_POST['adminItemStrengthEffect'] >= 0
+        && $_POST['adminItemMagicEffect'] >= 0
+        && $_POST['adminItemAgilityEffect'] >= 0
+        && $_POST['adminItemDefenseEffect'] >= 0
+        && $_POST['adminItemDefenseMagicEffect'] >= 0
+        && $_POST['adminItemWisdomEffect'] >= 0
+        && $_POST['adminItemProspectingEffect'] >= 0
+        && $_POST['adminItemPurchasePrice'] >= 0
+        && $_POST['adminItemSalePrice'] >= 0)
         {
-            //On récupère les informations du formulaire
+            //On récupère l'id du formulaire précédent
             $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
-            $adminItemPicture = htmlspecialchars(addslashes($_POST['adminItemPicture']));
-            $adminItemName = htmlspecialchars(addslashes($_POST['adminItemName']));
-            $adminItemDescription = htmlspecialchars(addslashes($_POST['adminItemDescription']));
-            $adminItemHpEffects = htmlspecialchars(addslashes($_POST['adminItemHpEffects']));
-            $adminItemMpEffect = htmlspecialchars(addslashes($_POST['adminItemMpEffect']));
-            $adminItemStrengthEffect = htmlspecialchars(addslashes($_POST['adminItemStrengthEffect']));
-            $adminItemMagicEffect = htmlspecialchars(addslashes($_POST['adminItemMagicEffect']));
-            $adminItemAgilityEffect = htmlspecialchars(addslashes($_POST['adminItemAgilityEffect']));
-            $adminItemDefenseEffect = htmlspecialchars(addslashes($_POST['adminItemDefenseEffect']));
-            $adminItemDefenseMagicEffect = htmlspecialchars(addslashes($_POST['adminItemDefenseMagicEffect']));
-            $adminItemWisdomEffect = htmlspecialchars(addslashes($_POST['adminItemWisdomEffect']));
-            $adminItemProspectingEffect = htmlspecialchars(addslashes($_POST['adminItemProspectingEffect']));
-            $adminItemPurchasePrice = htmlspecialchars(addslashes($_POST['adminItemPurchasePrice']));
-            $adminItemSalePrice = htmlspecialchars(addslashes($_POST['adminItemSalePrice']));
-    
-            //On met à jour le parchemin dans la base de donnée
-            $updateItems = $bdd->prepare('UPDATE car_items 
-            SET itemPicture = :adminItemPicture,
-            itemName = :adminItemName,
-            itemDescription = :adminItemDescription,
-            itemHpEffect = :adminItemHpEffects,
-            itemMpEffect = :adminItemMpEffect,
-            itemStrengthEffect = :adminItemStrengthEffect,
-            itemMagicEffect = :adminItemMagicEffect,
-            itemAgilityEffect = :adminItemAgilityEffect,
-            itemDefenseEffect = :adminItemDefenseEffect,
-            itemDefenseMagicEffect = :adminItemDefenseMagicEffect,
-            itemWisdomEffect = :adminItemWisdomEffect,
-            itemProspectingEffect = :adminItemProspectingEffect,
-            itemPurchasePrice = :adminItemPurchasePrice,
-            itemSalePrice = :adminItemSalePrice
-            WHERE itemId = :adminItemId');
-            $updateItems->execute([
-            'adminItemPicture' => $adminItemPicture,
-            'adminItemName' => $adminItemName,
-            'adminItemDescription' => $adminItemDescription,
-            'adminItemHpEffects' => $adminItemHpEffects,
-            'adminItemMpEffect' => $adminItemMpEffect,
-            'adminItemStrengthEffect' => $adminItemStrengthEffect,
-            'adminItemMagicEffect' => $adminItemMagicEffect,
-            'adminItemAgilityEffect' => $adminItemAgilityEffect,
-            'adminItemDefenseEffect' => $adminItemDefenseEffect,
-            'adminItemDefenseMagicEffect' => $adminItemDefenseMagicEffect,
-            'adminItemWisdomEffect' => $adminItemWisdomEffect,
-            'adminItemProspectingEffect' => $adminItemProspectingEffect,
-            'adminItemPurchasePrice' => $adminItemPurchasePrice,
-            'adminItemSalePrice' => $adminItemSalePrice,
-            'adminItemId' => $adminItemId]);
-            $updateItems->closeCursor();
-            ?>
-
-            le parchemin a bien été mit à jour
-
-            <hr>
-                
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
             
-            <?php
+            //On fait une requête pour vérifier si le parchemin choisit existe
+            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            WHERE itemId = ?');
+            $itemQuery->execute([$adminItemId]);
+            $itemRow = $itemQuery->rowCount();
+
+            //Si le parchemin existe
+            if ($itemRow == 1) 
+            {
+                //On récupère les informations du formulaire
+                $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
+                $adminItemPicture = htmlspecialchars(addslashes($_POST['adminItemPicture']));
+                $adminItemName = htmlspecialchars(addslashes($_POST['adminItemName']));
+                $adminItemDescription = htmlspecialchars(addslashes($_POST['adminItemDescription']));
+                $adminItemHpEffects = htmlspecialchars(addslashes($_POST['adminItemHpEffects']));
+                $adminItemMpEffect = htmlspecialchars(addslashes($_POST['adminItemMpEffect']));
+                $adminItemStrengthEffect = htmlspecialchars(addslashes($_POST['adminItemStrengthEffect']));
+                $adminItemMagicEffect = htmlspecialchars(addslashes($_POST['adminItemMagicEffect']));
+                $adminItemAgilityEffect = htmlspecialchars(addslashes($_POST['adminItemAgilityEffect']));
+                $adminItemDefenseEffect = htmlspecialchars(addslashes($_POST['adminItemDefenseEffect']));
+                $adminItemDefenseMagicEffect = htmlspecialchars(addslashes($_POST['adminItemDefenseMagicEffect']));
+                $adminItemWisdomEffect = htmlspecialchars(addslashes($_POST['adminItemWisdomEffect']));
+                $adminItemProspectingEffect = htmlspecialchars(addslashes($_POST['adminItemProspectingEffect']));
+                $adminItemPurchasePrice = htmlspecialchars(addslashes($_POST['adminItemPurchasePrice']));
+                $adminItemSalePrice = htmlspecialchars(addslashes($_POST['adminItemSalePrice']));
+        
+                //On met à jour le parchemin dans la base de donnée
+                $updateItems = $bdd->prepare('UPDATE car_items 
+                SET itemPicture = :adminItemPicture,
+                itemName = :adminItemName,
+                itemDescription = :adminItemDescription,
+                itemHpEffect = :adminItemHpEffects,
+                itemMpEffect = :adminItemMpEffect,
+                itemStrengthEffect = :adminItemStrengthEffect,
+                itemMagicEffect = :adminItemMagicEffect,
+                itemAgilityEffect = :adminItemAgilityEffect,
+                itemDefenseEffect = :adminItemDefenseEffect,
+                itemDefenseMagicEffect = :adminItemDefenseMagicEffect,
+                itemWisdomEffect = :adminItemWisdomEffect,
+                itemProspectingEffect = :adminItemProspectingEffect,
+                itemPurchasePrice = :adminItemPurchasePrice,
+                itemSalePrice = :adminItemSalePrice
+                WHERE itemId = :adminItemId');
+                $updateItems->execute([
+                'adminItemPicture' => $adminItemPicture,
+                'adminItemName' => $adminItemName,
+                'adminItemDescription' => $adminItemDescription,
+                'adminItemHpEffects' => $adminItemHpEffects,
+                'adminItemMpEffect' => $adminItemMpEffect,
+                'adminItemStrengthEffect' => $adminItemStrengthEffect,
+                'adminItemMagicEffect' => $adminItemMagicEffect,
+                'adminItemAgilityEffect' => $adminItemAgilityEffect,
+                'adminItemDefenseEffect' => $adminItemDefenseEffect,
+                'adminItemDefenseMagicEffect' => $adminItemDefenseMagicEffect,
+                'adminItemWisdomEffect' => $adminItemWisdomEffect,
+                'adminItemProspectingEffect' => $adminItemProspectingEffect,
+                'adminItemPurchasePrice' => $adminItemPurchasePrice,
+                'adminItemSalePrice' => $adminItemSalePrice,
+                'adminItemId' => $adminItemId]);
+                $updateItems->closeCursor();
+                ?>
+
+                le parchemin a bien été mit à jour
+
+                <hr>
+                    
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
+                
+                <?php
+            }
+            //Si le parchemin n'exite pas
+            else
+            {
+                echo "Erreur : Parchemin indisponible";
+            }
+            $itemQuery->closeCursor();
         }
-        //Si le parchemin n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Parchemin indisponible";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $itemQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas
@@ -147,39 +160,3 @@ else
 }
 
 require_once("../html/footer.php");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

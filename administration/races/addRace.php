@@ -9,35 +9,51 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['add']))
+if (isset($_POST['token'])
+&& isset($_POST['add']))
 {
-    ?>
-    
-    <p>Informations de la classe</p>
-    
-    <form method="POST" action="addRaceEnd.php">
-        Image : <input type="text" name="adminRacePicture" class="form-control" placeholder="Nom" value="../../img/empty.png" required autofocus>
-        Nom : <input type="text" name="adminRaceName" class="form-control" placeholder="Nom" required>
-        Description : <br> <textarea class="form-control" name="adminRaceDescription" id="adminRaceDescription" rows="3" required></textarea>
-        HP par niveau : <input type="number" name="adminRaceHpBonus" class="form-control" placeholder="HP par niveau" required>
-        MP par niveau : <input type="number" name="adminRaceMpBonus" class="form-control" placeholder="MP par niveau" required>
-        Force par niveau : <input type="number" name="adminRaceStrengthBonus" class="form-control" placeholder="Force par niveau" required>
-        Magie par niveau : <input type="number" name="adminRaceMagicBonus" class="form-control" placeholder="Magie par niveau" required>
-        Agilité par niveau : <input type="number" name="adminRaceAgilityBonus" class="form-control" placeholder="Agilité par niveau" required>
-        Défense par niveau : <input type="number" name="adminRaceDefenseBonus" class="form-control" placeholder="Défense par niveau" required>
-        Défense Magique par niveau : <input type="number" name="adminRaceDefenseMagicBonus" class="form-control" placeholder="Défense Magique par niveau" required>
-        Sagesse par niveau : <input type="number" name="adminRaceWisdomBonus" class="form-control" placeholder="Sagesse par niveau" required>
-        Prospection par niveau : <input type="number" name="adminRaceProspectingBonus" class="form-control" placeholder="Prospection par niveau" required>
-        <input name="finalAdd" class="btn btn-default form-control" type="submit" value="Ajouter">
-    </form>
-    
-    <hr>
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
+    {
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-    <form method="POST" action="index.php">
-        <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-    </form>
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
+        ?>
     
-    <?php
+        <p>Informations de la classe</p>
+        
+        <form method="POST" action="addRaceEnd.php">
+            Image : <input type="text" name="adminRacePicture" class="form-control" placeholder="Nom" value="../../img/empty.png" required autofocus>
+            Nom : <input type="text" name="adminRaceName" class="form-control" placeholder="Nom" required>
+            Description : <br> <textarea class="form-control" name="adminRaceDescription" id="adminRaceDescription" rows="3" required></textarea>
+            HP par niveau : <input type="number" name="adminRaceHpBonus" class="form-control" placeholder="HP par niveau" required>
+            MP par niveau : <input type="number" name="adminRaceMpBonus" class="form-control" placeholder="MP par niveau" required>
+            Force par niveau : <input type="number" name="adminRaceStrengthBonus" class="form-control" placeholder="Force par niveau" required>
+            Magie par niveau : <input type="number" name="adminRaceMagicBonus" class="form-control" placeholder="Magie par niveau" required>
+            Agilité par niveau : <input type="number" name="adminRaceAgilityBonus" class="form-control" placeholder="Agilité par niveau" required>
+            Défense par niveau : <input type="number" name="adminRaceDefenseBonus" class="form-control" placeholder="Défense par niveau" required>
+            Défense Magique par niveau : <input type="number" name="adminRaceDefenseMagicBonus" class="form-control" placeholder="Défense Magique par niveau" required>
+            Sagesse par niveau : <input type="number" name="adminRaceWisdomBonus" class="form-control" placeholder="Sagesse par niveau" required>
+            Prospection par niveau : <input type="number" name="adminRaceProspectingBonus" class="form-control" placeholder="Prospection par niveau" required>
+            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+            <input name="finalAdd" class="btn btn-default form-control" type="submit" value="Ajouter">
+        </form>
+        
+        <hr>
+
+        <form method="POST" action="index.php">
+            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+        </form>
+        
+        <?php
+    }
+    //Si le token de sécurité n'est pas correct
+    else
+    {
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
+    }
 }
 //Si toutes les variables $_POST n'existent pas
 else

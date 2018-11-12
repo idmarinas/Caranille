@@ -10,66 +10,83 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminItemId'])
+&& isset($_POST['token'])
 && isset($_POST['manage']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminItemId'])
-    && $_POST['adminItemId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le parchemin choisit existe
-        $itemQuery = $bdd->prepare('SELECT * FROM car_items 
-        WHERE itemId = ?');
-        $itemQuery->execute([$adminItemId]);
-        $itemRow = $itemQuery->rowCount();
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
 
-        //Si le parchemin existe
-        if ($itemRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminItemId'])
+        && $_POST['adminItemId'] >= 1)
         {
-            //On fait une recherche dans la base de donnée de tous les parchemin
-            $itemQuery = $bdd->prepare("SELECT * FROM car_items
-            WHERE itemId = ?");
-            $itemQuery->execute([$adminItemId]);
+            //On récupère l'id du formulaire précédent
+            $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
 
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($item = $itemQuery->fetch())
+            //On fait une requête pour vérifier si le parchemin choisit existe
+            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            WHERE itemId = ?');
+            $itemQuery->execute([$adminItemId]);
+            $itemRow = $itemQuery->rowCount();
+
+            //Si le parchemin existe
+            if ($itemRow == 1) 
             {
-                //On récupère les informations du parchemin
-                $adminItemName = stripslashes($item['itemName']);
+                //On fait une recherche dans la base de donnée de tous les parchemin
+                $itemQuery = $bdd->prepare("SELECT * FROM car_items
+                WHERE itemId = ?");
+                $itemQuery->execute([$adminItemId]);
+
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($item = $itemQuery->fetch())
+                {
+                    //On récupère les informations du parchemin
+                    $adminItemName = stripslashes($item['itemName']);
+                }
+                $itemQuery->closeCursor();
+                ?>
+                
+                Que souhaitez-vous faire du parchemin <em><?php echo $adminItemName ?></em> ?
+
+                <hr>
+                    
+                <form method="POST" action="editParchment.php">
+                    <input type="hidden" class="btn btn-default form-control" name="adminItemId" value="<?php echo $adminItemId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="edit" value="Afficher/Modifier le parchemin">
+                </form>
+
+                <hr>
+
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
+                
+                <?php
+            }
+            //Si le parchemin n'exite pas
+            else
+            {
+                echo "Erreur : Ce parchemin n'existe pas";
             }
             $itemQuery->closeCursor();
-            ?>
-            
-            Que souhaitez-vous faire du parchemin <em><?php echo $adminItemName ?></em> ?
-
-            <hr>
-                
-            <form method="POST" action="editParchment.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminItemId" value="<?php echo $adminItemId ?>">
-                <input type="submit" class="btn btn-default form-control" name="edit" value="Afficher/Modifier le parchemin">
-            </form>
-
-            <hr>
-
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
         }
-        //Si le parchemin n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Ce parchemin n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $itemQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

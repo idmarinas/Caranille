@@ -13,63 +13,76 @@ if (isset($_POST['adminShopId'])
 && isset($_POST['adminShopPicture'])
 && isset($_POST['adminShopName'])
 && isset($_POST['adminShopDescription'])
+&& isset($_POST['token'])
 && isset($_POST['finalEdit']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminShopId'])
-    && $_POST['adminShopId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère les informations du formulaire
-        $adminShopId = htmlspecialchars(addslashes($_POST['adminShopId']));
-        $adminShopPicture = htmlspecialchars(addslashes($_POST['adminShopPicture']));
-        $adminShopName = htmlspecialchars(addslashes($_POST['adminShopName']));
-        $adminShopDescription = htmlspecialchars(addslashes($_POST['adminShopDescription']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le magasin choisit existe
-        $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
-        WHERE shopId = ?');
-        $shopQuery->execute([$adminShopId]);
-        $shopRow = $shopQuery->rowCount();
-
-        //Si le magasin existe
-        if ($shopRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminShopId'])
+        && $_POST['adminShopId'] >= 1)
         {
-            //On met à jour l'objet dans la base de donnée
-            $updateShop = $bdd->prepare('UPDATE car_shops 
-            SET shopPicture = :adminShopPicture,
-            shopName = :adminShopName,
-            shopDescription = :adminShopDescription
-            WHERE shopId = :adminShopId');
-            $updateShop->execute([
-            'adminShopPicture' => $adminShopPicture,
-            'adminShopName' => $adminShopName,
-            'adminShopDescription' => $adminShopDescription,
-            'adminShopId' => $adminShopId]);
-            $updateShop->closeCursor();
-            ?>
+            //On récupère les informations du formulaire
+            $adminShopId = htmlspecialchars(addslashes($_POST['adminShopId']));
+            $adminShopPicture = htmlspecialchars(addslashes($_POST['adminShopPicture']));
+            $adminShopName = htmlspecialchars(addslashes($_POST['adminShopName']));
+            $adminShopDescription = htmlspecialchars(addslashes($_POST['adminShopDescription']));
 
-            Le magasin a bien été mit à jour
+            //On fait une requête pour vérifier si le magasin choisit existe
+            $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
+            WHERE shopId = ?');
+            $shopQuery->execute([$adminShopId]);
+            $shopRow = $shopQuery->rowCount();
 
-            <hr>
+            //Si le magasin existe
+            if ($shopRow == 1) 
+            {
+                //On met à jour l'objet dans la base de donnée
+                $updateShop = $bdd->prepare('UPDATE car_shops 
+                SET shopPicture = :adminShopPicture,
+                shopName = :adminShopName,
+                shopDescription = :adminShopDescription
+                WHERE shopId = :adminShopId');
+                $updateShop->execute([
+                'adminShopPicture' => $adminShopPicture,
+                'adminShopName' => $adminShopName,
+                'adminShopDescription' => $adminShopDescription,
+                'adminShopId' => $adminShopId]);
+                $updateShop->closeCursor();
+                ?>
+
+                Le magasin a bien été mit à jour
+
+                <hr>
+                    
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
                 
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
+                <?php
+            }
+            //Si le magasin n'exite pas
+            else
+            {
+                echo "Erreur : Ce magasin n'existe pas";
+            }
+            $shopQuery->closeCursor();
         }
-        //Si le magasin n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Ce magasin n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $shopQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
-    }
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
+    }    
 }
 //Si toutes les variables $_POST n'existent pas
 else

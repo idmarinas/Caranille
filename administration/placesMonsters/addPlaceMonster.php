@@ -11,122 +11,140 @@ require_once("../html/header.php");
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminplaceMonsterPlaceId'])
 && isset($_POST['adminplaceMonsterMonsterId'])
+&& isset($_POST['token'])
 && isset($_POST['add']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminplaceMonsterPlaceId'])
-    && ctype_digit($_POST['adminplaceMonsterMonsterId'])
-    && $_POST['adminplaceMonsterPlaceId'] >= 1
-    && $_POST['adminplaceMonsterMonsterId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminplaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminplaceMonsterPlaceId']));
-        $adminplaceMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminplaceMonsterMonsterId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le lieu choisie existe
-        $placeQuery = $bdd->prepare('SELECT * FROM car_places 
-        WHERE placeId = ?');
-        $placeQuery->execute([$adminplaceMonsterPlaceId]);
-        $placeRow = $placeQuery->rowCount();
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
 
-        //Si le lieu existe
-        if ($placeRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminplaceMonsterPlaceId'])
+        && ctype_digit($_POST['adminplaceMonsterMonsterId'])
+        && $_POST['adminplaceMonsterPlaceId'] >= 1
+        && $_POST['adminplaceMonsterMonsterId'] >= 1)
         {
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($place = $placeQuery->fetch())
-            {
-                //On récupère les informations du lieu
-                $adminPlaceMonsterplacePicture = stripslashes($place['placePicture']);
-                $adminPlaceMonsterplaceName = stripslashes($place['placeName']);
-            }
-            $placeQuery->closeCursor();
+            //On récupère l'id du formulaire précédent
+            $adminplaceMonsterPlaceId = htmlspecialchars(addslashes($_POST['adminplaceMonsterPlaceId']));
+            $adminplaceMonsterMonsterId = htmlspecialchars(addslashes($_POST['adminplaceMonsterMonsterId']));
 
-            //On fait une requête pour vérifier si le monstre choisit existe
-            $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
-            WHERE monsterId = ?');
-            $monsterQuery->execute([$adminplaceMonsterMonsterId]);
-            $monsterRow = $monsterQuery->rowCount();
+            //On fait une requête pour vérifier si le lieu choisie existe
+            $placeQuery = $bdd->prepare('SELECT * FROM car_places 
+            WHERE placeId = ?');
+            $placeQuery->execute([$adminplaceMonsterPlaceId]);
+            $placeRow = $placeQuery->rowCount();
 
-            //Si le monstre existe
-            if ($monsterRow == 1) 
+            //Si le lieu existe
+            if ($placeRow == 1) 
             {
                 //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                while ($monster = $monsterQuery->fetch())
+                while ($place = $placeQuery->fetch())
                 {
-                    //On récupère les informations du monstre
-                    $adminPlaceMonsterMonsterPicture = stripslashes($monster['monsterPicture']);
-                    $adminPlaceMonsterMonsterName = stripslashes($monster['monsterName']);
+                    //On récupère les informations du lieu
+                    $adminPlaceMonsterplacePicture = stripslashes($place['placePicture']);
+                    $adminPlaceMonsterplaceName = stripslashes($place['placeName']);
                 }
-                $monsterQuery->closeCursor();
+                $placeQuery->closeCursor();
 
-                //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette lieu
-                $placeMonsterQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
-                WHERE placeMonsterPlaceId = ?
-                AND placeMonsterMonsterId = ?');
-                $placeMonsterQuery->execute([$adminplaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
-                $placeMonsterRow = $placeMonsterQuery->rowCount();
+                //On fait une requête pour vérifier si le monstre choisit existe
+                $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
+                WHERE monsterId = ?');
+                $monsterQuery->execute([$adminplaceMonsterMonsterId]);
+                $monsterRow = $monsterQuery->rowCount();
 
-                //Si le monstre n'est pas dans le lieu
-                if ($placeMonsterRow == 0) 
+                //Si le monstre existe
+                if ($monsterRow == 1) 
                 {
-                    ?>
-            
-                    <p>ATTENTION</p> 
+                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                    while ($monster = $monsterQuery->fetch())
+                    {
+                        //On récupère les informations du monstre
+                        $adminPlaceMonsterMonsterPicture = stripslashes($monster['monsterPicture']);
+                        $adminPlaceMonsterMonsterName = stripslashes($monster['monsterName']);
+                    }
+                    $monsterQuery->closeCursor();
 
-                    Vous êtes sur le point d'ajouter le monstre <em><?php echo $adminPlaceMonsterMonsterName ?></em> dans le lieu <em><?php echo $adminPlaceMonsterplaceName ?></em>.<br />
-                    Confirmez-vous l'ajout ?
+                    //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette lieu
+                    $placeMonsterQuery = $bdd->prepare('SELECT * FROM car_places_monsters 
+                    WHERE placeMonsterPlaceId = ?
+                    AND placeMonsterMonsterId = ?');
+                    $placeMonsterQuery->execute([$adminplaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
+                    $placeMonsterRow = $placeMonsterQuery->rowCount();
 
-                    <hr>
+                    //Si le monstre n'est pas dans le lieu
+                    if ($placeMonsterRow == 0) 
+                    {
+                        ?>
+                
+                        <p>ATTENTION</p> 
+
+                        Vous êtes sur le point d'ajouter le monstre <em><?php echo $adminPlaceMonsterMonsterName ?></em> dans le lieu <em><?php echo $adminPlaceMonsterplaceName ?></em>.<br />
+                        Confirmez-vous l'ajout ?
+
+                        <hr>
+                            
+                        <form method="POST" action="addPlaceMonsterEnd.php">
+                            <input type="hidden" class="btn btn-default form-control" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
+                            <input type="hidden" class="btn btn-default form-control" name="adminplaceMonsterMonsterId" value="<?php echo $adminplaceMonsterMonsterId ?>">
+                            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                            <input type="submit" class="btn btn-default form-control" name="finalAdd" value="Je confirme">
+                        </form>
                         
-                    <form method="POST" action="addPlaceMonsterEnd.php">
-                        <input type="hidden" class="btn btn-default form-control" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
-                        <input type="hidden" class="btn btn-default form-control" name="adminplaceMonsterMonsterId" value="<?php echo $adminplaceMonsterMonsterId ?>">
-                        <input type="submit" class="btn btn-default form-control" name="finalAdd" value="Je confirme">
-                    </form>
-                    
-                    <hr>
+                        <hr>
 
-                    <form method="POST" action="index.php">
-                        <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-                    </form>
-                    
-                    <?php
+                        <form method="POST" action="index.php">
+                            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                        </form>
+                        
+                        <?php
+                    }
+                    //Si le monstre est déjà dans cette lieu
+                    else
+                    {
+                        ?>
+                        
+                        Erreur : Ce monstre est déjà dans cette lieu
+                        
+                        <form method="POST" action="managePlaceMonster.php">
+                            <input type="hidden" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
+                            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                            <input type="submit" class="btn btn-default form-control" name="manage" value="Retour">
+                        </form>
+                        
+                        <?php
+                    }
+                    $monsterQuery->closeCursor();
                 }
-                //Si le monstre est déjà dans cette lieu
+                //Si le monstre existe pas
                 else
                 {
-                    ?>
-                    
-                    Erreur : Ce monstre est déjà dans cette lieu
-                    
-                    <form method="POST" action="managePlaceMonster.php">
-                        <input type="hidden" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
-                        <input type="submit" class="btn btn-default form-control" name="manage" value="Retour">
-                    </form>
-                    
-                    <?php
+                    echo "Erreur : Ce monstre n'existe pas";
                 }
                 $monsterQuery->closeCursor();
             }
-            //Si le monstre existe pas
+            //Si le lieu existe pas
             else
             {
-                echo "Erreur : Ce monstre n'existe pas";
+                echo "Erreur : Cette lieu n'existe pas";
             }
-            $monsterQuery->closeCursor();
+            $placeQuery->closeCursor();
         }
-        //Si le lieu existe pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Cette lieu n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $placeQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
-    }
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
+    }  
 }
 //Si toutes les variables $_POST n'existent pas
 else
