@@ -9,9 +9,9 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['adminShopItemShopId'])
+if (isset($_POST['token'])
+&& isset($_POST['adminShopItemShopId'])
 && isset($_POST['adminShopItemItemId']))
-&& isset($_POST['token'])
 {
     //Si le token de sécurité est correct
     if ($_POST['token'] == $_SESSION['token'])

@@ -52,6 +52,7 @@ else
 <hr>
 
 <form method="POST" action="addItem.php">
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" class="btn btn-default form-control" name="add" value="Créer un objet">
 </form>
 
