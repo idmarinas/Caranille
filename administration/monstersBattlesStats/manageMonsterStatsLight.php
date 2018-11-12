@@ -10,242 +10,263 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminMonsterStatsMonsterId'])
+&& isset($_POST['token'])
 && isset($_POST['viewStats']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminMonsterStatsMonsterId'])
-    && $_POST['adminMonsterStatsMonsterId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminMonsterStatsMonsterId = htmlspecialchars(addslashes($_POST['adminMonsterStatsMonsterId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le monstre choisit existe
-        $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
-        WHERE monsterId = ?');
-        $monsterQuery->execute([$adminMonsterStatsMonsterId]);
-        $monsterRow = $monsterQuery->rowCount();
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
 
-        //Si le monstre existe
-        if ($monsterRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminMonsterStatsMonsterId'])
+        && $_POST['adminMonsterStatsMonsterId'] >= 1)
         {
-            ?>
+            //On récupère l'id du formulaire précédent
+            $adminMonsterStatsMonsterId = htmlspecialchars(addslashes($_POST['adminMonsterStatsMonsterId']));
 
-            <h2>Statistiques classique du monstre</h2>
-            <h4>Limité au 10 derniers résultats par catégorie</h4>
+            //On fait une requête pour vérifier si le monstre choisit existe
+            $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
+            WHERE monsterId = ?');
+            $monsterQuery->execute([$adminMonsterStatsMonsterId]);
+            $monsterRow = $monsterQuery->rowCount();
 
-            <hr>
-
-            <p>Lancement de combat :</p>
-
-            <?php
-            //On fait une requête pour récupérer les stats
-            $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
-            WHERE monsterBattleStatsMonsterId = ?
-            AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'LaunchBattle'
-            ORDER BY monsterBattleStatsId desc
-            LIMIT 0,10");
-            $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
-            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
-
-            if ($monsterBattlesStatsRow >= 1)
+            //Si le monstre existe
+            if ($monsterRow == 1) 
             {
-                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                ?>
+
+                <h2>Statistiques classique du monstre</h2>
+                <h4>Limité au 10 derniers résultats par catégorie</h4>
+
+                <hr>
+
+                <p>Lancement de combat :</p>
+
+                <?php
+                //On fait une requête pour récupérer les stats
+                $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
+                WHERE monsterBattleStatsMonsterId = ?
+                AND monsterBattleStatsCharacterId = characterId
+                AND monsterBattleStatsType = 'LaunchBattle'
+                ORDER BY monsterBattleStatsId desc
+                LIMIT 0,10");
+                $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+                $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
+
+                if ($monsterBattlesStatsRow >= 1)
                 {
-                    //On récupère les informations du monstre
-                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                    
-                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
-                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                    while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                    {
+                        //On récupère les informations du monstre
+                        $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                        $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                        
+                        $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                        echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                    }
+                    $monsterBattlesStatsQuery->closeCursor();
                 }
-                $monsterBattlesStatsQuery->closeCursor();
+                else
+                {
+                    echo "Aucune lancement de combat<br />";
+                }
+                ?>
+
+                <form method="POST" action="../monstersBattlesStats/manageMonsterStatsLaunchBattle.php">
+                    <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
+                </form>
+                
+                <hr>
+
+                <p>Match nul :</p>
+
+                <?php
+                //On fait une requête pour récupérer les stats
+                $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
+                WHERE monsterBattleStatsMonsterId = ?
+                AND monsterBattleStatsCharacterId = characterId
+                AND monsterBattleStatsType = 'DrawBattle'
+                ORDER BY monsterBattleStatsId desc
+                LIMIT 0,10");
+                $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+                $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
+
+                if ($monsterBattlesStatsRow >= 1)
+                {           
+                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                    while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                    {
+                        //On récupère les informations du monstre
+                        $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                        $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                        
+                        $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                        echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                    }
+                    $monsterBattlesStatsQuery->closeCursor();
+                }
+                else
+                {
+                    echo "Aucune match nul de combat<br />";
+                }
+                ?>
+
+                <form method="POST" action="../monstersBattlesStats/manageMonsterStatsDrawBattle.php">
+                    <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
+                </form>
+
+                <hr>
+
+                <p>Victoire de combat :</p>
+
+                <?php
+                //On fait une requête pour récupérer les stats
+                $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
+                WHERE monsterBattleStatsMonsterId = ?
+                AND monsterBattleStatsCharacterId = characterId
+                AND monsterBattleStatsType = 'VictoryBattle'
+                ORDER BY monsterBattleStatsId desc
+                LIMIT 0,10");
+                $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+                $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
+
+                if ($monsterBattlesStatsRow >= 1)
+                {
+                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                    while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                    {
+                        //On récupère les informations du monstre
+                        $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                        $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                        
+                        $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                        echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                    }
+                    $monsterBattlesStatsQuery->closeCursor();
+                }
+                else
+                {
+                    echo "Aucune victoire de combat<br />";
+                }
+                ?>
+
+                <form method="POST" action="../monstersBattlesStats/manageMonsterStatsVictoryBattle.php">
+                    <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
+                </form>
+
+                <hr>
+
+                <p>Défaite de combat :</p>
+
+                <?php
+                //On fait une requête pour récupérer les stats
+                $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
+                WHERE monsterBattleStatsMonsterId = ?
+                AND monsterBattleStatsCharacterId = characterId
+                AND monsterBattleStatsType = 'DefeatedBattle'
+                ORDER BY monsterBattleStatsId desc
+                LIMIT 0,10");
+                $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+                $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
+
+                if ($monsterBattlesStatsRow >= 1)
+                {
+                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                    while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                    {
+                        //On récupère les informations du monstre
+                        $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                        $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                        
+                        $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                        echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                    }
+                    $monsterBattlesStatsQuery->closeCursor();
+                }
+                else
+                {
+                    echo "Aucune défaite de combat<br />";
+                }
+                ?>
+
+                <form method="POST" action="../monstersBattlesStats/manageMonsterStatsDefeatedBattle.php">
+                    <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
+                </form>
+
+                <hr>
+
+                <p>Fuite de combat :</p>
+
+                <?php
+                //On fait une requête pour récupérer les stats
+                $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
+                WHERE monsterBattleStatsMonsterId = ?
+                AND monsterBattleStatsCharacterId = characterId
+                AND monsterBattleStatsType = 'EscapeBattle'
+                ORDER BY monsterBattleStatsId desc
+                LIMIT 0,10");
+                $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
+                $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
+
+                if ($monsterBattlesStatsRow >= 1)
+                {
+
+                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                    while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
+                    {
+                        //On récupère les informations du monstre
+                        $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
+                        $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
+                        
+                        $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
+                        echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
+                    }
+                    $monsterBattlesStatsQuery->closeCursor();
+                }
+                else
+                {
+                    echo "Aucune fuite de combat<br />";
+                }
+                ?>
+
+                <form method="POST" action="../monstersBattlesStats/manageMonsterStatsEscapeBattle.php">
+                    <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
+                </form>
+
+                <?php
             }
+            //Si le monstre n'exite pas
             else
             {
-                echo "Aucune lancement de combat<br />";
+            echo "Erreur : Ce monstre n'existe pas";
             }
-            ?>
-
-            <form method="POST" action="../monstersBattlesStats/manageMonsterStatsLaunchBattle.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
-                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
-            </form>
-            
-            <hr>
-
-            <p>Match nul :</p>
-
-            <?php
-            //On fait une requête pour récupérer les stats
-            $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
-            WHERE monsterBattleStatsMonsterId = ?
-            AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'DrawBattle'
-            ORDER BY monsterBattleStatsId desc
-            LIMIT 0,10");
-            $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
-            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
-
-            if ($monsterBattlesStatsRow >= 1)
-            {           
-                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
-                {
-                    //On récupère les informations du monstre
-                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                    
-                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
-                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
-                }
-                $monsterBattlesStatsQuery->closeCursor();
-            }
-            else
-            {
-                echo "Aucune match nul de combat<br />";
-            }
-            ?>
-
-            <form method="POST" action="../monstersBattlesStats/manageMonsterStatsDrawBattle.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
-                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
-            </form>
-
-            <hr>
-
-            <p>Victoire de combat :</p>
-
-            <?php
-            //On fait une requête pour récupérer les stats
-            $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
-            WHERE monsterBattleStatsMonsterId = ?
-            AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'VictoryBattle'
-            ORDER BY monsterBattleStatsId desc
-            LIMIT 0,10");
-            $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
-            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
-
-            if ($monsterBattlesStatsRow >= 1)
-            {
-                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
-                {
-                    //On récupère les informations du monstre
-                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                    
-                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
-                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
-                }
-                $monsterBattlesStatsQuery->closeCursor();
-            }
-            else
-            {
-                echo "Aucune victoire de combat<br />";
-            }
-            ?>
-
-            <form method="POST" action="../monstersBattlesStats/manageMonsterStatsVictoryBattle.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
-                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
-            </form>
-
-            <hr>
-
-            <p>Défaite de combat :</p>
-
-            <?php
-            //On fait une requête pour récupérer les stats
-            $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
-            WHERE monsterBattleStatsMonsterId = ?
-            AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'DefeatedBattle'
-            ORDER BY monsterBattleStatsId desc
-            LIMIT 0,10");
-            $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
-            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
-
-            if ($monsterBattlesStatsRow >= 1)
-            {
-                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
-                {
-                    //On récupère les informations du monstre
-                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                    
-                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
-                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
-                }
-                $monsterBattlesStatsQuery->closeCursor();
-            }
-            else
-            {
-                echo "Aucune défaite de combat<br />";
-            }
-            ?>
-
-            <form method="POST" action="../monstersBattlesStats/manageMonsterStatsDefeatedBattle.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
-                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
-            </form>
-
-            <hr>
-
-            <p>Fuite de combat :</p>
-
-            <?php
-            //On fait une requête pour récupérer les stats
-            $monsterBattlesStatsQuery = $bdd->prepare("SELECT * FROM car_monsters_battles_stats , car_characters
-            WHERE monsterBattleStatsMonsterId = ?
-            AND monsterBattleStatsCharacterId = characterId
-            AND monsterBattleStatsType = 'EscapeBattle'
-            ORDER BY monsterBattleStatsId desc
-            LIMIT 0,10");
-            $monsterBattlesStatsQuery->execute([$adminMonsterStatsMonsterId]);
-            $monsterBattlesStatsRow = $monsterBattlesStatsQuery->rowCount();
-
-            if ($monsterBattlesStatsRow >= 1)
-            {
-
-                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                while ($monsterBattlesStats = $monsterBattlesStatsQuery->fetch())
-                {
-                    //On récupère les informations du monstre
-                    $adminMonsterBattleStatsCharacterName = stripslashes($monsterBattlesStats['characterName']);
-                    $adminMonsterBattleStatsDateTime = stripslashes($monsterBattlesStats['monsterBattleStatsDateTime']);
-                    
-                    $dateFr = strftime('%d-%m-%Y - %T',strtotime($monsterBattlesStats['monsterBattleStatsDateTime']));
-                    echo "($dateFr) - $adminMonsterBattleStatsCharacterName<br />";
-                }
-                $monsterBattlesStatsQuery->closeCursor();
-            }
-            else
-            {
-                echo "Aucune fuite de combat<br />";
-            }
-            ?>
-
-            <form method="POST" action="../monstersBattlesStats/manageMonsterStatsEscapeBattle.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminMonsterStatsMonsterId" value="<?php echo $adminMonsterStatsMonsterId ?>">
-                <input type="submit" class="btn btn-default form-control" name="viewStats" value="Statistiques complète">
-            </form>
-
-            <?php
         }
-        //Si le monstre n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-           echo "Erreur : Ce monstre n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

@@ -50,6 +50,7 @@ if ($monsterRow > 0)
             ?>
             
         </select>
+        <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
         <input type="submit" name="manage" class="btn btn-default form-control" value="Gérer le monstre">
     </form>
     
@@ -68,6 +69,7 @@ Générer X montre(s) vierge.
 
 <form method="POST" action="generateMonster.php">
     Quantité : <input type="number" name="adminQuantityMonsterGenerate" class="form-control" placeholder="Quantité" value="1" required>
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" class="btn btn-default form-control" name="generate" value="Générer le(s) monstre(s)">
 </form>
 

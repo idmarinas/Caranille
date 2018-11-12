@@ -36,6 +36,7 @@ if ($newsRow > 0)
             ?>
             
         </select>
+        <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
         <input type="submit" name="manage" class="btn btn-default form-control" value="Gérer la news">
     </form>
     
@@ -52,6 +53,7 @@ $newsQuery->closeCursor();
 <hr>
 
 <form method="POST" action="addNews.php">
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" class="btn btn-default form-control" name="add" value="Publier une news">
 </form>
 

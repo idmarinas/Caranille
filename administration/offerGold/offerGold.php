@@ -10,95 +10,113 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminCharacterId'])
+&& isset($_POST['token'])
 && isset($_POST['adminOfferGold']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminCharacterId'])
-    && ctype_digit($_POST['adminOfferGold'])
-    && $_POST['adminCharacterId'] >= 0
-    && $_POST['adminOfferGold'] >= 0)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère les informations du formulaire précédent
-        $adminCharacterId = htmlspecialchars(addslashes($_POST['adminCharacterId']));
-        $adminOfferGold = htmlspecialchars(addslashes($_POST['adminOfferGold']));
-        
-        //Si l'experience à offrir est pour tous les joueurs
-        if ($adminCharacterId == 0)
-        {
-            ?>
-            
-            <p>ATTENTION</p> 
-            Vous êtes sur le point d'offrir <em><?php echo $adminOfferGold ?></em> pièce(s) d'or à <em>tous les joueurs</em>.<br />
-            Confirmez-vous  ?
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-            <hr>
-                
-            <form method="POST" action="offerGoldEnd.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminCharacterId" value="<?php echo $adminCharacterId ?>">
-                <input type="hidden" class="btn btn-default form-control" name="adminOfferGold" value="<?php echo $adminOfferGold ?>">
-                <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme">
-            </form>
-            
-            <hr>
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
 
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
-        }
-        //Si l'experience à offrir est pour un seul joueur
-        else 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminCharacterId'])
+        && ctype_digit($_POST['adminOfferGold'])
+        && $_POST['adminCharacterId'] >= 0
+        && $_POST['adminOfferGold'] >= 0)
         {
-            //On fait une requête pour vérifier si le personnage existe
-            $characterQuery = $bdd->prepare("SELECT * FROM car_characters 
-            WHERE characterId = ?");
-            $characterQuery->execute([$adminCharacterId]);
-            $characterRow = $characterQuery->rowCount();
-    
-            //Si le personnage existe
-            if ($characterRow == 1)
+            //On récupère les informations du formulaire précédent
+            $adminCharacterId = htmlspecialchars(addslashes($_POST['adminCharacterId']));
+            $adminOfferGold = htmlspecialchars(addslashes($_POST['adminOfferGold']));
+            
+            //Si l'experience à offrir est pour tous les joueurs
+            if ($adminCharacterId == 0)
             {
-                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                while ($character = $characterQuery->fetch())
-                {
-                    $adminCharacterName = stripslashes($character['characterName']);
-                }
                 ?>
                 
-                <p>ATTENTION</p>
+                <p>ATTENTION</p> 
+                Vous êtes sur le point d'offrir <em><?php echo $adminOfferGold ?></em> pièce(s) d'or à <em>tous les joueurs</em>.<br />
+                Confirmez-vous  ?
 
-                Vous êtes sur le point d'offrir <em><?php echo $adminOfferGold ?></em> pièce(s) d'or à <em><?php echo $adminCharacterName ?></em>.<br />
-                Confirmez-vous ?
-    
                 <hr>
                     
                 <form method="POST" action="offerGoldEnd.php">
                     <input type="hidden" class="btn btn-default form-control" name="adminCharacterId" value="<?php echo $adminCharacterId ?>">
                     <input type="hidden" class="btn btn-default form-control" name="adminOfferGold" value="<?php echo $adminOfferGold ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
                     <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme">
                 </form>
                 
                 <hr>
-    
+
                 <form method="POST" action="index.php">
                     <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
                 </form>
-            
+                
                 <?php
             }
-            //Si le compte n'existe pas
-            else
+            //Si l'experience à offrir est pour un seul joueur
+            else 
             {
-                echo "Erreur : Ce compte n'existe pas";
+                //On fait une requête pour vérifier si le personnage existe
+                $characterQuery = $bdd->prepare("SELECT * FROM car_characters 
+                WHERE characterId = ?");
+                $characterQuery->execute([$adminCharacterId]);
+                $characterRow = $characterQuery->rowCount();
+        
+                //Si le personnage existe
+                if ($characterRow == 1)
+                {
+                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                    while ($character = $characterQuery->fetch())
+                    {
+                        $adminCharacterName = stripslashes($character['characterName']);
+                    }
+                    ?>
+                    
+                    <p>ATTENTION</p>
+
+                    Vous êtes sur le point d'offrir <em><?php echo $adminOfferGold ?></em> pièce(s) d'or à <em><?php echo $adminCharacterName ?></em>.<br />
+                    Confirmez-vous ?
+        
+                    <hr>
+                        
+                    <form method="POST" action="offerGoldEnd.php">
+                        <input type="hidden" class="btn btn-default form-control" name="adminCharacterId" value="<?php echo $adminCharacterId ?>">
+                        <input type="hidden" class="btn btn-default form-control" name="adminOfferGold" value="<?php echo $adminOfferGold ?>">
+                        <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                        <input type="submit" class="btn btn-default form-control" name="finalDelete" value="Je confirme">
+                    </form>
+                    
+                    <hr>
+        
+                    <form method="POST" action="index.php">
+                        <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                    </form>
+                
+                    <?php
+                }
+                //Si le compte n'existe pas
+                else
+                {
+                    echo "Erreur : Ce compte n'existe pas";
+                }
+                $accountQuery->closeCursor();
             }
-            $accountQuery->closeCursor();
+        }
+        //Si tous les champs numérique ne contiennent pas un nombre
+        else
+        {
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

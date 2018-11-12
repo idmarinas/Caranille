@@ -9,41 +9,54 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['generate']))
+if (isset($_POST['token'])
+&& isset($_POST['generate']))
 {
-    //On récupère les informations du formulaire précédent
-    $adminQuantityMonsterGenerate = htmlspecialchars(addslashes($_POST['adminQuantityMonsterGenerate']));
-
-    //Si il y a plus d'un monstre
-    if ($adminQuantityMonsterGenerate > 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        $generateMonsterSQL = "INSERT INTO car_monsters VALUES";
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        for ($i = 0; $i < $adminQuantityMonsterGenerate -1; $i++)
+        //On récupère les informations du formulaire précédent
+        $adminQuantityMonsterGenerate = htmlspecialchars(addslashes($_POST['adminQuantityMonsterGenerate']));
+
+        //Si il y a plus d'un monstre
+        if ($adminQuantityMonsterGenerate > 1)
         {
-            $generateMonsterSQL = $generateMonsterSQL . "(null, '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0, 0, 0, 0, 0, 0),";
+            $generateMonsterSQL = "INSERT INTO car_monsters VALUES";
+
+            for ($i = 0; $i < $adminQuantityMonsterGenerate -1; $i++)
+            {
+                $generateMonsterSQL = $generateMonsterSQL . "(null, '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0, 0, 0, 0, 0, 0),";
+            }
+            $generateMonsterSQL = $generateMonsterSQL . "(null, '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0, 0, 0, 0, 0, 0);";
         }
-        $generateMonsterSQL = $generateMonsterSQL . "(null, '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0, 0, 0, 0, 0, 0);";
+        //Si il n'y a qu'un monstre
+        else
+        {
+            $generateMonsterSQL = "INSERT INTO car_monsters VALUES";
+            $generateMonsterSQL = $generateMonsterSQL . "(null, '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0, 0, 0, 0, 0, 0);";
+        }
+
+        $bdd->query($generateMonsterSQL);
+        ?>
+
+        <br />Vous venez de générer <?php echo $adminQuantityMonsterGenerate ?> monstre(s) vierge.
+
+        <hr>
+
+        <form method="POST" action="index.php">
+            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+        </form>
+            
+        <?php
     }
-    //Si il n'y a qu'un monstre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        $generateMonsterSQL = "INSERT INTO car_monsters VALUES";
-        $generateMonsterSQL = $generateMonsterSQL . "(null, '1', '../../img/empty.png', 'Empty', 'Empty', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'No', 0, 0, 0, 0, 0, 0);";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
-
-    $bdd->query($generateMonsterSQL);
-    ?>
-
-    <br />Vous venez de générer <?php echo $adminQuantityMonsterGenerate ?> monstre(s) vierge.
-
-    <hr>
-
-    <form method="POST" action="index.php">
-        <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-    </form>
-        
-    <?php    
 }
 //Si toutes les variables $_POST n'existent pas
 else

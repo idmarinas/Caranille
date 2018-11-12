@@ -10,60 +10,77 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminNewsId'])
+&& isset($_POST['token'])
 && isset($_POST['manage']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminNewsId'])
-    && $_POST['adminNewsId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminNewsId = htmlspecialchars(addslashes($_POST['adminNewsId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si la news choisie existe
-        $newsQuery = $bdd->prepare('SELECT * FROM car_news 
-        WHERE newsId = ?');
-        $newsQuery->execute([$adminNewsId]);
-        $newsRow = $newsQuery->rowCount();
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
 
-        //Si la news existe
-        if ($newsRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminNewsId'])
+        && $_POST['adminNewsId'] >= 1)
         {
-            //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-            while ($news = $newsQuery->fetch())
+            //On récupère l'id du formulaire précédent
+            $adminNewsId = htmlspecialchars(addslashes($_POST['adminNewsId']));
+
+            //On fait une requête pour vérifier si la news choisie existe
+            $newsQuery = $bdd->prepare('SELECT * FROM car_news 
+            WHERE newsId = ?');
+            $newsQuery->execute([$adminNewsId]);
+            $newsRow = $newsQuery->rowCount();
+
+            //Si la news existe
+            if ($newsRow == 1) 
             {
-                //On récupère les informations de la news
-                $adminNewsTitle = stripslashes($news['newsTitle']);
-            }
-            ?>
-            
-            Que souhaitez-vous faire de la news <em><?php echo $adminNewsTitle ?></em> ?
-
-            <hr>
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($news = $newsQuery->fetch())
+                {
+                    //On récupère les informations de la news
+                    $adminNewsTitle = stripslashes($news['newsTitle']);
+                }
+                ?>
                 
-            <form method="POST" action="editNews.php">
-                <input type="hidden" class="btn btn-default form-control" name="adminNewsId" value="<?php echo $adminNewsId ?>">
-                <input type="submit" class="btn btn-default form-control" name="edit" value="Afficher/Modifier la news">
-            </form>
-            
-            <hr>
+                Que souhaitez-vous faire de la news <em><?php echo $adminNewsTitle ?></em> ?
 
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
+                <hr>
+                    
+                <form method="POST" action="editNews.php">
+                    <input type="hidden" class="btn btn-default form-control" name="adminNewsId" value="<?php echo $adminNewsId ?>">
+                    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                    <input type="submit" class="btn btn-default form-control" name="edit" value="Afficher/Modifier la news">
+                </form>
+                
+                <hr>
+
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
+                
+                <?php
+            }
+            //Si la news n'exite pas
+            else
+            {
+                echo "Erreur : News indisponible";
+            }
+            $newsQuery->closeCursor();
         }
-        //Si la news n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : News indisponible";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $newsQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

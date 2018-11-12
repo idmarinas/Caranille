@@ -9,26 +9,42 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['add']))
+if (isset($_POST['token'])
+&& isset($_POST['add']))
 {
-    ?>
-    
-    <p>Informations de la news</p>
-    
-    <form method="POST" action="addNewsEnd.php">
-        Image : <input type="text" name="adminNewsPicture" class="form-control" placeholder="Image" value="../../img/empty.png" required>
-        Titre : <input type="text" name="adminNewsTitle" class="form-control" placeholder="Titre" required>
-        Message : <br> <textarea class="form-control" name="adminNewsMessage" id="adminNewsMessage" rows="3" required></textarea>
-        <input name="finalAdd" class="btn btn-default form-control" type="submit" value="Ajouter">
-    </form>
-    
-    <hr>
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
+    {
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-    <form method="POST" action="index.php">
-        <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-    </form>
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
+        ?>
     
-    <?php
+        <p>Informations de la news</p>
+        
+        <form method="POST" action="addNewsEnd.php">
+            Image : <input type="text" name="adminNewsPicture" class="form-control" placeholder="Image" value="../../img/empty.png" required>
+            Titre : <input type="text" name="adminNewsTitle" class="form-control" placeholder="Titre" required>
+            Message : <br> <textarea class="form-control" name="adminNewsMessage" id="adminNewsMessage" rows="3" required></textarea>
+            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+            <input name="finalAdd" class="btn btn-default form-control" type="submit" value="Ajouter">
+        </form>
+        
+        <hr>
+
+        <form method="POST" action="index.php">
+            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+        </form>
+        
+        <?php
+    }
+    //Si le token de sécurité n'est pas correct
+    else
+    {
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
+    }
 }
 //Si toutes les variables $_POST n'existent pas
 else

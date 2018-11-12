@@ -12,41 +12,54 @@ require_once("../html/header.php");
 if (isset($_POST['adminNewsPicture'])
 && isset($_POST['adminNewsTitle'])
 && isset($_POST['adminNewsMessage'])
+&& isset($_POST['token'])
 && isset($_POST['finalAdd']))
 {
-    //On récupère les informations du formulaire
-    $adminNewsPicture = htmlspecialchars(addslashes($_POST['adminNewsPicture']));
-    $adminNewsTitle = htmlspecialchars(addslashes($_POST['adminNewsTitle']));
-    $adminNewsMessage = htmlspecialchars(addslashes($_POST['adminNewsMessage']));
-    $adminNewsAccountPseudo = $accountPseudo;
-    $adminNewsDate = date('Y-m-d H:i:s');
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
+    {
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-    //On met à jour l'équipement dans la base de donnée
-    $addNews = $bdd->prepare("INSERT INTO car_news VALUES(
-    NULL,
-    :adminNewsPicture,
-    :adminNewsTitle,
-    :adminNewsMessage,
-    :adminNewsAccountPseudo,
-    :adminNewsDate)");
-    $addNews->execute([
-    'adminNewsPicture' => $adminNewsPicture,
-    'adminNewsTitle' => $adminNewsTitle,
-    'adminNewsMessage' => $adminNewsMessage,
-    'adminNewsAccountPseudo' => $adminNewsAccountPseudo,
-    'adminNewsDate' => $adminNewsDate]);
-    $addNews->closeCursor();
-    ?>
+        //On récupère les informations du formulaire
+        $adminNewsPicture = htmlspecialchars(addslashes($_POST['adminNewsPicture']));
+        $adminNewsTitle = htmlspecialchars(addslashes($_POST['adminNewsTitle']));
+        $adminNewsMessage = htmlspecialchars(addslashes($_POST['adminNewsMessage']));
+        $adminNewsAccountPseudo = $accountPseudo;
+        $adminNewsDate = date('Y-m-d H:i:s');
 
-    La news a bien été publiée
+        //On met à jour l'équipement dans la base de donnée
+        $addNews = $bdd->prepare("INSERT INTO car_news VALUES(
+        NULL,
+        :adminNewsPicture,
+        :adminNewsTitle,
+        :adminNewsMessage,
+        :adminNewsAccountPseudo,
+        :adminNewsDate)");
+        $addNews->execute([
+        'adminNewsPicture' => $adminNewsPicture,
+        'adminNewsTitle' => $adminNewsTitle,
+        'adminNewsMessage' => $adminNewsMessage,
+        'adminNewsAccountPseudo' => $adminNewsAccountPseudo,
+        'adminNewsDate' => $adminNewsDate]);
+        $addNews->closeCursor();
+        ?>
 
-    <hr>
+        La news a bien été publiée
+
+        <hr>
+            
+        <form method="POST" action="index.php">
+            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+        </form>
         
-    <form method="POST" action="index.php">
-        <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-    </form>
-    
-    <?php
+        <?php
+    }
+    //Si le token de sécurité n'est pas correct
+    else
+    {
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
+    }
 }
 //Si toutes les variables $_POST n'existent pas
 else

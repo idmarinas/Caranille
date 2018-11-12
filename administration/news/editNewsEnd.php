@@ -13,62 +13,75 @@ if (isset($_POST['adminNewsId'])
 && isset($_POST['adminNewsPicture'])
 && isset($_POST['adminNewsTitle'])
 && isset($_POST['adminNewsMessage'])
+&& isset($_POST['token'])
 && isset($_POST['finalEdit']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminNewsId'])
-    && $_POST['adminNewsId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère les informations du formulaire
-        $adminNewsId = htmlspecialchars(addslashes($_POST['adminNewsId']));
-        $adminNewsPicture = htmlspecialchars(addslashes($_POST['adminNewsPicture']));
-        $adminNewsTitle = htmlspecialchars(addslashes($_POST['adminNewsTitle']));
-        $adminNewsMessage = htmlspecialchars(addslashes($_POST['adminNewsMessage']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si la news choisie existe
-        $newsQuery = $bdd->prepare('SELECT * FROM car_news 
-        WHERE newsId = ?');
-        $newsQuery->execute([$adminNewsId]);
-        $newsRow = $newsQuery->rowCount();
-
-        //Si la news existe
-        if ($newsRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminNewsId'])
+        && $_POST['adminNewsId'] >= 1)
         {
-            //On met à jour la news dans la base de donnée
-            $updateNews = $bdd->prepare('UPDATE car_news
-            SET newsPicture = :adminNewsPicture,
-            newsTitle = :adminNewsTitle,
-            newsMessage = :adminNewsMessage
-            WHERE newsId = :adminNewsId');
-            $updateNews->execute([
-            'adminNewsPicture' => $adminNewsPicture,
-            'adminNewsTitle' => $adminNewsTitle,
-            'adminNewsMessage' => $adminNewsMessage,
-            'adminNewsId' => $adminNewsId]);
-            $updateNews->closeCursor();
-            ?>
+            //On récupère les informations du formulaire
+            $adminNewsId = htmlspecialchars(addslashes($_POST['adminNewsId']));
+            $adminNewsPicture = htmlspecialchars(addslashes($_POST['adminNewsPicture']));
+            $adminNewsTitle = htmlspecialchars(addslashes($_POST['adminNewsTitle']));
+            $adminNewsMessage = htmlspecialchars(addslashes($_POST['adminNewsMessage']));
 
-            La news a bien été mise à jour
+            //On fait une requête pour vérifier si la news choisie existe
+            $newsQuery = $bdd->prepare('SELECT * FROM car_news 
+            WHERE newsId = ?');
+            $newsQuery->execute([$adminNewsId]);
+            $newsRow = $newsQuery->rowCount();
 
-            <hr>
+            //Si la news existe
+            if ($newsRow == 1) 
+            {
+                //On met à jour la news dans la base de donnée
+                $updateNews = $bdd->prepare('UPDATE car_news
+                SET newsPicture = :adminNewsPicture,
+                newsTitle = :adminNewsTitle,
+                newsMessage = :adminNewsMessage
+                WHERE newsId = :adminNewsId');
+                $updateNews->execute([
+                'adminNewsPicture' => $adminNewsPicture,
+                'adminNewsTitle' => $adminNewsTitle,
+                'adminNewsMessage' => $adminNewsMessage,
+                'adminNewsId' => $adminNewsId]);
+                $updateNews->closeCursor();
+                ?>
+
+                La news a bien été mise à jour
+
+                <hr>
+                    
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
                 
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
+                <?php
+            }
+            //Si la news n'exite pas
+            else
+            {
+                echo "Erreur : Cette news n'existe pas";
+            }
+            $newsQuery->closeCursor();
         }
-        //Si la news n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Cette news n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $newsQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

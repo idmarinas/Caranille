@@ -10,143 +10,160 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminMonsterDropMonsterId'])
+&& isset($_POST['token'])
 && isset($_POST['manage']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminMonsterDropMonsterId'])
-    && $_POST['adminMonsterDropMonsterId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminMonsterDropMonsterId = htmlspecialchars(addslashes($_POST['adminMonsterDropMonsterId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le monstre choisit existe
-        $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
-        WHERE monsterId = ?');
-        $monsterQuery->execute([$adminMonsterDropMonsterId]);
-        $monsterRow = $monsterQuery->rowCount();
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
 
-        //Si le monstre existe
-        if ($monsterRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminMonsterDropMonsterId'])
+        && $_POST['adminMonsterDropMonsterId'] >= 1)
         {
-            $monsterDropQuery = $bdd->prepare("SELECT * FROM car_monsters, car_items, car_items_types, car_monsters_drops
-            WHERE itemItemTypeId = itemTypeId
-            AND monsterDropMonsterID = monsterId
-            AND monsterDropItemId = itemId
-            AND monsterDropMonsterId = ?
-            ORDER BY itemItemTypeId, itemName");
-            $monsterDropQuery->execute([$adminMonsterDropMonsterId]);
-            $monsterDropRow = $monsterDropQuery->rowCount();
+            //On récupère l'id du formulaire précédent
+            $adminMonsterDropMonsterId = htmlspecialchars(addslashes($_POST['adminMonsterDropMonsterId']));
 
-            //S'il existe un ou plusieurs objet pour ce monstre on affiche le menu déroulant
-            if ($monsterDropRow > 0) 
+            //On fait une requête pour vérifier si le monstre choisit existe
+            $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
+            WHERE monsterId = ?');
+            $monsterQuery->execute([$adminMonsterDropMonsterId]);
+            $monsterRow = $monsterQuery->rowCount();
+
+            //Si le monstre existe
+            if ($monsterRow == 1) 
             {
-                ?>
-                
-                <form method="POST" action="editDeleteMonsterDrop.php">
-                    Objet(s) (Obtention en %) : <select name="adminMonsterDropItemId" class="form-control">
-                        
-                    <?php
-                    //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
-                    while ($monsterDrop = $monsterDropQuery->fetch())
-                    {
-                        //On récupère les informations des objets du monstre
-                        $adminMonsterDropItemId = stripslashes($monsterDrop['itemId']);
-                        $adminMonsterDropItemName = stripslashes($monsterDrop['itemName']);
-                        $adminMonsterDropRate = stripslashes($monsterDrop['monsterDropRate']);
-                        $adminItemTypeName = stripslashes($monsterDrop['itemTypeName']);
-                        $adminItemTypeNameShow = stripslashes($monsterDrop['itemTypeNameShow']);
-                        ?>
-                        <option value="<?php echo $adminMonsterDropItemId ?>"><?php echo "[$adminItemTypeNameShow] - $adminMonsterDropItemName ($adminMonsterDropRate/1000)"; ?></option>
-                        <?php
-                    }
-                    $monsterDropQuery->closeCursor();
+                $monsterDropQuery = $bdd->prepare("SELECT * FROM car_monsters, car_items, car_items_types, car_monsters_drops
+                WHERE itemItemTypeId = itemTypeId
+                AND monsterDropMonsterID = monsterId
+                AND monsterDropItemId = itemId
+                AND monsterDropMonsterId = ?
+                ORDER BY itemItemTypeId, itemName");
+                $monsterDropQuery->execute([$adminMonsterDropMonsterId]);
+                $monsterDropRow = $monsterDropQuery->rowCount();
+
+                //S'il existe un ou plusieurs objet pour ce monstre on affiche le menu déroulant
+                if ($monsterDropRow > 0) 
+                {
                     ?>
-                        
-                    </select>
-                    <input type="hidden" name="adminMonsterDropMonsterId" value="<?php echo $adminMonsterDropMonsterId ?>">
-                    <input type="submit" name="edit" class="btn btn-default form-control" value="Modifier">
-                    <input type="submit" name="delete" class="btn btn-default form-control" value="Retirer">
-                </form>
+                    
+                    <form method="POST" action="editDeleteMonsterDrop.php">
+                        Objet(s) (Obtention en %) : <select name="adminMonsterDropItemId" class="form-control">
+                            
+                        <?php
+                        //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                        while ($monsterDrop = $monsterDropQuery->fetch())
+                        {
+                            //On récupère les informations des objets du monstre
+                            $adminMonsterDropItemId = stripslashes($monsterDrop['itemId']);
+                            $adminMonsterDropItemName = stripslashes($monsterDrop['itemName']);
+                            $adminMonsterDropRate = stripslashes($monsterDrop['monsterDropRate']);
+                            $adminItemTypeName = stripslashes($monsterDrop['itemTypeName']);
+                            $adminItemTypeNameShow = stripslashes($monsterDrop['itemTypeNameShow']);
+                            ?>
+                            <option value="<?php echo $adminMonsterDropItemId ?>"><?php echo "[$adminItemTypeNameShow] - $adminMonsterDropItemName ($adminMonsterDropRate/1000)"; ?></option>
+                            <?php
+                        }
+                        $monsterDropQuery->closeCursor();
+                        ?>
+                            
+                        </select>
+                        <input type="hidden" name="adminMonsterDropMonsterId" value="<?php echo $adminMonsterDropMonsterId ?>">
+                        <input type="submit" name="edit" class="btn btn-default form-control" value="Modifier">
+                        <input type="submit" name="delete" class="btn btn-default form-control" value="Retirer">
+                    </form>
+
+                    <hr>
+
+                    <?php
+                }
+                $monsterQuery->closeCursor();
+
+                //On recherche la liste des objets et équipements du jeu qui ne sont pas attribué à ce monstre
+                $itemQuery = $bdd->prepare("SELECT * FROM car_items, car_items_types
+                WHERE itemItemTypeId = itemTypeId
+                AND (SELECT COUNT(*) FROM car_monsters_drops
+                WHERE monsterDropMonsterId = ?
+                AND monsterDropItemId = itemId) = 0
+                ORDER BY itemItemTypeId, itemName");
+                $itemQuery->execute([$adminMonsterDropMonsterId]);
+                $itemRow = $itemQuery->rowCount();
+                //S'il existe un ou plusieurs objets on affiche le menu déroulant pour proposer au joueur d'en ajouter
+                if ($itemRow > 0) 
+                {
+                    ?>
+                    
+                    <form method="POST" action="addMonsterDrop.php">
+                        Objet(s) existant : <select name="adminMonsterDropItemId" class="form-control">
+                                
+                            <?php
+                            while ($item = $itemQuery->fetch())
+                            {
+                                //On récupère les informations des objets
+                                $adminMonsterDropItemId = stripslashes($item['itemId']);
+                                $adminMonsterDropItemName = stripslashes($item['itemName']);
+                                $adminItemTypeName = stripslashes($item['itemTypeName']);
+                                $adminItemTypeNameShow = stripslashes($item['itemTypeNameShow']);
+                                ?>
+                                <option value="<?php echo $adminMonsterDropItemId ?>"><?php echo "[$adminItemTypeNameShow] - $adminMonsterDropItemName"; ?></option>
+                                <?php
+                            }
+                            $itemQuery->closeCursor();
+                            ?>
+                                
+                        </select>
+                        Visible dans le bestiaire ? : <select name="adminMonsterDropItemVisible" class="form-control">                        
+                            <option value="Yes">Oui</option>
+                            <option value="No">Non</option>
+                        </select>
+                        Taux d'obtention sur 1000 <br />
+                        (1 = 0,10%, 10 = 1% etc...) : <input type="number" name="adminMonsterDropRate" class="form-control" placeholder="Taux d'obtention (sur 1000)" value="0" required>
+                        Taux visible dans le bestiaire ? : <select name="adminMonsterDropRateVisible" class="form-control">
+                            <option value="Yes">Oui</option>
+                            <option value="No">Non</option>
+                        </select>
+                        <input type="hidden" name="adminMonsterDropMonsterId" value="<?php echo $adminMonsterDropMonsterId ?>">
+                        <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                        <input type="submit" name="add" class="btn btn-default form-control" value="Ajouter cet équipement/objet">
+                    </form>
+                    
+                    <?php
+                }
+                else
+                {
+                echo "Il n'y a actuellement aucun objets";
+                }
+                ?>
 
                 <hr>
 
-                <?php
-            }
-            $monsterQuery->closeCursor();
-
-            //On recherche la liste des objets et équipements du jeu qui ne sont pas attribué à ce monstre
-            $itemQuery = $bdd->prepare("SELECT * FROM car_items, car_items_types
-            WHERE itemItemTypeId = itemTypeId
-            AND (SELECT COUNT(*) FROM car_monsters_drops
-            WHERE monsterDropMonsterId = ?
-            AND monsterDropItemId = itemId) = 0
-            ORDER BY itemItemTypeId, itemName");
-            $itemQuery->execute([$adminMonsterDropMonsterId]);
-            $itemRow = $itemQuery->rowCount();
-            //S'il existe un ou plusieurs objets on affiche le menu déroulant pour proposer au joueur d'en ajouter
-            if ($itemRow > 0) 
-            {
-                ?>
-                
-                <form method="POST" action="addMonsterDrop.php">
-                    Objet(s) existant : <select name="adminMonsterDropItemId" class="form-control">
-                            
-                        <?php
-                        while ($item = $itemQuery->fetch())
-                        {
-                            //On récupère les informations des objets
-                            $adminMonsterDropItemId = stripslashes($item['itemId']);
-                            $adminMonsterDropItemName = stripslashes($item['itemName']);
-                            $adminItemTypeName = stripslashes($item['itemTypeName']);
-                            $adminItemTypeNameShow = stripslashes($item['itemTypeNameShow']);
-                            ?>
-                            <option value="<?php echo $adminMonsterDropItemId ?>"><?php echo "[$adminItemTypeNameShow] - $adminMonsterDropItemName"; ?></option>
-                            <?php
-                        }
-                        $itemQuery->closeCursor();
-                        ?>
-                            
-                    </select>
-                    Visible dans le bestiaire ? : <select name="adminMonsterDropItemVisible" class="form-control">                        
-                        <option value="Yes">Oui</option>
-                        <option value="No">Non</option>
-                    </select>
-                    Taux d'obtention sur 1000 <br />
-                    (1 = 0,10%, 10 = 1% etc...) : <input type="number" name="adminMonsterDropRate" class="form-control" placeholder="Taux d'obtention (sur 1000)" value="0" required>
-                    Taux visible dans le bestiaire ? : <select name="adminMonsterDropRateVisible" class="form-control">
-                        <option value="Yes">Oui</option>
-                        <option value="No">Non</option>
-                    </select>
-                    <input type="hidden" name="adminMonsterDropMonsterId" value="<?php echo $adminMonsterDropMonsterId ?>">
-                    <input type="submit" name="add" class="btn btn-default form-control" value="Ajouter cet équipement/objet">
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
                 </form>
                 
                 <?php
             }
+            //Si le monstre n'exite pas
             else
             {
-               echo "Il n'y a actuellement aucun objets";
+            echo "Erreur : Ce monstre n'existe pas";
             }
-            ?>
-
-            <hr>
-
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
         }
-        //Si le monstre n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-           echo "Erreur : Ce monstre n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas
