@@ -9,40 +9,53 @@ if ($accountAccess < 2) { exit(header("Location: ../../index.php")); }
 require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
-if (isset($_POST['finalDelete']))
+if (isset($_POST['token'])
+&& isset($_POST['finalDelete']))
 {
-    //On récupère le nom de l'image du formulaire précédent
-    $adminFile = htmlspecialchars(addslashes($_POST['pictureFile']));
-
-    if ($adminFile != "default.png")
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        unlink("../../img/equipments/" . $adminFile);
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        ?>
+        //On récupère le nom de l'image du formulaire précédent
+        $adminFile = htmlspecialchars(addslashes($_POST['pictureFile']));
 
-        L'image a bien été supprimée
-    
-        <hr>
-    
-        <form method="POST" action="index.php">
-            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-        </form>
+        if ($adminFile != "default.png")
+        {
+            unlink("../../img/equipments/" . $adminFile);
 
-        <?php
+            ?>
+
+            L'image a bien été supprimée
+        
+            <hr>
+        
+            <form method="POST" action="index.php">
+                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+            </form>
+
+            <?php
+        }
+        else
+        {
+            ?>
+
+            Erreur : Il est impossible de supprimer l'image par défaut
+        
+            <hr>
+        
+            <form method="POST" action="index.php">
+                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+            </form>
+
+            <?php
+        }
     }
+    //Si le token de sécurité n'est pas correct
     else
     {
-        ?>
-
-        Erreur : Il est impossible de supprimer l'image par défaut
-    
-        <hr>
-    
-        <form method="POST" action="index.php">
-            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-        </form>
-
-        <?php
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

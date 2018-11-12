@@ -10,10 +10,10 @@ require_once("../html/header.php");
 ?>
     
 <form method="POST" action="manageItemsPicture.php">
-    Images d'objets : <select name="pictureFile" class="form-control">
+    Images d'équipements : <select name="pictureFile" class="form-control">
             
         <?php
-        $dir = '../../img/items/';
+        $dir = '../../img/equipments/';
         //On ouvre le dossier
         if ($dh = opendir($dir)) 
         {
@@ -34,6 +34,7 @@ require_once("../html/header.php");
         ?>
 
     </select>
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" name="viewPicture" class="btn btn-default form-control" value="Afficher l'image">
     <input type="submit" name="deletePicture" class="btn btn-default form-control" value="Supprimer l'image">
 </form>
@@ -44,6 +45,7 @@ require_once("../html/header.php");
     <!-- On limite le fichier à 1000Ko -->
     <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
     <input type="file" name="picture">
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input name="upload" class="btn btn-default form-control" type="submit" value="Envoyer l'image">
 </form>
 
