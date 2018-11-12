@@ -35,6 +35,7 @@ if ($battleInvitationRow > 0)
             ?>
         
         </select>
+        <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
         <input type="submit" name="manage" class="btn btn-default form-control" value="Gérer l'invitation de combat">
     </form>
     
@@ -51,6 +52,7 @@ $battleInvitationQuery->closeCursor();
 <hr>
 
 <form method="POST" action="addBattleInvitationRandom.php">
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" class="btn btn-default form-control" name="add" value="Envoyer une invitation de combat">
 </form>
 
