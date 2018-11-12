@@ -10,40 +10,57 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminCharacterLevel'])
+&& isset($_POST['token'])
 && isset($_POST['edit']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminCharacterLevel']) 
-    && $_POST['adminCharacterLevel'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminCharacterLevel = htmlspecialchars(addslashes($_POST['adminCharacterLevel']));
-        ?>
-        
-        <p>ATTENTION</p> 
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        Vous êtes sur le point de modifier votre niveau par <em><?php echo $adminCharacterLevel ?></em>.<br />
-        Confirmez-vous ?
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
 
-        <hr>
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminCharacterLevel']) 
+        && $_POST['adminCharacterLevel'] >= 1)
+        {
+            //On récupère l'id du formulaire précédent
+            $adminCharacterLevel = htmlspecialchars(addslashes($_POST['adminCharacterLevel']));
+            ?>
             
-        <form method="POST" action="editLevelEnd.php">
-            <input type="hidden" class="btn btn-default form-control" name="adminCharacterLevel" value="<?php echo $adminCharacterLevel ?>">
-            <input type="submit" class="btn btn-default form-control" name="finalEdit" value="Je confirme">
-        </form>
-        
-        <hr>
+            <p>ATTENTION</p> 
 
-        <form method="POST" action="index.php">
-            <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-        </form>
-	
-	<?php
+            Vous êtes sur le point de modifier votre niveau par <em><?php echo $adminCharacterLevel ?></em>.<br />
+            Confirmez-vous ?
+
+            <hr>
+                
+            <form method="POST" action="editLevelEnd.php">
+                <input type="hidden" class="btn btn-default form-control" name="adminCharacterLevel" value="<?php echo $adminCharacterLevel ?>">
+                <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
+                <input type="submit" class="btn btn-default form-control" name="finalEdit" value="Je confirme">
+            </form>
+            
+            <hr>
+
+            <form method="POST" action="index.php">
+                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+            </form>
+        
+        <?php
+        }
+        //Si tous les champs numérique ne contiennent pas un nombre
+        else
+        {
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        }
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas
