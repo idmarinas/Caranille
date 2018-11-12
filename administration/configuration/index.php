@@ -62,6 +62,7 @@ $configurationQuery->closeCursor();
         ?>
     
     </select>
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input name="edit" class="btn btn-default form-control" type="submit" value="Modifier">
 </form>
 
