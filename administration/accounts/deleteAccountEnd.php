@@ -10,77 +10,90 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['adminAccountId'])
+&& isset($_POST['token'])
 && isset($_POST['finalDelete']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminAccountId'])
-    && $_POST['adminAccountId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminAccountId = htmlspecialchars(addslashes($_POST['adminAccountId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le compte choisit existe
-        $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
-        WHERE accountId = ?');
-        $accountQuery->execute([$adminAccountId]);
-        $account = $accountQuery->rowCount();
-        $accountQuery->closeCursor();
-
-        //Si le compte existe
-        if ($account == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminAccountId'])
+        && $_POST['adminAccountId'] >= 1)
         {
-            //On supprime le compte de la base de donnée
-            $accountDeleteQuery = $bdd->prepare("DELETE FROM car_accounts
-            WHERE accountId = ?");
-            $accountDeleteQuery->execute([$adminAccountId]);
-            $accountDeleteQuery->closeCursor();
+            //On récupère l'id du formulaire précédent
+            $adminAccountId = htmlspecialchars(addslashes($_POST['adminAccountId']));
 
-            //On supprime le personnage de la base de donnée
-            $characterDeleteQuery = $bdd->prepare("DELETE FROM car_characters
-            WHERE characterAccountId = ?");
-            $characterDeleteQuery->execute([$adminAccountId]);
-            $characterDeleteQuery->closeCursor();
-            
-            //On supprime les combats de ce personnage de la base de donnée
-            $characterBattleDeleteQuery = $bdd->prepare("DELETE FROM car_battles
-            WHERE battleCharacterId = ?");
-            $characterBattleDeleteQuery->execute([$adminAccountId]);
-            $characterBattleDeleteQuery->closeCursor();
-            
-            //On supprime l'inventaire de ce personnage de la base de donnée
-            $characterInventoryDeleteQuery = $bdd->prepare("DELETE FROM car_inventory
-            WHERE inventoryCharacterId = ?");
-            $characterInventoryDeleteQuery->execute([$adminAccountId]);
-            $characterInventoryDeleteQuery->closeCursor();
-            
-            //On supprime le bestiaire de ce personnage de la base de donnée
-            $characterBestiaryDeleteQuery = $bdd->prepare("DELETE FROM car_bestiary
-            WHERE bestiaryCharacterId = ?");
-            $characterBestiaryDeleteQuery->execute([$adminAccountId]);
-            $characterBestiaryDeleteQuery->closeCursor();
-            ?>
+            //On fait une requête pour vérifier si le compte choisit existe
+            $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
+            WHERE accountId = ?');
+            $accountQuery->execute([$adminAccountId]);
+            $account = $accountQuery->rowCount();
+            $accountQuery->closeCursor();
 
-            Le compte a bien été supprimé
+            //Si le compte existe
+            if ($account == 1) 
+            {
+                //On supprime le compte de la base de donnée
+                $accountDeleteQuery = $bdd->prepare("DELETE FROM car_accounts
+                WHERE accountId = ?");
+                $accountDeleteQuery->execute([$adminAccountId]);
+                $accountDeleteQuery->closeCursor();
 
-            <hr>
+                //On supprime le personnage de la base de donnée
+                $characterDeleteQuery = $bdd->prepare("DELETE FROM car_characters
+                WHERE characterAccountId = ?");
+                $characterDeleteQuery->execute([$adminAccountId]);
+                $characterDeleteQuery->closeCursor();
                 
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
+                //On supprime les combats de ce personnage de la base de donnée
+                $characterBattleDeleteQuery = $bdd->prepare("DELETE FROM car_battles
+                WHERE battleCharacterId = ?");
+                $characterBattleDeleteQuery->execute([$adminAccountId]);
+                $characterBattleDeleteQuery->closeCursor();
+                
+                //On supprime l'inventaire de ce personnage de la base de donnée
+                $characterInventoryDeleteQuery = $bdd->prepare("DELETE FROM car_inventory
+                WHERE inventoryCharacterId = ?");
+                $characterInventoryDeleteQuery->execute([$adminAccountId]);
+                $characterInventoryDeleteQuery->closeCursor();
+                
+                //On supprime le bestiaire de ce personnage de la base de donnée
+                $characterBestiaryDeleteQuery = $bdd->prepare("DELETE FROM car_bestiary
+                WHERE bestiaryCharacterId = ?");
+                $characterBestiaryDeleteQuery->execute([$adminAccountId]);
+                $characterBestiaryDeleteQuery->closeCursor();
+                ?>
+
+                Le compte a bien été supprimé
+
+                <hr>
+                    
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
+                
+                <?php
+            }
+            //Si le compte n'existe pas
+            else
+            {
+                echo "Erreur : Ce compte n'existe pas";
+            }
+            $accountQuery->closeCursor();
         }
-        //Si le compte n'existe pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Ce compte n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $accountQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

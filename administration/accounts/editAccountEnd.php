@@ -13,68 +13,81 @@ if (isset($_POST['adminAccountId'])
 && isset($_POST['adminAccountPseudo']) 
 && isset($_POST['adminAccountEmail']) 
 && isset($_POST['adminAccountAccess'])
+&& isset($_POST['token'])
 && isset($_POST['finalEdit']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminAccountId'])
-    && ctype_digit($_POST['adminAccountAccess'])
-    && $_POST['adminAccountId'] >= 1)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère l'id du formulaire précédent
-        $adminAccountId = htmlspecialchars(addslashes($_POST['adminAccountId']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si le compte choisit existe
-        $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
-        WHERE accountId = ?');
-        $accountQuery->execute([$adminAccountId]);
-        $account = $accountQuery->rowCount();
-        $accountQuery->closeCursor();
-
-        //Si le compte existe
-        if ($account == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminAccountId'])
+        && ctype_digit($_POST['adminAccountAccess'])
+        && $_POST['adminAccountId'] >= 1)
         {
-            //On récupère les informations du formulaire
+            //On récupère l'id du formulaire précédent
             $adminAccountId = htmlspecialchars(addslashes($_POST['adminAccountId']));
-            $adminAccountPseudo = htmlspecialchars(addslashes($_POST['adminAccountPseudo']));
-            $adminAccountEmail = htmlspecialchars(addslashes($_POST['adminAccountEmail']));
-            $adminAccountAccess =  htmlspecialchars(addslashes($_POST['adminAccountAccess']));
 
-            //On met à jour le compte dans la base de donnée
-            $updateAccount = $bdd->prepare('UPDATE car_accounts 
-            SET accountPseudo = :adminAccountPseudo, 
-            accountEmail = :adminAccountEmail, 
-            accountAccess = :adminAccountAccess
-            WHERE accountId = :adminAccountId');
+            //On fait une requête pour vérifier si le compte choisit existe
+            $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
+            WHERE accountId = ?');
+            $accountQuery->execute([$adminAccountId]);
+            $account = $accountQuery->rowCount();
+            $accountQuery->closeCursor();
 
-            $updateAccount->execute([
-            'adminAccountPseudo' => $adminAccountPseudo,
-            'adminAccountEmail' => $adminAccountEmail,
-            'adminAccountAccess' => $adminAccountAccess,
-            'adminAccountId' => $adminAccountId]);
-            $updateAccount->closeCursor();
-            ?>
+            //Si le compte existe
+            if ($account == 1) 
+            {
+                //On récupère les informations du formulaire
+                $adminAccountId = htmlspecialchars(addslashes($_POST['adminAccountId']));
+                $adminAccountPseudo = htmlspecialchars(addslashes($_POST['adminAccountPseudo']));
+                $adminAccountEmail = htmlspecialchars(addslashes($_POST['adminAccountEmail']));
+                $adminAccountAccess =  htmlspecialchars(addslashes($_POST['adminAccountAccess']));
 
-            Le compte a bien été mit à jour
+                //On met à jour le compte dans la base de donnée
+                $updateAccount = $bdd->prepare('UPDATE car_accounts 
+                SET accountPseudo = :adminAccountPseudo, 
+                accountEmail = :adminAccountEmail, 
+                accountAccess = :adminAccountAccess
+                WHERE accountId = :adminAccountId');
 
-            <hr>
+                $updateAccount->execute([
+                'adminAccountPseudo' => $adminAccountPseudo,
+                'adminAccountEmail' => $adminAccountEmail,
+                'adminAccountAccess' => $adminAccountAccess,
+                'adminAccountId' => $adminAccountId]);
+                $updateAccount->closeCursor();
+                ?>
+
+                Le compte a bien été mit à jour
+
+                <hr>
+                    
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
                 
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
+                <?php
+            }
+            //Si le compte n'existe pas
+            else
+            {
+                echo "Erreur : Ce compte n'existe pas";
+            }
+            $accountQuery->closeCursor();
         }
-        //Si le compte n'existe pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Ce compte n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $accountQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas

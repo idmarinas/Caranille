@@ -32,6 +32,7 @@ ORDER by characterName");
         ?>
     
     </select>
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" name="manage" class="btn btn-default form-control" value="Gérer le compte">
 </form>
 
