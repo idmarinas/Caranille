@@ -17,83 +17,96 @@ if (isset($_POST['adminItemId'])
 && isset($_POST['adminItemMpEffect'])
 && isset($_POST['adminItemPurchasePrice'])
 && isset($_POST['adminItemSalePrice'])
+&& isset($_POST['token'])
 && isset($_POST['finalEdit']))
 {
-    //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
-    if (ctype_digit($_POST['adminItemId'])
-    && ctype_digit($_POST['adminItemHpEffects'])
-    && ctype_digit($_POST['adminItemMpEffect'])
-    && ctype_digit($_POST['adminItemPurchasePrice'])
-    && ctype_digit($_POST['adminItemSalePrice'])
-    && $_POST['adminItemId'] >= 1
-    && $_POST['adminItemHpEffects'] >= 0
-    && $_POST['adminItemMpEffect'] >= 0
-    && $_POST['adminItemPurchasePrice'] >= 0
-    && $_POST['adminItemSalePrice'] >= 0)
+    //Si le token de sécurité est correct
+    if ($_POST['token'] == $_SESSION['token'])
     {
-        //On récupère les informations du formulaire
-        $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
-        $adminItemPicture = htmlspecialchars(addslashes($_POST['adminItemPicture']));
-        $adminItemName = htmlspecialchars(addslashes($_POST['adminItemName']));
-        $adminItemDescription = htmlspecialchars(addslashes($_POST['adminItemDescription']));
-        $adminItemHpEffects = htmlspecialchars(addslashes($_POST['adminItemHpEffects']));
-        $adminItemMpEffect = htmlspecialchars(addslashes($_POST['adminItemMpEffect']));
-        $adminItemPurchasePrice = htmlspecialchars(addslashes($_POST['adminItemPurchasePrice']));
-        $adminItemSalePrice = htmlspecialchars(addslashes($_POST['adminItemSalePrice']));
+        //On supprime le token de l'ancien formulaire
+        $_SESSION['token'] = NULL;
 
-        //On fait une requête pour vérifier si l'objet choisit existe
-        $itemQuery = $bdd->prepare('SELECT * FROM car_items 
-        WHERE itemId = ?');
-        $itemQuery->execute([$adminItemId]);
-        $itemRow = $itemQuery->rowCount();
-
-        //Si l'objet existe
-        if ($itemRow == 1) 
+        //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
+        if (ctype_digit($_POST['adminItemId'])
+        && ctype_digit($_POST['adminItemHpEffects'])
+        && ctype_digit($_POST['adminItemMpEffect'])
+        && ctype_digit($_POST['adminItemPurchasePrice'])
+        && ctype_digit($_POST['adminItemSalePrice'])
+        && $_POST['adminItemId'] >= 1
+        && $_POST['adminItemHpEffects'] >= 0
+        && $_POST['adminItemMpEffect'] >= 0
+        && $_POST['adminItemPurchasePrice'] >= 0
+        && $_POST['adminItemSalePrice'] >= 0)
         {
-            //On met à jour l'objet dans la base de donnée
-            $updateItems = $bdd->prepare('UPDATE car_items 
-            SET itemPicture = :adminItemPicture,
-            itemName = :adminItemName,
-            itemDescription = :adminItemDescription,
-            itemHpEffect = :adminItemHpEffects,
-            itemMpEffect = :adminItemMpEffect,
-            itemPurchasePrice = :adminItemPurchasePrice,
-            itemSalePrice = :adminItemSalePrice
-            WHERE itemId = :adminItemId');
+            //On récupère les informations du formulaire
+            $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
+            $adminItemPicture = htmlspecialchars(addslashes($_POST['adminItemPicture']));
+            $adminItemName = htmlspecialchars(addslashes($_POST['adminItemName']));
+            $adminItemDescription = htmlspecialchars(addslashes($_POST['adminItemDescription']));
+            $adminItemHpEffects = htmlspecialchars(addslashes($_POST['adminItemHpEffects']));
+            $adminItemMpEffect = htmlspecialchars(addslashes($_POST['adminItemMpEffect']));
+            $adminItemPurchasePrice = htmlspecialchars(addslashes($_POST['adminItemPurchasePrice']));
+            $adminItemSalePrice = htmlspecialchars(addslashes($_POST['adminItemSalePrice']));
 
-            $updateItems->execute([
-            'adminItemPicture' => $adminItemPicture,
-            'adminItemName' => $adminItemName,
-            'adminItemDescription' => $adminItemDescription,
-            'adminItemHpEffects' => $adminItemHpEffects,
-            'adminItemMpEffect' => $adminItemMpEffect,
-            'adminItemPurchasePrice' => $adminItemPurchasePrice,
-            'adminItemSalePrice' => $adminItemSalePrice,
-            'adminItemId' => $adminItemId]);
-            $updateItems->closeCursor();
-            ?>
+            //On fait une requête pour vérifier si l'objet choisit existe
+            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            WHERE itemId = ?');
+            $itemQuery->execute([$adminItemId]);
+            $itemRow = $itemQuery->rowCount();
 
-            L'objet a bien été mit à jour
+            //Si l'objet existe
+            if ($itemRow == 1) 
+            {
+                //On met à jour l'objet dans la base de donnée
+                $updateItems = $bdd->prepare('UPDATE car_items 
+                SET itemPicture = :adminItemPicture,
+                itemName = :adminItemName,
+                itemDescription = :adminItemDescription,
+                itemHpEffect = :adminItemHpEffects,
+                itemMpEffect = :adminItemMpEffect,
+                itemPurchasePrice = :adminItemPurchasePrice,
+                itemSalePrice = :adminItemSalePrice
+                WHERE itemId = :adminItemId');
 
-            <hr>
+                $updateItems->execute([
+                'adminItemPicture' => $adminItemPicture,
+                'adminItemName' => $adminItemName,
+                'adminItemDescription' => $adminItemDescription,
+                'adminItemHpEffects' => $adminItemHpEffects,
+                'adminItemMpEffect' => $adminItemMpEffect,
+                'adminItemPurchasePrice' => $adminItemPurchasePrice,
+                'adminItemSalePrice' => $adminItemSalePrice,
+                'adminItemId' => $adminItemId]);
+                $updateItems->closeCursor();
+                ?>
+
+                L'objet a bien été mit à jour
+
+                <hr>
+                    
+                <form method="POST" action="index.php">
+                    <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
+                </form>
                 
-            <form method="POST" action="index.php">
-                <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
-            </form>
-            
-            <?php
+                <?php
+            }
+            //Si l'objet n'exite pas
+            else
+            {
+                echo "Erreur : Cet objet n'existe pas";
+            }
+            $itemQuery->closeCursor();
         }
-        //Si l'objet n'exite pas
+        //Si tous les champs numérique ne contiennent pas un nombre
         else
         {
-            echo "Erreur : Cet objet n'existe pas";
+            echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
         }
-        $itemQuery->closeCursor();
     }
-    //Si tous les champs numérique ne contiennent pas un nombre
+    //Si le token de sécurité n'est pas correct
     else
     {
-        echo "Erreur : Les champs de type numérique ne peuvent contenir qu'un nombre entier";
+        echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
 //Si toutes les variables $_POST n'existent pas
