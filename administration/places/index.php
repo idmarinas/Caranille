@@ -52,6 +52,7 @@ $placeQuery->closeCursor();
 <hr>
 
 <form method="POST" action="addPlace.php">
+    <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
     <input type="submit" class="btn btn-default form-control" name="add" value="Créer un lieu">
 </form>
 
