@@ -88,7 +88,7 @@ if (isset($_POST['installationType'])
         echo "Erreur : Impossible de valider le formulaire, veuillez réessayer";
     }
 }
-//Si tous les champs n'ont pas été rmepli
+//Si tous les champs n'ont pas été rempli
 else 
 {
     echo "Tous les champs n'ont pas été rempli";
