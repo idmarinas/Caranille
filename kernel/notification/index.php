@@ -7,4 +7,6 @@ WHERE notificationCharacterId = ?
 AND notificationRead = 'No'");
 $notificationNumberQuery->execute([$characterId]);
 $notificationNumberRow = $notificationNumberQuery->rowCount();
+
+$totalNotification = $notificationNumberRow + $privateConversationReportedRow;
 ?>

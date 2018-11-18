@@ -387,7 +387,8 @@ CREATE TABLE IF NOT EXISTS `car_private_conversation`
 (
   `privateConversationId` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `privateConversationCharacterOneId` int(5) NOT NULL,
-  `privateConversationCharacterTwoId` int(5) NOT NULL
+  `privateConversationCharacterTwoId` int(5) NOT NULL,
+  `privateConversationReported` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `car_private_conversation_message` 

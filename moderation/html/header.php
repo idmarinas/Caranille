@@ -30,6 +30,12 @@
 							<a class="dropdown-item" href="../../moderation/ban/index.php">Bannir/Débannir</a>
 						</div>
 					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Supervision <?php echo "($totalNotification)" ?></a>
+						<div class="dropdown-menu" aria-labelledby="dropdown01">
+							<a class="dropdown-item" href="../../moderation/privateConversation/index.php">Conversations <?php echo "($totalNotification)" ?></a>
+						</div>
+					</li>
 				</ul>
 				<ul class="navbar-nav pull-right"> 
 					<li class="nav-item dropdown">

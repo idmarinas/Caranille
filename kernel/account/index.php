@@ -33,4 +33,12 @@ WHERE accountId = :accountId");
 $updateAccount->execute(array(
 'accountLastAction' => $accountLastAction,   
 'accountId' => $accountId));
+
+//Si le compte est admin
+if ($accountId >= 1)
+{
+    $privateConversationReportedQuery = $bdd->query("SELECT * FROM car_private_conversation
+    WHERE privateConversationReported = 1");
+    $privateConversationReportedRow = $privateConversationReportedQuery->rowCount();
+}
 ?>
