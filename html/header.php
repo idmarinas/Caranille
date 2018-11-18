@@ -105,7 +105,7 @@
 				</ul>
 				<ul class="navbar-nav pull-right"> 
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mon compte <?php if(isset($_SESSION['account']['id'])) { echo "($notificationNumberRow)"; } ?></a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mon compte <?php if(isset($_SESSION['account']['id'])) { echo "($totalNotification)"; } ?></a>
 						<div class="dropdown-menu" aria-labelledby="dropdown01">
 							<?php
 							//Si le joueur est connecté on lui donne la possibilité de se déconnecter
@@ -126,7 +126,7 @@
 									case 1:
 									?>
 
-									<a class="dropdown-item" href="../../moderation/main/index.php">Modération</a>
+									<a class="dropdown-item" href="../../moderation/main/index.php">Modération (<?php echo $privateConversationReportedRow ?>)</a>
 
 									<?php
 									break;
@@ -134,7 +134,7 @@
 									case 2:
 									?>
 
-									<a class="dropdown-item" href="../../moderation/main/index.php">Modération</a>
+									<a class="dropdown-item" href="../../moderation/main/index.php">Modération (<?php echo $privateConversationReportedRow ?>)</a>
 									<a class="dropdown-item" href="../../administration/main/index.php">Administration</a>
 									
 									<?php

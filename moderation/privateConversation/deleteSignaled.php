@@ -41,7 +41,8 @@ if (isset($_POST['adminPrivateConversationId'])
             {
                 ?>
 
-                ATTENTION : Vous êtes sur le point de supprimer le signalement de cette conversation.<br />Si vous validez cette demande vous ne pourrez plus consulter la conversation sauf si celle-ci est à nouveau
+                ATTENTION : Vous êtes sur le point de supprimer le signalement de cette conversation.<br />
+                Si vous validez cette demande vous ne pourrez plus consulter la conversation sauf si celle-ci est à nouveau signalée.
                 
                 <form method="POST" action="deleteSignaledEnd.php">
                     <input type="hidden" class="btn btn-default form-control" name="adminPrivateConversationId" value="<?php echo $adminPrivateConversationId ?>">
