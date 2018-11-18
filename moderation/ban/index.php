@@ -38,8 +38,6 @@ ORDER by characterName");
     <input type="submit" name="ban" class="btn btn-default form-control" value="Bannir le compte">
 </form>
 
-<hr>
-
 <?php
 //On fait une recherche dans la base de donnée de tous les comptes et personnages
 $accountQuery = $bdd->query("SELECT * FROM car_accounts, car_characters
@@ -52,6 +50,8 @@ $accountRow = $accountQuery->rowCount();
 if ($accountRow > 0)
 {
     ?>
+    
+    <hr>
 
     <form method="POST" action="unbanAccount.php">
         Liste des joueurs banni <select name="modoAccountId" class="form-control">
