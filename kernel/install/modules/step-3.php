@@ -31,7 +31,7 @@ if (isset($_POST['databaseName'])
 		    fwrite($openSql, "
 		    <?php
 		    //Version of Caranille
-		    \$version = \"2.0.0\";
+		    \$version = \"1.9.0\";
 		    \$dsn = 'mysql:dbname=$databaseName;host=$databaseHost;port=$databasePort';
 		    \$user = '$databaseUser';
 		    \$password = '$databasePassword';
