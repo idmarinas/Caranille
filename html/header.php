@@ -125,12 +125,16 @@
 
 									case 1:
 									?>
+
+									<a class="dropdown-item" href="../../moderation/main/index.php">Modération</a>
+
 									<?php
 									break;
 
 									case 2:
 									?>
 
+									<a class="dropdown-item" href="../../moderation/main/index.php">Modération</a>
 									<a class="dropdown-item" href="../../administration/main/index.php">Administration</a>
 									
 									<?php
