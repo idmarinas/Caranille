@@ -10,8 +10,9 @@ require_once("../html/header.php");
 
 //Si les variables $_POST suivantes existent
 if (isset($_POST['modoAccountId'])
+&& isset($_POST['modoBanReason'])
 && isset($_POST['token'])
-&& isset($_POST['unban']))
+&& isset($_POST['banEnd']))
 {
     //Si le token de sécurité est correct
     if ($_POST['token'] == $_SESSION['token'])
@@ -28,11 +29,11 @@ if (isset($_POST['modoAccountId'])
         {
             //On récupère l'id du formulaire précédent
             $modoAccountId = htmlspecialchars(addslashes($_POST['modoAccountId']));
+            $modoBanReason = htmlspecialchars(addslashes($_POST['modoBanReason']));
 
-            //On fait une requête pour vérifier si le compte choisit existe et si il est banni
+            //On fait une requête pour vérifier si le compte choisit existe
             $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
-            WHERE accountId = ?
-            AND accountStatus = 1');
+            WHERE accountId = ?');
             $accountQuery->execute([$modoAccountId]);
             $account = $accountQuery->rowCount();
 
@@ -47,41 +48,41 @@ if (isset($_POST['modoAccountId'])
                     $modoAccountStatus = stripslashes($account['accountStatus']);
                     $modoAccountReason = stripslashes($account['accountReason']);
                 }
-                
-                //Si le compte est encore banni
-                if ($modoAccountStatus == 1)
-                {
-                    ?>
-                    
-                    <p>ATTENTION</p> 
 
-                    Vous êtes sur le point de débannir le compte <em><?php echo $modoAccountPseudo ?></em>.<br />
-                    Confirmez-vous ?
+                //Si le compte n'est pas encore banni
+                if ($modoAccountStatus == 0)
+                {
+                    //On met à jour le compte dans la base de donnée
+                    $updateAccount = $bdd->prepare('UPDATE car_accounts 
+                    SET accountStatus = 1, 
+                    accountReason = :modoBanReason
+                    WHERE accountId = :modoAccountId');
+
+                    $updateAccount->execute([
+                    'modoBanReason' => $modoBanReason,
+                    'modoAccountId' => $modoAccountId]);
+                    $updateAccount->closeCursor();
+                    ?>
+
+                    Le compte a bien été banni
 
                     <hr>
                         
-                    <form method="POST" action="unbanAccountEnd.php">
-                        <input type="hidden" class="btn btn-default form-control" name="modoAccountId" value="<?php echo $modoAccountId ?>">
-                        <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
-                        <input type="submit" class="btn btn-default form-control" name="unbanEnd" value="Je confirme le débanissement">
-                    </form>
-                    
-                    <hr>
-
                     <form method="POST" action="index.php">
                         <input type="submit" class="btn btn-default form-control" name="back" value="Retour">
                     </form>
                     
                     <?php
                 }
-                //Si le compte est déjà débanni
+                //Si le compte est déjà banni
                 else
                 {
                     ?>
                 
                     <p>ATTENTION</p> 
     
-                    Le compte <em><?php echo $modoAccountPseudo ?></em> est déjà débanni<br />
+                    Le compte <em><?php echo $modoAccountPseudo ?></em> est déjà banni<br />
+                    Raison du ban : <?php echo $modoAccountReason ?><br />
 
                     <hr>
     
@@ -95,7 +96,7 @@ if (isset($_POST['modoAccountId'])
             //Si le compte n'existe pas
             else
             {
-                echo "Erreur : Ce compte n'existe pas";
+                echo "Erreur : Ce compte n'existe pas ou est déjà banni";
             }
             $accountQuery->closeCursor();
         }
