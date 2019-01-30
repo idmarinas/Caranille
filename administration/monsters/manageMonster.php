@@ -42,7 +42,7 @@ if (isset($_POST['adminMonsterId'])
                 while ($monster = $monsterQuery->fetch())
                 {
                     //On récupère les informations du formulaire
-                    $adminMonsterName = stripslashes($monsterQuery['monsterName']);
+                    $adminMonsterName = stripslashes($monster['monsterName']);
                 }
                 ?>
                 
