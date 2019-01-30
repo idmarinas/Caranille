@@ -78,7 +78,7 @@ if (isset($_POST['adminItemId'])
             
             //On fait une requête pour vérifier si l'équipement choisit existe
             $itemQuery = $bdd->prepare("SELECT * FROM car_items 
-            WHERE itemId = ?');
+            WHERE itemId = ?");
             $itemQuery->execute([$adminItemId]);
             $itemRow = $itemQuery->rowCount();
 
@@ -87,7 +87,7 @@ if (isset($_POST['adminItemId'])
             {
                 //On fait une requête pour vérifier si le type d'équipement choisit existe
                 $itemTypeQuery = $bdd->prepare("SELECT * FROM car_items_types
-                WHERE itemTypeId = ?');
+                WHERE itemTypeId = ?");
                 $itemTypeQuery->execute([$adminItemItemTypeId]);
                 $itemTypeRow = $itemTypeQuery->rowCount();
         
@@ -99,7 +99,7 @@ if (isset($_POST['adminItemId'])
                     {
                         //On fait une requête pour vérifier si la classe choisie existe
                         $raceQuery = $bdd->prepare("SELECT * FROM car_races 
-                        WHERE raceId = ?');
+                        WHERE raceId = ?");
                         $raceQuery->execute([$adminItemRaceId]);
                         $raceRow = $raceQuery->rowCount();
                     }
@@ -154,7 +154,7 @@ if (isset($_POST['adminItemId'])
                         itemProspectingEffect = :adminItemProspectingEffect,
                         itemPurchasePrice = :adminItemPurchasePrice,
                         itemSalePrice = :adminItemSalePrice
-                        WHERE itemId = :adminItemId');
+                        WHERE itemId = :adminItemId");
                         $updateItems->execute([
                         'adminItemItemTypeId' => $adminItemItemTypeId,
                         'adminItemRaceId' => $adminItemRaceId,
@@ -269,7 +269,7 @@ if (isset($_POST['adminItemId'])
                                 characterDefenseMagicTotal = characterDefenseMagic + characterDefenseMagicSkillPoints + characterDefenseMagicBonus + characterDefenseMagicEquipments + characterDefenseMagicGuild,
                                 characterWisdomTotal = characterWisdom + characterWisdomSkillPoints + characterWisdomBonus + characterWisdomEquipments + characterWisdomGuild,
                                 characterProspectingTotal = characterProspecting + characterProspectingSkillPoints + characterProspectingBonus + characterProspectingEquipments + characterProspectingGuild
-                                WHERE characterId = :adminCharacterId');
+                                WHERE characterId = :adminCharacterId");
                                 $updateCharacter->execute(['adminCharacterId' => $adminCharacterId]);
                                 $updateCharacter->closeCursor();
                             }

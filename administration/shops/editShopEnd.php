@@ -34,7 +34,7 @@ if (isset($_POST['adminShopId'])
 
             //On fait une requête pour vérifier si le magasin choisit existe
             $shopQuery = $bdd->prepare("SELECT * FROM car_shops 
-            WHERE shopId = ?');
+            WHERE shopId = ?");
             $shopQuery->execute([$adminShopId]);
             $shopRow = $shopQuery->rowCount();
 
@@ -46,7 +46,7 @@ if (isset($_POST['adminShopId'])
                 SET shopPicture = :adminShopPicture,
                 shopName = :adminShopName,
                 shopDescription = :adminShopDescription
-                WHERE shopId = :adminShopId');
+                WHERE shopId = :adminShopId");
                 $updateShop->execute([
                 'adminShopPicture' => $adminShopPicture,
                 'adminShopName' => $adminShopName,

@@ -32,7 +32,7 @@ if (isset($_POST['marketItemId'])
 
             //On fait une requête pour vérifier si l'objet ou équippement choisit existe
             $itemQuery = $bdd->prepare("SELECT * FROM car_items 
-            WHERE itemId = ?');
+            WHERE itemId = ?");
             $itemQuery->execute([$marketItemId]);
             $itemRow = $itemQuery->rowCount();
 
@@ -173,7 +173,7 @@ if (isset($_POST['marketItemId'])
                             characterDefenseTotal = characterDefense + characterDefenseSkillPoints + characterDefenseBonus + characterDefenseEquipments,
                             characterDefenseMagicTotal = characterDefenseMagic + characterDefenseMagicSkillPoints + characterDefenseMagicBonus + characterDefenseMagicEquipments,
                             characterWisdomTotal = characterWisdom + characterWisdomSkillPoints + characterWisdomBonus + characterWisdomEquipments
-                            WHERE characterId = :characterId');
+                            WHERE characterId = :characterId");
                             $updateCharacter->execute(['characterId' => $characterId]);
                             $updateCharacter->closeCursor();
                         }

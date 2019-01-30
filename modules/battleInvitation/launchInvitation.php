@@ -24,7 +24,7 @@ if (isset($_POST['battleInvitationCharacterId'])
 		WHERE battleInvitationId = battleInvitationCharacterBattleInvitationId
 		AND battleInvitationMonsterId = monsterId
 		AND battleInvitationCharacterId = ?
-		AND battleInvitationCharacterCharacterId = ?');
+		AND battleInvitationCharacterCharacterId = ?");
         $battleInvitationQuery->execute([$battleInvitationCharacterId, $characterId]);
         $battleInvitationRow = $battleInvitationQuery->rowCount();
 

@@ -89,7 +89,7 @@ if (isset($_POST['privateConversationId'])
                 //On fait une recherche dans la base de donnée des 20 derniers message de la conversation
                 $privateConversationMessageQuery = $bdd->prepare("SELECT * FROM car_private_conversation_message
                 WHERE privateConversationMessagePrivateConversationId = ?
-                LIMIT 0, 20');
+                LIMIT 0, 20");
                 $privateConversationMessageQuery->execute([$privateConversationId]);
                 $privateConversationMessageRow = $privateConversationMessageQuery->rowCount();
                 

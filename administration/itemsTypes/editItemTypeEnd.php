@@ -30,7 +30,7 @@ if (isset($_POST['adminItemTypeId'])
             
             //On fait une requête pour vérifier si le type d'objet choisit existe
             $itemTypeQuery = $bdd->prepare("SELECT * FROM car_items_types
-            WHERE itemTypeId = ?');
+            WHERE itemTypeId = ?");
             $itemTypeQuery->execute([$adminItemTypeId]);
             $itemTypeRow = $itemTypeQuery->rowCount();
 
@@ -40,7 +40,7 @@ if (isset($_POST['adminItemTypeId'])
                 //On met à jour le type d'objet dans la base de donnée
                 $updateItemType = $bdd->prepare("UPDATE car_items_types
                 SET itemTypeNameShow = :adminItemTypeNameShow
-                WHERE itemTypeId = :adminItemTypeId');
+                WHERE itemTypeId = :adminItemTypeId");
                 $updateItemType->execute([
                 'adminItemTypeNameShow' => $adminItemTypeNameShow,
                 'adminItemTypeId' => $adminItemTypeId]);

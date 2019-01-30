@@ -34,7 +34,7 @@ if (isset($_POST['marketId'])
             WHERE itemItemTypeId = itemTypeId
             AND marketCharacterId = characterId
             AND marketItemId = itemId
-            AND marketId = ?');
+            AND marketId = ?");
             $marketQuery->execute([$marketId]);
             $marketRow = $marketQuery->rowCount();
 

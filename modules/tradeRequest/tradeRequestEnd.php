@@ -30,7 +30,7 @@ if (isset($_POST['tradeCharacterId'])
             
             //On fait une requête pour vérifier si le personnage choisit existe
             $characterQuery = $bdd->prepare("SELECT * FROM car_characters 
-            WHERE characterId = ?');
+            WHERE characterId = ?");
             $characterQuery->execute([$tradeCharacterId]);
             $characterRow = $characterQuery->rowCount();
     

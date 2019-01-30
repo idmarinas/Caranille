@@ -21,7 +21,7 @@ if (isset($_POST['accountPseudo'])
         //On fait une requête pour vérifier si la combinaison pseudo et adresse Email est bonne
         $accountQuery = $bdd->prepare("SELECT * FROM car_accounts 
         WHERE accountPseudo = ?
-        AND accountEmail = ?');
+        AND accountEmail = ?");
         $accountQuery->execute([$accountPseudo, $accountEmail]);
         $accountRow = $accountQuery->rowCount();
 

@@ -70,7 +70,7 @@ if (isset($_POST['adminRaceId'])
             
             //On fait une requête pour vérifier si la race choisie existe
             $raceQuery = $bdd->prepare("SELECT * FROM car_races 
-            WHERE raceId = ?');
+            WHERE raceId = ?");
             $raceQuery->execute([$adminRaceId]);
             $raceRow = $raceQuery->rowCount();
 
@@ -91,7 +91,7 @@ if (isset($_POST['adminRaceId'])
                 raceDefenseMagicBonus = :adminRaceDefenseMagicBonus,
                 raceWisdomBonus = :adminRaceWisdomBonus,
                 raceProspectingBonus = :adminRaceProspectingBonus
-                WHERE raceId = :adminRaceId');
+                WHERE raceId = :adminRaceId");
                 $updateRace->execute([
                 'adminRacePicture' => $adminRacePicture,
                 'adminRaceName' => $adminRaceName,
@@ -110,7 +110,7 @@ if (isset($_POST['adminRaceId'])
                 
                 //On cherche les joueurs qui utilise cette classe
                 $characterRaceQuery = $bdd->prepare("SELECT * FROM car_characters 
-                WHERE characterRaceId = ?');
+                WHERE characterRaceId = ?");
                 $characterRaceQuery->execute([$adminRaceId]);
         
                 //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
@@ -177,7 +177,7 @@ if (isset($_POST['adminRaceId'])
                     characterDefenseMagicTotal = characterDefenseMagic + characterDefenseMagicSkillPoints + characterDefenseMagicBonus + characterDefenseMagicEquipments,
                     characterWisdomTotal = characterWisdom + characterWisdomSkillPoints + characterWisdomBonus + characterWisdomEquipments,
                     characterProspectingTotal = characterProspecting + characterProspectingSkillPoints + characterProspectingBonus + characterProspectingEquipments
-                    WHERE characterId = :adminCharacterId');
+                    WHERE characterId = :adminCharacterId");
                     $updateCharacter->execute(['adminCharacterId' => $adminCharacterId]);
                     $updateCharacter->closeCursor();
                 }

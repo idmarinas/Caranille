@@ -35,7 +35,7 @@ if (isset($_POST['adminplaceMonsterPlaceId'])
 
             //On fait une requête pour vérifier si le lieu choisie existe
             $placeQuery = $bdd->prepare("SELECT * FROM car_places 
-            WHERE placeId = ?');
+            WHERE placeId = ?");
             $placeQuery->execute([$adminplaceMonsterPlaceId]);
             $placeRow = $placeQuery->rowCount();
 
@@ -44,7 +44,7 @@ if (isset($_POST['adminplaceMonsterPlaceId'])
             {
                 //On fait une requête pour vérifier si le monstre choisit existe
                 $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters 
-                WHERE monsterId = ?');
+                WHERE monsterId = ?");
                 $monsterQuery->execute([$adminplaceMonsterMonsterId]);
                 $monsterRow = $monsterQuery->rowCount();
 
@@ -54,7 +54,7 @@ if (isset($_POST['adminplaceMonsterPlaceId'])
                     //On fait une requête pour vérifier si le monstre choisit  existe bien dans le lieu
                     $monsterQuery = $bdd->prepare("SELECT * FROM car_places_monsters 
                     WHERE placeMonsterPlaceId = ?
-                    AND placeMonsterMonsterId = ?');
+                    AND placeMonsterMonsterId = ?");
                     $monsterQuery->execute([$adminplaceMonsterPlaceId, $adminplaceMonsterMonsterId]);
                     $monsterRow = $monsterQuery->rowCount();
 

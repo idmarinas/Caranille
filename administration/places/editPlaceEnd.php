@@ -44,7 +44,7 @@ if (isset($_POST['adminPlaceId'])
 
             //On fait une requête pour vérifier si le lieu choisit existe
             $placeQuery = $bdd->prepare("SELECT * FROM car_places 
-            WHERE placeId = ?');
+            WHERE placeId = ?");
             $placeQuery->execute([$adminPlaceId]);
             $placeRow = $placeQuery->rowCount();
 
@@ -57,7 +57,7 @@ if (isset($_POST['adminPlaceId'])
                     //On ejecte tous les joueurs présents dedans
                     $updateCharacter = $bdd->prepare("UPDATE car_characters 
                     SET characterPlaceId = 0
-                    WHERE characterPlaceId = :adminPlaceId');
+                    WHERE characterPlaceId = :adminPlaceId");
                     $updateCharacter->execute([
                     'adminPlaceId' => $adminPlaceId]);
                     $updateCharacter->closeCursor();
@@ -70,7 +70,7 @@ if (isset($_POST['adminPlaceId'])
                 placePriceInn = :adminplacePriceInn,
                 placeChapter = :adminplaceChapter,
                 placeAccess = :adminplaceAccess
-                WHERE placeId = :adminPlaceId');
+                WHERE placeId = :adminPlaceId");
                 $updatePlace->execute([
                 'adminplacePicture' => $adminplacePicture,
                 'adminplaceName' => $adminplaceName,

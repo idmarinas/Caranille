@@ -183,7 +183,7 @@ if (isset($_POST['adminGameName'])
             configurationExperienceBonus = :adminGameExperienceBonus,
             configurationGoldBonus = :adminGameGoldBonus,
             configurationDropBonus = :adminGameDropBonus,
-            configurationAccess = :adminGameAccess');
+            configurationAccess = :adminGameAccess");
             $updateConfiguration->execute([
             'adminGameName' => $adminGameName,
             'adminGamePresentation' => $adminGamePresentation,

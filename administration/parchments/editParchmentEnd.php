@@ -64,7 +64,7 @@ if (isset($_POST['adminItemId'])
             
             //On fait une requête pour vérifier si le parchemin choisit existe
             $itemQuery = $bdd->prepare("SELECT * FROM car_items 
-            WHERE itemId = ?');
+            WHERE itemId = ?");
             $itemQuery->execute([$adminItemId]);
             $itemRow = $itemQuery->rowCount();
 
@@ -104,7 +104,7 @@ if (isset($_POST['adminItemId'])
                 itemProspectingEffect = :adminItemProspectingEffect,
                 itemPurchasePrice = :adminItemPurchasePrice,
                 itemSalePrice = :adminItemSalePrice
-                WHERE itemId = :adminItemId');
+                WHERE itemId = :adminItemId");
                 $updateItems->execute([
                 'adminItemPicture' => $adminItemPicture,
                 'adminItemName' => $adminItemName,

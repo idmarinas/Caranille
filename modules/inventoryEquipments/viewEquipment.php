@@ -31,7 +31,7 @@ if (isset($_POST['itemId'])
             
             //On fait une requête pour vérifier si l'équipement choisit existe
             $equipmentQuery = $bdd->prepare("SELECT * FROM car_items 
-            WHERE itemId = ?');
+            WHERE itemId = ?");
             $equipmentQuery->execute([$itemId]);
             $equipmentRow = $equipmentQuery->rowCount();
     

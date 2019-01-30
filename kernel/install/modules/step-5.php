@@ -40,7 +40,7 @@ if (isset($_POST['accountPseudo'])
             {
                 //On fait une requête pour vérifier si le pseudo est déjà utilisé
                 $pseudoQuery = $bdd->prepare("SELECT * FROM car_accounts 
-                WHERE accountPseudo= ?');
+                WHERE accountPseudo= ?");
                 $pseudoQuery->execute([$accountPseudo]);
                 $pseudoRow = $pseudoQuery->rowCount();
                 $pseudoQuery->closeCursor();
@@ -50,7 +50,7 @@ if (isset($_POST['accountPseudo'])
                 {
                     //On fait une requête pour vérifier si le nom du personnage est déjà utilisé
                     $characterQuery = $bdd->prepare("SELECT * FROM car_characters 
-                    WHERE characterName= ?');
+                    WHERE characterName= ?");
                     $characterQuery->execute([$characterName]);
                     $characterRow = $characterQuery->rowCount();
                     $characterQuery->closeCursor();
@@ -60,7 +60,7 @@ if (isset($_POST['accountPseudo'])
                     {
                         //On fait une requête pour vérifier si le nom du personnage est déjà utilisé
                         $raceQuery = $bdd->prepare("SELECT * FROM car_races 
-                        WHERE raceId = ?');
+                        WHERE raceId = ?");
                         $raceQuery->execute([$characterRaceId]);
                         $raceRow = $raceQuery->rowCount();
                         $raceQuery->closeCursor();

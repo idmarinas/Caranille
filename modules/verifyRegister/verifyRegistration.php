@@ -17,7 +17,7 @@ if (isset($_POST['accountEmail'])
         //On fait une requête pour vérifier si une demande de vérification est en cours
         $accountVerificationQuery = $bdd->prepare("SELECT * FROM car_accounts_verifications 
         WHERE accountVerificationEmailAdresse = ?
-        AND accountVerificationEmailCode = ?');
+        AND accountVerificationEmailCode = ?");
         $accountVerificationQuery->execute([$accountEmail, $codeAccountVerification]);
         $accountVerificationRow = $accountVerificationQuery->rowCount();
 

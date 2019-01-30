@@ -130,7 +130,7 @@ if (isset($_POST['itemId'])
                 characterDefenseMagicTotal = characterDefenseMagic + characterDefenseMagicSkillPoints + characterDefenseMagicBonus + characterDefenseMagicEquipments + characterDefenseMagicGuild,
                 characterWisdomTotal = characterWisdom + characterWisdomSkillPoints + characterWisdomBonus + characterWisdomEquipments + characterWisdomGuild,
                 characterProspectingTotal = characterProspecting + characterProspectingSkillPoints + characterProspectingBonus + characterProspectingEquipments + characterProspectingGuild
-                WHERE characterId = :characterId');
+                WHERE characterId = :characterId");
                 $updateCharacter->execute(['characterId' => $characterId]);
                 $updateCharacter->closeCursor();
                 ?>

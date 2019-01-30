@@ -34,7 +34,7 @@ if (isset($_POST['adminNewsId'])
 
             //On fait une requête pour vérifier si la news choisie existe
             $newsQuery = $bdd->prepare("SELECT * FROM car_news 
-            WHERE newsId = ?');
+            WHERE newsId = ?");
             $newsQuery->execute([$adminNewsId]);
             $newsRow = $newsQuery->rowCount();
 
@@ -46,7 +46,7 @@ if (isset($_POST['adminNewsId'])
                 SET newsPicture = :adminNewsPicture,
                 newsTitle = :adminNewsTitle,
                 newsMessage = :adminNewsMessage
-                WHERE newsId = :adminNewsId');
+                WHERE newsId = :adminNewsId");
                 $updateNews->execute([
                 'adminNewsPicture' => $adminNewsPicture,
                 'adminNewsTitle' => $adminNewsTitle,

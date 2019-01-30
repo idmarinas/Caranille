@@ -41,7 +41,7 @@ if (isset($_POST['adminChapterId'])
 
             //On fait une requête pour vérifier si le chapitre choisit existe
             $chapterQuery = $bdd->prepare("SELECT * FROM car_chapters 
-            WHERE chapterId = ?');
+            WHERE chapterId = ?");
             $chapterQuery->execute([$adminChapterId]);
             $chapterRow = $chapterQuery->rowCount();
 
@@ -54,7 +54,7 @@ if (isset($_POST['adminChapterId'])
                 chapterTitle = :adminChapterTitle,
                 chapterOpening = :adminChapterOpening,
                 chapterEnding = :adminChapterEnding
-                WHERE chapterId = :adminChapterId');
+                WHERE chapterId = :adminChapterId");
                 $updateChapter->execute([
                 'adminChapterMonsterId' => $adminChapterMonsterId,
                 'adminChapterTitle' => $adminChapterTitle,

@@ -28,7 +28,7 @@ if (isset($_POST['privateConversationCharacterId'])
             
             //On fait une requête pour vérifier si le personnage choisit existe
             $characterQuery = $bdd->prepare("SELECT * FROM car_characters 
-            WHERE characterId = ?');
+            WHERE characterId = ?");
             $characterQuery->execute([$privateConversationCharacterId]);
             $characterRow = $characterQuery->rowCount();
 

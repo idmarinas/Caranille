@@ -22,7 +22,7 @@ if (isset($_POST['battleInvitationCharacterId'])
 		WHERE battleInvitationId = battleInvitationCharacterBattleInvitationId
 		AND battleInvitationMonsterId = monsterId
 		AND battleInvitationCharacterId = ?
-		AND battleInvitationCharacterCharacterId = ?');
+		AND battleInvitationCharacterCharacterId = ?");
         $battleInvitationQuery->execute([$battleInvitationCharacterId, $characterId]);
         $battleInvitationRow = $battleInvitationQuery->rowCount();
 
@@ -77,7 +77,7 @@ if (isset($_POST['battleInvitationCharacterId'])
                 //On met à jour les stats du monstre
                 $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
                 SET monsterQuantityBattle = monsterQuantityBattle + 1
-                WHERE monsterId = :opponentId');
+                WHERE monsterId = :opponentId");
                 $updateMonsterStats->execute(['opponentId' => $opponentId]);
                 $updateMonsterStats->closeCursor();  
                 

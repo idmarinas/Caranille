@@ -31,7 +31,7 @@ if (isset($_POST['adminItemId'])
 
             //On fait une requête pour vérifier si l'objet choisit existe
             $itemQuery = $bdd->prepare("SELECT * FROM car_items 
-            WHERE itemId = ?');
+            WHERE itemId = ?");
             $itemQuery->execute([$adminItemId]);
             $itemRow = $itemQuery->rowCount();
 

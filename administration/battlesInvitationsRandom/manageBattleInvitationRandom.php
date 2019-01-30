@@ -31,7 +31,7 @@ if (isset($_POST['battleInvitationId'])
 
             //On fait une requête pour vérifier si l'objet choisit existe
             $battleInvitationQuery = $bdd->prepare("SELECT * FROM car_battles_invitations
-            WHERE battleInvitationId = ?');
+            WHERE battleInvitationId = ?");
             $battleInvitationQuery->execute([$adminBattleInvitationId]);
             $battleInvitationRow = $battleInvitationQuery->rowCount();
 
@@ -58,7 +58,7 @@ if (isset($_POST['battleInvitationId'])
                 //On fait une requête pour vérifier si l'objet choisit existe
                 $battleInvitationCharacterQuery = $bdd->prepare("SELECT * FROM car_battles_invitations_characters, car_characters
                 WHERE battleInvitationCharacterCharacterId = characterId
-                AND battleInvitationCharacterBattleInvitationId = ?');
+                AND battleInvitationCharacterBattleInvitationId = ?");
                 $battleInvitationCharacterQuery->execute([$battleInvitationId]);
                 
                 //On fait une recherche dans la base de donnée de toutes les lieux

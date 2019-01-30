@@ -3,7 +3,7 @@ require_once("../../kernel/kernel.php");
 require_once("../../html/header.php");
 
 //On recherche la liste des news dans la base de donnée
-$newsQuery = $bdd->query("SELECT * FROM car_news ORDER BY newsId desc LIMIT 0,4');
+$newsQuery = $bdd->query("SELECT * FROM car_news ORDER BY newsId desc LIMIT 0,4");
 $newsRow = $newsQuery->rowCount();
 
 //S'il existe des news on les affiche

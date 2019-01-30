@@ -30,7 +30,7 @@ if (isset($_POST['marketId'])
             $marketQuery = $bdd->prepare("SELECT * FROM car_market, car_characters, car_items
             WHERE marketCharacterId = characterId
             AND marketItemId = itemId
-            AND marketId = ?');
+            AND marketId = ?");
             $marketQuery->execute([$marketId]);
             $marketRow = $marketQuery->rowCount();
 

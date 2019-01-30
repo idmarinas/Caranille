@@ -71,7 +71,7 @@ if (isset($_POST['adminBattleInvitationCharacterId'])
             //On fait une requête pour vérifier si le monstre choisit existe
             $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters, car_monsters_categories
             WHERE monsterCategory = monsterCategoryId
-            AND monsterId = ?');
+            AND monsterId = ?");
             $monsterQuery->execute([$adminBattleInvitationMonsterId]);
             $monsterRow = $monsterQuery->rowCount();
 

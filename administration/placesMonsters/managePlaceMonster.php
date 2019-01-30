@@ -31,7 +31,7 @@ if (isset($_POST['adminplaceMonsterPlaceId'])
 
             //On fait une requête pour vérifier si le lieu choisit existe
             $placeQuery = $bdd->prepare("SELECT * FROM car_places 
-            WHERE placeId = ?');
+            WHERE placeId = ?");
             $placeQuery->execute([$adminplaceMonsterPlaceId]);
             $placeRow = $placeQuery->rowCount();
 

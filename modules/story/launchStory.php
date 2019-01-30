@@ -55,7 +55,7 @@ if (isset($_POST['continue']))
             //On met à jour les stats du monstre
             $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
             SET monsterQuantityBattle = monsterQuantityBattle + 1
-            WHERE monsterId = :opponentId');
+            WHERE monsterId = :opponentId");
             $updateMonsterStats->execute(['opponentId' => $opponentId]);
             $updateMonsterStats->closeCursor();  
             

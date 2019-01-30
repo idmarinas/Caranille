@@ -27,7 +27,7 @@ if (isset($_POST['token'])
             SET characterGold = characterGold - :placePriceInn,
             characterHpMin = characterHpTotal,
             characterMpMin = characterMpTotal
-            WHERE characterId = :characterId');
+            WHERE characterId = :characterId");
             $updateAccount->execute([
             'placePriceInn' => $placePriceInn,
             'characterId' => $characterId]);

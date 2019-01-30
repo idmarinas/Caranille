@@ -68,7 +68,7 @@ if (isset($_POST['adminMonsterId'])
 
             //On fait une requête pour vérifier si le monstre choisit existe
             $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters 
-            WHERE monsterId = ?');
+            WHERE monsterId = ?");
             $monsterQuery->execute([$adminMonsterId]);
             $monsterRow = $monsterQuery->rowCount();
 
@@ -112,7 +112,7 @@ if (isset($_POST['adminMonsterId'])
                 monsterGold = :adminMonsterGold,
                 monsterLimited = :adminMonsterLimited,
                 monsterQuantity = :adminMonsterQuantity
-                WHERE monsterId = :adminMonsterId');
+                WHERE monsterId = :adminMonsterId");
                 $updateMonster->execute([
                 'adminMonsterCategoryCategoryId' => $adminMonsterCategoryCategoryId,
                 'adminMonsterPicture' => $adminMonsterPicture,

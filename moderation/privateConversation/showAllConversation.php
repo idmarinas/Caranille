@@ -79,7 +79,7 @@ if (isset($_POST['adminPrivateConversationId'])
                 <?php
                 //On fait une recherche dans la base de donnée des messages de la conversation
                 $privateConversationMessageQuery = $bdd->prepare("SELECT * FROM car_private_conversation_message
-                WHERE privateConversationMessagePrivateConversationId = ?');
+                WHERE privateConversationMessagePrivateConversationId = ?");
                 $privateConversationMessageQuery->execute([$adminPrivateConversationId]);
                 $privateConversationMessageRow = $privateConversationMessageQuery->rowCount();
                 

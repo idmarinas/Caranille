@@ -25,7 +25,7 @@ if (isset($_POST['token'])
             $updateCharacter = $bdd->prepare("UPDATE car_characters 
             SET characterHpSkillPoints = characterHpSkillPoints + 10,
             characterSkillPoints = characterSkillPoints -1
-            WHERE characterId = :characterId');
+            WHERE characterId = :characterId");
             $updateCharacter->execute(['characterId' => $characterId]);
             $updateCharacter->closeCursor();
 
@@ -39,7 +39,7 @@ if (isset($_POST['token'])
             characterDefenseMagicTotal = characterDefenseMagic + characterDefenseMagicSkillPoints + characterDefenseMagicBonus + characterDefenseMagicEquipments + characterDefenseMagicGuild,
             characterWisdomTotal = characterWisdom + characterWisdomSkillPoints + characterWisdomBonus + characterWisdomEquipments + characterWisdomGuild,
             characterProspectingTotal = characterProspecting + characterProspectingSkillPoints + characterProspectingBonus + characterProspectingEquipments + characterProspectingGuild
-            WHERE characterId = :characterId');
+            WHERE characterId = :characterId");
             $updateCharacter->execute(['characterId' => $characterId]);
             $updateCharacter->closeCursor();
             ?>

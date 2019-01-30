@@ -32,7 +32,7 @@ if (isset($_POST['modoAccountId'])
 
             //On fait une requête pour vérifier si le compte choisit existe
             $accountQuery = $bdd->prepare("SELECT * FROM car_accounts 
-            WHERE accountId = ?');
+            WHERE accountId = ?");
             $accountQuery->execute([$modoAccountId]);
             $account = $accountQuery->rowCount();
 
@@ -54,8 +54,8 @@ if (isset($_POST['modoAccountId'])
                     //On met à jour le compte dans la base de donnée
                     $updateAccount = $bdd->prepare("UPDATE car_accounts 
                     SET accountStatus = 0, 
-                    accountReason = "Empty"
-                    WHERE accountId = :modoAccountId');
+                    accountReason = 'Empty'
+                    WHERE accountId = :modoAccountId");
 
                     $updateAccount->execute([
                     'modoAccountId' => $modoAccountId]);

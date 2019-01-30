@@ -39,7 +39,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin <= 0)
         //On met à jour les stats du monstre
         $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
         SET monsterQuantityDraw = monsterQuantityDraw + 1
-        WHERE monsterId = :opponentId');
+        WHERE monsterId = :opponentId");
         $updateMonsterStats->execute(['opponentId' => $opponentId]);
         $updateMonsterStats->closeCursor();  
 
@@ -228,7 +228,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
                 //On fait passer le joueur au chapitre suivant
                 $updateCharacterChapter = $bdd->prepare("UPDATE car_characters 
                 SET characterChapter = characterChapter + 1
-                WHERE characterId = :characterId');
+                WHERE characterId = :characterId");
                 $updateCharacterChapter->execute(['characterId' => $characterId]);
                 $updateCharacterChapter->closeCursor();  
             }
@@ -289,7 +289,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
             //On met à jour le bestiaire du joueur
             $updateBestiary = $bdd->prepare("UPDATE car_bestiary 
             SET bestiaryMonsterQuantity = bestiaryMonsterQuantity + 1
-            WHERE bestiaryId = :bestiaryId');
+            WHERE bestiaryId = :bestiaryId");
             $updateBestiary->execute(['bestiaryId' => $bestiaryId]);
             $updateBestiary->closeCursor();  
         }
@@ -319,7 +319,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
         //On met à jour les stats du monstre
         $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
         SET monsterQuantityVictory = monsterQuantityVictory + 1
-        WHERE monsterId = :opponentId');
+        WHERE monsterId = :opponentId");
         $updateMonsterStats->execute(['opponentId' => $opponentId]);
         $updateMonsterStats->closeCursor();  
 
@@ -403,7 +403,7 @@ if ($characterHpMin <= 0 && $battleOpponentHpRemaining > 0)
         //On met à jour les stats du monstre
         $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
         SET monsterQuantityDefeated = monsterQuantityDefeated + 1
-        WHERE monsterId = :opponentId');
+        WHERE monsterId = :opponentId");
         $updateMonsterStats->execute(['opponentId' => $opponentId]);
         $updateMonsterStats->closeCursor();  
 
