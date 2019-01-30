@@ -20,6 +20,9 @@ if (isset($_POST['adminplaceMonsterPlaceId'])
         //On supprime le token de l'ancien formulaire
         $_SESSION['token'] = NULL;
 
+        //Comme il y a un nouveau formulaire on régénère un nouveau token
+        $_SESSION['token'] = uniqid();
+
         //On vérifie si tous les champs numérique contiennent bien un nombre entier positif
         if (ctype_digit($_POST['adminplaceMonsterPlaceId'])
         && ctype_digit($_POST['adminplaceMonsterMonsterId'])
