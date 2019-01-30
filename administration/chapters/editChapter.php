@@ -30,7 +30,7 @@ if (isset($_POST['adminChapterId'])
             $adminChapterId = htmlspecialchars(addslashes($_POST['adminChapterId']));
 
             //On fait une requête pour vérifier si le chapitre choisit existe
-            $chapterQuery = $bdd->prepare('SELECT * FROM car_chapters 
+            $chapterQuery = $bdd->prepare("SELECT * FROM car_chapters 
             WHERE chapterId = ?');
             $chapterQuery->execute([$adminChapterId]);
             $chapterRow = $chapterQuery->rowCount();
@@ -50,7 +50,7 @@ if (isset($_POST['adminChapterId'])
                 }
 
                 //On récupère les informations du monstre du chapitre
-                $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
+                $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters 
                 WHERE monsterId = ?');
                 $monsterQuery->execute([$adminChapterMonsterId]);
                 

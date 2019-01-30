@@ -37,7 +37,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin <= 0)
     if ($battleType != "Arena")
     {
         //On met à jour les stats du monstre
-        $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+        $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
         SET monsterQuantityDraw = monsterQuantityDraw + 1
         WHERE monsterId = :opponentId');
         $updateMonsterStats->execute(['opponentId' => $opponentId]);
@@ -226,7 +226,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
                 echo "$chapterEnding";
                 
                 //On fait passer le joueur au chapitre suivant
-                $updateCharacterChapter = $bdd->prepare('UPDATE car_characters 
+                $updateCharacterChapter = $bdd->prepare("UPDATE car_characters 
                 SET characterChapter = characterChapter + 1
                 WHERE characterId = :characterId');
                 $updateCharacterChapter->execute(['characterId' => $characterId]);
@@ -287,7 +287,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
         		$bestiaryId = stripslashes($bestiary['bestiaryId']);
         	}
             //On met à jour le bestiaire du joueur
-            $updateBestiary = $bdd->prepare('UPDATE car_bestiary 
+            $updateBestiary = $bdd->prepare("UPDATE car_bestiary 
             SET bestiaryMonsterQuantity = bestiaryMonsterQuantity + 1
             WHERE bestiaryId = :bestiaryId');
             $updateBestiary->execute(['bestiaryId' => $bestiaryId]);
@@ -317,7 +317,7 @@ if ($battleOpponentHpRemaining <= 0 && $characterHpMin > 0)
         $bestiaryQuery->closeCursor(); 
 
         //On met à jour les stats du monstre
-        $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+        $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
         SET monsterQuantityVictory = monsterQuantityVictory + 1
         WHERE monsterId = :opponentId');
         $updateMonsterStats->execute(['opponentId' => $opponentId]);
@@ -401,7 +401,7 @@ if ($characterHpMin <= 0 && $battleOpponentHpRemaining > 0)
     else
     {
         //On met à jour les stats du monstre
-        $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+        $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
         SET monsterQuantityDefeated = monsterQuantityDefeated + 1
         WHERE monsterId = :opponentId');
         $updateMonsterStats->execute(['opponentId' => $opponentId]);

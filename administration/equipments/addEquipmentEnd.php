@@ -73,7 +73,7 @@ if (isset($_POST['adminItemItemTypeId'])
             $adminItemRaceId = htmlspecialchars(addslashes($_POST['adminItemRaceId']));
             
             //On fait une requête pour vérifier si le type d'équipement choisit existe
-            $itemTypeQuery = $bdd->prepare('SELECT * FROM car_items_types
+            $itemTypeQuery = $bdd->prepare("SELECT * FROM car_items_types
             WHERE itemTypeId = ?');
             $itemTypeQuery->execute([$adminItemItemTypeId]);
             $itemTypeRow = $itemTypeQuery->rowCount();
@@ -85,7 +85,7 @@ if (isset($_POST['adminItemItemTypeId'])
                 if ($adminItemRaceId > 0)
                 {
                     //On fait une requête pour vérifier si la classe choisie existe
-                    $raceQuery = $bdd->prepare('SELECT * FROM car_races 
+                    $raceQuery = $bdd->prepare("SELECT * FROM car_races 
                     WHERE raceId = ?');
                     $raceQuery->execute([$adminItemRaceId]);
                     $raceRow = $raceQuery->rowCount();

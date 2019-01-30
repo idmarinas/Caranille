@@ -32,7 +32,7 @@ if (isset($_POST['modoAccountId'])
             $modoBanReason = htmlspecialchars(addslashes($_POST['modoBanReason']));
 
             //On fait une requête pour vérifier si le compte choisit existe
-            $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
+            $accountQuery = $bdd->prepare("SELECT * FROM car_accounts 
             WHERE accountId = ?');
             $accountQuery->execute([$modoAccountId]);
             $account = $accountQuery->rowCount();
@@ -53,7 +53,7 @@ if (isset($_POST['modoAccountId'])
                 if ($modoAccountStatus == 0)
                 {
                     //On met à jour le compte dans la base de donnée
-                    $updateAccount = $bdd->prepare('UPDATE car_accounts 
+                    $updateAccount = $bdd->prepare("UPDATE car_accounts 
                     SET accountStatus = 1, 
                     accountReason = :modoBanReason
                     WHERE accountId = :modoAccountId');

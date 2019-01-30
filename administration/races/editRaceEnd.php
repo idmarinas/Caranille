@@ -69,7 +69,7 @@ if (isset($_POST['adminRaceId'])
             $adminRaceProspectingBonus = htmlspecialchars(addslashes($_POST['adminRaceProspectingBonus']));
             
             //On fait une requête pour vérifier si la race choisie existe
-            $raceQuery = $bdd->prepare('SELECT * FROM car_races 
+            $raceQuery = $bdd->prepare("SELECT * FROM car_races 
             WHERE raceId = ?');
             $raceQuery->execute([$adminRaceId]);
             $raceRow = $raceQuery->rowCount();
@@ -78,7 +78,7 @@ if (isset($_POST['adminRaceId'])
             if ($raceRow == 1) 
             {
                 //On met à jour la race dans la base de donnée
-                $updateRace = $bdd->prepare('UPDATE car_races 
+                $updateRace = $bdd->prepare("UPDATE car_races 
                 SET racePicture = :adminRacePicture,
                 raceName = :adminRaceName, 
                 raceDescription = :adminRaceDescription,
@@ -109,7 +109,7 @@ if (isset($_POST['adminRaceId'])
                 $updateRace->closeCursor();
                 
                 //On cherche les joueurs qui utilise cette classe
-                $characterRaceQuery = $bdd->prepare('SELECT * FROM car_characters 
+                $characterRaceQuery = $bdd->prepare("SELECT * FROM car_characters 
                 WHERE characterRaceId = ?');
                 $characterRaceQuery->execute([$adminRaceId]);
         
@@ -167,7 +167,7 @@ if (isset($_POST['adminRaceId'])
                     $updateCharacter->closeCursor();
                     
                     //On recalcule toutes les statisiques max du personnage
-                    $updateCharacter = $bdd->prepare('UPDATE car_characters
+                    $updateCharacter = $bdd->prepare("UPDATE car_characters
                     SET characterHpTotal = characterHpMax + characterHpSkillPoints + characterHpBonus + characterHpEquipments,
                     characterMpTotal = characterMpMax + characterMpSkillPoints + characterMpBonus + characterMpEquipments,
                     characterStrengthTotal = characterStrength + characterStrengthSkillPoints + characterStrengthBonus + characterStrengthEquipments,

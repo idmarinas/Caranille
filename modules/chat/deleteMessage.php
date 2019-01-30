@@ -27,7 +27,7 @@ if (isset($_POST['chatMessageId'])
 	        $chatMessageId = htmlspecialchars(addslashes($_POST['chatMessageId']));
 	        
 	        //On fait une requête pour vérifier si le message choisit existe
-	        $chatQuery = $bdd->prepare('SELECT * FROM car_chat
+	        $chatQuery = $bdd->prepare("SELECT * FROM car_chat
 	        WHERE chatMessageId = ?');
 	        $chatQuery->execute([$chatMessageId]);
 	        $chatRow = $chatQuery->rowCount();

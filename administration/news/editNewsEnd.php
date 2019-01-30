@@ -33,7 +33,7 @@ if (isset($_POST['adminNewsId'])
             $adminNewsMessage = htmlspecialchars(addslashes($_POST['adminNewsMessage']));
 
             //On fait une requête pour vérifier si la news choisie existe
-            $newsQuery = $bdd->prepare('SELECT * FROM car_news 
+            $newsQuery = $bdd->prepare("SELECT * FROM car_news 
             WHERE newsId = ?');
             $newsQuery->execute([$adminNewsId]);
             $newsRow = $newsQuery->rowCount();
@@ -42,7 +42,7 @@ if (isset($_POST['adminNewsId'])
             if ($newsRow == 1) 
             {
                 //On met à jour la news dans la base de donnée
-                $updateNews = $bdd->prepare('UPDATE car_news
+                $updateNews = $bdd->prepare("UPDATE car_news
                 SET newsPicture = :adminNewsPicture,
                 newsTitle = :adminNewsTitle,
                 newsMessage = :adminNewsMessage

@@ -11,7 +11,7 @@ if ($battleRow > 0) { exit(header("Location: ../../modules/battle/index.php")); 
 require_once("../../html/header.php");
 
 //On recherche la liste des lieux disponible par rapport au chapitre du joueur
-$placeQuery = $bdd->prepare('SELECT * FROM car_places
+$placeQuery = $bdd->prepare("SELECT * FROM car_places
 WHERE placeChapter <= ?
 ORDER BY placeChapter');
 $placeQuery->execute([$characterChapter]);

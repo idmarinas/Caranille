@@ -26,7 +26,7 @@ if (isset($_POST['accountCode'])
         if ($accountPassword == $accountPasswordConfirm) 
         {
             //On fait une requête pour vérifier si une demande de vérification est en cours
-            $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
+            $accountForgetPasswordQuery = $bdd->prepare("SELECT * FROM car_forgets_passwords 
             WHERE accountForgetPasswordEmailCode = ?');
             $accountForgetPasswordQuery->execute([$accountCode]);
             $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();
@@ -51,7 +51,7 @@ if (isset($_POST['accountCode'])
                 $deleteForgetPasswordQuery->closeCursor();
 
                 //On met à jour le mot de passe dans la base de donnée
-                $updateAccount = $bdd->prepare('UPDATE car_accounts 
+                $updateAccount = $bdd->prepare("UPDATE car_accounts 
                 SET accountPassword = :accountPassword
                 WHERE accountId = :accountForgetPasswordAccountId');
                 $updateAccount->execute(array(

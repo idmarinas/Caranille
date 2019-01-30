@@ -32,7 +32,7 @@ if (isset($_POST['modoAccountId'])
             $modoBanReason = htmlspecialchars(addslashes($_POST['modoBanReason']));
 
             //On fait une requête pour vérifier si le compte choisit existe
-            $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
+            $accountQuery = $bdd->prepare("SELECT * FROM car_accounts 
             WHERE accountId = ?');
             $accountQuery->execute([$modoAccountId]);
             $account = $accountQuery->rowCount();

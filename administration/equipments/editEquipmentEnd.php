@@ -77,7 +77,7 @@ if (isset($_POST['adminItemId'])
             $adminItemRaceId = htmlspecialchars(addslashes($_POST['adminItemRaceId']));
             
             //On fait une requête pour vérifier si l'équipement choisit existe
-            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            $itemQuery = $bdd->prepare("SELECT * FROM car_items 
             WHERE itemId = ?');
             $itemQuery->execute([$adminItemId]);
             $itemRow = $itemQuery->rowCount();
@@ -86,7 +86,7 @@ if (isset($_POST['adminItemId'])
             if ($itemRow == 1) 
             {
                 //On fait une requête pour vérifier si le type d'équipement choisit existe
-                $itemTypeQuery = $bdd->prepare('SELECT * FROM car_items_types
+                $itemTypeQuery = $bdd->prepare("SELECT * FROM car_items_types
                 WHERE itemTypeId = ?');
                 $itemTypeQuery->execute([$adminItemItemTypeId]);
                 $itemTypeRow = $itemTypeQuery->rowCount();
@@ -98,7 +98,7 @@ if (isset($_POST['adminItemId'])
                     if ($adminItemRaceId > 0)
                     {
                         //On fait une requête pour vérifier si la classe choisie existe
-                        $raceQuery = $bdd->prepare('SELECT * FROM car_races 
+                        $raceQuery = $bdd->prepare("SELECT * FROM car_races 
                         WHERE raceId = ?');
                         $raceQuery->execute([$adminItemRaceId]);
                         $raceRow = $raceQuery->rowCount();
@@ -135,7 +135,7 @@ if (isset($_POST['adminItemId'])
                         $adminItemSalePrice = htmlspecialchars(addslashes($_POST['adminItemSalePrice']));
         
                         //On met à jour l'équipement dans la base de donnée
-                        $updateItems = $bdd->prepare('UPDATE car_items 
+                        $updateItems = $bdd->prepare("UPDATE car_items 
                         SET itemItemTypeId = :adminItemItemTypeId, 
                         itemRaceId = :adminItemRaceId, 
                         itemPicture = :adminItemPicture,
@@ -259,7 +259,7 @@ if (isset($_POST['adminItemId'])
                                 $updateCharacter->closeCursor();
                 
                                 //On va maintenant finir par actualiser tous le personnage
-                                $updateCharacter = $bdd->prepare('UPDATE car_characters
+                                $updateCharacter = $bdd->prepare("UPDATE car_characters
                                 SET characterHpTotal = characterHpMax + characterHpSkillPoints + characterHpBonus + characterHpEquipments + characterHpGuild,
                                 characterMpTotal = characterMpMax + characterMpSkillPoints + characterMpBonus + characterMpEquipments + characterMpGuild,
                                 characterStrengthTotal = characterStrength + characterStrengthSkillPoints + characterStrengthBonus + characterStrengthEquipments + characterStrengthGuild,

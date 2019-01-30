@@ -40,7 +40,7 @@ if (isset($_POST['adminShopItemShopId'])
             if ($adminShopItemDiscount >= 0 && $adminShopItemDiscount <= 100)
             {
                 //On fait une requête pour vérifier si le magasin choisit existe
-                $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
+                $shopQuery = $bdd->prepare("SELECT * FROM car_shops 
                 WHERE shopId = ?');
                 $shopQuery->execute([$adminShopItemShopId]);
                 $shopRow = $shopQuery->rowCount();
@@ -57,7 +57,7 @@ if (isset($_POST['adminShopItemShopId'])
                     }
 
                     //On fait une requête pour vérifier si l'objet choisit existe
-                    $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+                    $itemQuery = $bdd->prepare("SELECT * FROM car_items 
                     WHERE itemId = ?');
                     $itemQuery->execute([$adminShopItemItemId]);
                     $itemRow = $itemQuery->rowCount();
@@ -75,7 +75,7 @@ if (isset($_POST['adminShopItemShopId'])
                         $itemQuery->closeCursor();
                 
                         //On fait une requête pour vérifier si le monstre n'est pas déjà dans cette lieu
-                        $shopItemQuery = $bdd->prepare('SELECT * FROM car_shops_items
+                        $shopItemQuery = $bdd->prepare("SELECT * FROM car_shops_items
                         WHERE shopItemShopId = ?
                         AND shopItemItemId = ?');
                         $shopItemQuery->execute([$adminShopItemShopId, $adminShopItemItemId]);

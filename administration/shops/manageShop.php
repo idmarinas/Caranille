@@ -30,7 +30,7 @@ if (isset($_POST['adminShopId'])
             $adminShopId = htmlspecialchars(addslashes($_POST['adminShopId']));
 
             //On fait une requête pour vérifier si le magasin choisit existe
-            $shopQuery = $bdd->prepare('SELECT * FROM car_shops 
+            $shopQuery = $bdd->prepare("SELECT * FROM car_shops 
             WHERE shopId = ?');
             $shopQuery->execute([$adminShopId]);
             $shopRow = $shopQuery->rowCount();

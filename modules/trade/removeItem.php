@@ -55,7 +55,7 @@ if (isset($_POST['tradeId'])
                 }
                 
                 //On fait une requête pour vérifier si l'objet ou équippement choisit existe
-                $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+                $itemQuery = $bdd->prepare("SELECT * FROM car_items 
                 WHERE itemId = ?');
                 $itemQuery->execute([$tradeItemId]);
                 $itemRow = $itemQuery->rowCount();

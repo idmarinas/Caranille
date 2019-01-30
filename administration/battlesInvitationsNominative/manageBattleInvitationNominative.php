@@ -30,7 +30,7 @@ if (isset($_POST['battleInvitationId'])
             $adminBattleInvitationId = htmlspecialchars(addslashes($_POST['battleInvitationId']));
 
             //On fait une requête pour vérifier si l'objet choisit existe
-            $battleInvitationQuery = $bdd->prepare('SELECT * FROM car_battles_invitations
+            $battleInvitationQuery = $bdd->prepare("SELECT * FROM car_battles_invitations
             WHERE battleInvitationId = ?');
             $battleInvitationQuery->execute([$adminBattleInvitationId]);
             $battleInvitationRow = $battleInvitationQuery->rowCount();
@@ -56,7 +56,7 @@ if (isset($_POST['battleInvitationId'])
                 <?php
                 
                 //On fait une requête pour vérifier si l'objet choisit existe
-                $battleInvitationCharacterQuery = $bdd->prepare('SELECT * FROM car_battles_invitations_characters, car_characters
+                $battleInvitationCharacterQuery = $bdd->prepare("SELECT * FROM car_battles_invitations_characters, car_characters
                 WHERE battleInvitationCharacterCharacterId = characterId
                 AND battleInvitationCharacterBattleInvitationId = ?');
                 $battleInvitationCharacterQuery->execute([$battleInvitationId]);

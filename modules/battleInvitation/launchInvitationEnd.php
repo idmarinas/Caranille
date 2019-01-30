@@ -18,7 +18,7 @@ if (isset($_POST['battleInvitationCharacterId'])
         $battleInvitationCharacterId = htmlspecialchars(addslashes($_POST['battleInvitationCharacterId']));
 
         //On fait une requête pour vérifier si l'invitation de combat choisit existe
-        $battleInvitationQuery = $bdd->prepare('SELECT * FROM car_battles_invitations, car_battles_invitations_characters, car_monsters
+        $battleInvitationQuery = $bdd->prepare("SELECT * FROM car_battles_invitations, car_battles_invitations_characters, car_monsters
 		WHERE battleInvitationId = battleInvitationCharacterBattleInvitationId
 		AND battleInvitationMonsterId = monsterId
 		AND battleInvitationCharacterId = ?
@@ -75,7 +75,7 @@ if (isset($_POST['battleInvitationCharacterId'])
                 $addBattle->closeCursor();
 
                 //On met à jour les stats du monstre
-                $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+                $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
                 SET monsterQuantityBattle = monsterQuantityBattle + 1
                 WHERE monsterId = :opponentId');
                 $updateMonsterStats->execute(['opponentId' => $opponentId]);

@@ -15,7 +15,7 @@ if (isset($_POST['accountEmail'])
         $codeAccountVerification = htmlspecialchars(addslashes($_POST['codeAccountVerification']));
 
         //On fait une requête pour vérifier si une demande de vérification est en cours
-        $accountVerificationQuery = $bdd->prepare('SELECT * FROM car_accounts_verifications 
+        $accountVerificationQuery = $bdd->prepare("SELECT * FROM car_accounts_verifications 
         WHERE accountVerificationEmailAdresse = ?
         AND accountVerificationEmailCode = ?');
         $accountVerificationQuery->execute([$accountEmail, $codeAccountVerification]);

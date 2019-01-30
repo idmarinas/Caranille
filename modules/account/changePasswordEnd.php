@@ -40,7 +40,7 @@ if (isset($_POST['oldPassword'])
             if ($accountRow == 1)
             {
                 //On met à jour le mot de passe dans la base de donnée
-                $updateAccount = $bdd->prepare('UPDATE car_accounts 
+                $updateAccount = $bdd->prepare("UPDATE car_accounts 
                 SET accountPassword = :newPassword
                 WHERE accountId = :accountId');
                 $updateAccount->execute(array(

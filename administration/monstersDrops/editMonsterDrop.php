@@ -45,7 +45,7 @@ if (isset($_POST['adminMonsterDropMonsterId'])
             if ($adminMonsterDropRate >= 0 && $adminMonsterDropRate <= 100)
             {
                 //On fait une requête pour vérifier si le monstre choisit existe
-                $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters 
+                $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters 
                 WHERE monsterId = ?');
                 $monsterQuery->execute([$adminMonsterDropMonsterId]);
                 $monsterRow = $monsterQuery->rowCount();
@@ -54,7 +54,7 @@ if (isset($_POST['adminMonsterDropMonsterId'])
                 if ($monsterRow == 1) 
                 {
                     //On fait une requête pour vérifier si l'objet choisit existe
-                    $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+                    $itemQuery = $bdd->prepare("SELECT * FROM car_items 
                     WHERE itemId = ?');
                     $itemQuery->execute([$adminMonsterDropItemId]);
                     $itemRow = $itemQuery->rowCount();
@@ -63,7 +63,7 @@ if (isset($_POST['adminMonsterDropMonsterId'])
                     if ($itemRow == 1) 
                     {
                         //On fait une requête pour vérifier si l'objet est sur ce monstre
-                        $monsterDropQuery = $bdd->prepare('SELECT * FROM car_monsters_drops 
+                        $monsterDropQuery = $bdd->prepare("SELECT * FROM car_monsters_drops 
                         WHERE monsterDropMonsterId = ?
                         AND monsterDropItemId = ?');
                         $monsterDropQuery->execute([$adminMonsterDropMonsterId, $adminMonsterDropItemId]);
@@ -73,7 +73,7 @@ if (isset($_POST['adminMonsterDropMonsterId'])
                         if ($monsterDropRow == 1) 
                         {
                             //On met l'équipement/objet à jour dans la base de donnée
-                            $updateMonsterDrop = $bdd->prepare('UPDATE car_monsters_drops
+                            $updateMonsterDrop = $bdd->prepare("UPDATE car_monsters_drops
                             SET monsterDropItemVisible = :adminMonsterDropItemVisible,
                             monsterDropRate = :adminMonsterDropRate,
                             monsterDropRateVisible = :adminMonsterDropRateVisible

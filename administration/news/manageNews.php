@@ -30,7 +30,7 @@ if (isset($_POST['adminNewsId'])
             $adminNewsId = htmlspecialchars(addslashes($_POST['adminNewsId']));
 
             //On fait une requête pour vérifier si la news choisie existe
-            $newsQuery = $bdd->prepare('SELECT * FROM car_news 
+            $newsQuery = $bdd->prepare("SELECT * FROM car_news 
             WHERE newsId = ?');
             $newsQuery->execute([$adminNewsId]);
             $newsRow = $newsQuery->rowCount();

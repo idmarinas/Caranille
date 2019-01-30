@@ -22,14 +22,14 @@ if (isset($_POST['token'])
         if ($characterSkillPoints > 0)
         {
             //On met la stats à jour
-            $updateCharacter = $bdd->prepare('UPDATE car_characters 
+            $updateCharacter = $bdd->prepare("UPDATE car_characters 
             SET characterAgilitySkillPoints = characterAgilitySkillPoints + 1,
             characterSkillPoints = characterSkillPoints -1
             WHERE characterId = :characterId');
             $updateCharacter->execute(['characterId' => $characterId]);
             $updateCharacter->closeCursor();
 
-            $updateCharacter = $bdd->prepare('UPDATE car_characters
+            $updateCharacter = $bdd->prepare("UPDATE car_characters
             SET characterHpTotal = characterHpMax + characterHpSkillPoints + characterHpBonus + characterHpEquipments + characterHpGuild,
             characterMpTotal = characterMpMax + characterMpSkillPoints + characterMpBonus + characterMpEquipments + characterMpGuild,
             characterStrengthTotal = characterStrength + characterStrengthSkillPoints + characterStrengthBonus + characterStrengthEquipments + characterStrengthGuild,

@@ -43,7 +43,7 @@ if (isset($_POST['adminPlaceId'])
             $adminplaceAccess = htmlspecialchars(addslashes($_POST['adminplaceAccess']));
 
             //On fait une requête pour vérifier si le lieu choisit existe
-            $placeQuery = $bdd->prepare('SELECT * FROM car_places 
+            $placeQuery = $bdd->prepare("SELECT * FROM car_places 
             WHERE placeId = ?');
             $placeQuery->execute([$adminPlaceId]);
             $placeRow = $placeQuery->rowCount();
@@ -55,7 +55,7 @@ if (isset($_POST['adminPlaceId'])
                 if ($adminplaceAccess == "No")
                 {
                     //On ejecte tous les joueurs présents dedans
-                    $updateCharacter = $bdd->prepare('UPDATE car_characters 
+                    $updateCharacter = $bdd->prepare("UPDATE car_characters 
                     SET characterPlaceId = 0
                     WHERE characterPlaceId = :adminPlaceId');
                     $updateCharacter->execute([
@@ -63,7 +63,7 @@ if (isset($_POST['adminPlaceId'])
                     $updateCharacter->closeCursor();
                 }
                 //On met à jour le lieu dans la base de donnée
-                $updatePlace = $bdd->prepare('UPDATE car_places 
+                $updatePlace = $bdd->prepare("UPDATE car_places 
                 SET placePicture = :adminplacePicture,
                 placeName = :adminplaceName,
                 placeDescription = :adminItemDescription,

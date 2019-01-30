@@ -34,7 +34,7 @@ if (isset($_POST['marketItemId'])
             $marketSalePrice = htmlspecialchars(addslashes($_POST['marketSalePrice']));
 
             //On fait une requête pour vérifier si l'objet ou équippement choisit existe
-            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            $itemQuery = $bdd->prepare("SELECT * FROM car_items 
             WHERE itemId = ?');
             $itemQuery->execute([$marketItemId]);
             $itemRow = $itemQuery->rowCount();

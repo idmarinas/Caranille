@@ -30,7 +30,7 @@ if (isset($_POST['adminItemId'])
             $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
 
             //On fait une requête pour vérifier si le parchemin choisit existe
-            $itemQuery = $bdd->prepare('SELECT * FROM car_items, car_items_types
+            $itemQuery = $bdd->prepare("SELECT * FROM car_items, car_items_types
             WHERE itemItemTypeId = itemTypeId
             AND itemId = ?');
             $itemQuery->execute([$adminItemId]);

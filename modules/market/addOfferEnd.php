@@ -31,7 +31,7 @@ if (isset($_POST['marketItemId'])
             $marketSalePrice = htmlspecialchars(addslashes($_POST['marketSalePrice']));
 
             //On fait une requête pour vérifier si l'objet ou équippement choisit existe
-            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            $itemQuery = $bdd->prepare("SELECT * FROM car_items 
             WHERE itemId = ?');
             $itemQuery->execute([$marketItemId]);
             $itemRow = $itemQuery->rowCount();
@@ -164,7 +164,7 @@ if (isset($_POST['marketItemId'])
                             $updateCharacter->closeCursor();
 
                             //On va maintenant finir par actualiser tous le personnage
-                            $updateCharacter = $bdd->prepare('UPDATE car_characters
+                            $updateCharacter = $bdd->prepare("UPDATE car_characters
                             SET characterHpTotal = characterHpMax + characterHpSkillPoints + characterHpBonus + characterHpEquipments,
                             characterMpTotal = characterMpMax + characterMpSkillPoints + characterMpBonus + characterMpEquipments,
                             characterStrengthTotal = characterStrength + characterStrengthSkillPoints + characterStrengthBonus + characterStrengthEquipments,

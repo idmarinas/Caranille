@@ -19,7 +19,7 @@ if (isset($_POST['accountCode'])
         $accountCode = htmlspecialchars(addslashes($_POST['accountCode']));
 
         //On fait une requête pour vérifier si une demande de vérification est en cours
-        $accountForgetPasswordQuery = $bdd->prepare('SELECT * FROM car_forgets_passwords 
+        $accountForgetPasswordQuery = $bdd->prepare("SELECT * FROM car_forgets_passwords 
         WHERE accountForgetPasswordEmailCode = ?');
         $accountForgetPasswordQuery->execute([$accountCode]);
         $accountForgetPasswordRow = $accountForgetPasswordQuery->rowCount();

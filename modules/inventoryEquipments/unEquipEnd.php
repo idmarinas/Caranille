@@ -139,7 +139,7 @@ if (isset($_POST['itemId'])
                     $updateCharacter->closeCursor();
     
                     //On va maintenant finir par actualiser tous le personnage
-                    $updateCharacter = $bdd->prepare('UPDATE car_characters
+                    $updateCharacter = $bdd->prepare("UPDATE car_characters
                     SET characterHpTotal = characterHpMax + characterHpSkillPoints + characterHpBonus + characterHpEquipments + characterHpGuild,
                     characterMpTotal = characterMpMax + characterMpSkillPoints + characterMpBonus + characterMpEquipments + characterMpGuild,
                     characterStrengthTotal = characterStrength + characterStrengthSkillPoints + characterStrengthBonus + characterStrengthEquipments + characterStrengthGuild,

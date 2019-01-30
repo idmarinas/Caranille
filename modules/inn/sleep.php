@@ -23,7 +23,7 @@ if (isset($_POST['token'])
         //Si le personnage a assez d'argent pour se soigner
         if ($characterGold >= $placePriceInn) 
         {
-            $updateAccount = $bdd->prepare('UPDATE car_characters
+            $updateAccount = $bdd->prepare("UPDATE car_characters
             SET characterGold = characterGold - :placePriceInn,
             characterHpMin = characterHpTotal,
             characterMpMin = characterMpTotal

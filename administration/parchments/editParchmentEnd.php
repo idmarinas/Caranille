@@ -63,7 +63,7 @@ if (isset($_POST['adminItemId'])
             $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
             
             //On fait une requête pour vérifier si le parchemin choisit existe
-            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            $itemQuery = $bdd->prepare("SELECT * FROM car_items 
             WHERE itemId = ?');
             $itemQuery->execute([$adminItemId]);
             $itemRow = $itemQuery->rowCount();
@@ -89,7 +89,7 @@ if (isset($_POST['adminItemId'])
                 $adminItemSalePrice = htmlspecialchars(addslashes($_POST['adminItemSalePrice']));
         
                 //On met à jour le parchemin dans la base de donnée
-                $updateItems = $bdd->prepare('UPDATE car_items 
+                $updateItems = $bdd->prepare("UPDATE car_items 
                 SET itemPicture = :adminItemPicture,
                 itemName = :adminItemName,
                 itemDescription = :adminItemDescription,

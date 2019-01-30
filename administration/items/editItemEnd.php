@@ -49,7 +49,7 @@ if (isset($_POST['adminItemId'])
             $adminItemSalePrice = htmlspecialchars(addslashes($_POST['adminItemSalePrice']));
 
             //On fait une requête pour vérifier si l'objet choisit existe
-            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            $itemQuery = $bdd->prepare("SELECT * FROM car_items 
             WHERE itemId = ?');
             $itemQuery->execute([$adminItemId]);
             $itemRow = $itemQuery->rowCount();
@@ -58,7 +58,7 @@ if (isset($_POST['adminItemId'])
             if ($itemRow == 1) 
             {
                 //On met à jour l'objet dans la base de donnée
-                $updateItems = $bdd->prepare('UPDATE car_items 
+                $updateItems = $bdd->prepare("UPDATE car_items 
                 SET itemPicture = :adminItemPicture,
                 itemName = :adminItemName,
                 itemDescription = :adminItemDescription,

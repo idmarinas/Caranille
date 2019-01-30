@@ -66,7 +66,7 @@ if (isset($_POST['token'])
                     $addBattle->closeCursor();
 
                     //On met à jour les stats du monstre
-                    $updateMonsterStats = $bdd->prepare('UPDATE car_monsters 
+                    $updateMonsterStats = $bdd->prepare("UPDATE car_monsters 
                     SET monsterQuantityBattle = monsterQuantityBattle + 1
                     WHERE monsterId = :opponentId');
                     $updateMonsterStats->execute(['opponentId' => $opponentId]);
@@ -113,7 +113,7 @@ if (isset($_POST['token'])
                         $addBattle->closeCursor();
 
                         //On met le monstre à jour dans la base de donnée
-                        $updateMonster = $bdd->prepare('UPDATE car_monsters 
+                        $updateMonster = $bdd->prepare("UPDATE car_monsters 
                         SET monsterQuantity = monsterQuantity - 1
                         WHERE monsterId = :opponentId');
                         $updateMonster->execute([

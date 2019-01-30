@@ -30,7 +30,7 @@ if (isset($_POST['adminPlaceId'])
             $adminPlaceId = htmlspecialchars(addslashes($_POST['adminPlaceId']));
 
             //On fait une requête pour vérifier si le lieu choisit existe
-            $placeQuery = $bdd->prepare('SELECT * FROM car_places 
+            $placeQuery = $bdd->prepare("SELECT * FROM car_places 
             WHERE placeId = ?');
             $placeQuery->execute([$adminPlaceId]);
             $placeRow = $placeQuery->rowCount();

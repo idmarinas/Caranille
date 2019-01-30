@@ -30,7 +30,7 @@ if (isset($_POST['marketId'])
             $marketId = htmlspecialchars(addslashes($_POST['marketId']));
 
             //On fait une requête pour vérifier si l'offre choisit existe
-            $marketQuery = $bdd->prepare('SELECT * FROM car_items, car_items_types, car_market, car_characters
+            $marketQuery = $bdd->prepare("SELECT * FROM car_items, car_items_types, car_market, car_characters
             WHERE itemItemTypeId = itemTypeId
             AND marketCharacterId = characterId
             AND marketItemId = itemId

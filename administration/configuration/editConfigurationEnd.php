@@ -174,7 +174,7 @@ if (isset($_POST['adminGameName'])
             }
             
             //On met à jour la configuration dans la base de donnée
-            $updateConfiguration = $bdd->prepare('UPDATE car_configuration
+            $updateConfiguration = $bdd->prepare("UPDATE car_configuration
             SET configurationGameName = :adminGameName,
             configurationPresentation = :adminGamePresentation,
             configurationMaxLevel = :adminGameMaxLevel,

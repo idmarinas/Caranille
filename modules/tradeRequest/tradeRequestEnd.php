@@ -29,7 +29,7 @@ if (isset($_POST['tradeCharacterId'])
             $tradeMessage = htmlspecialchars(addslashes($_POST['tradeMessage']));
             
             //On fait une requête pour vérifier si le personnage choisit existe
-            $characterQuery = $bdd->prepare('SELECT * FROM car_characters 
+            $characterQuery = $bdd->prepare("SELECT * FROM car_characters 
             WHERE characterId = ?');
             $characterQuery->execute([$tradeCharacterId]);
             $characterRow = $characterQuery->rowCount();

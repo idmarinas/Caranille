@@ -31,7 +31,7 @@ if (isset($_POST['adminAccountId'])
             $adminAccountId = htmlspecialchars(addslashes($_POST['adminAccountId']));
 
             //On fait une requête pour vérifier si le compte choisit existe
-            $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
+            $accountQuery = $bdd->prepare("SELECT * FROM car_accounts 
             WHERE accountId = ?');
             $accountQuery->execute([$adminAccountId]);
             $account = $accountQuery->rowCount();
@@ -47,7 +47,7 @@ if (isset($_POST['adminAccountId'])
                 $adminAccountAccess =  htmlspecialchars(addslashes($_POST['adminAccountAccess']));
 
                 //On met à jour le compte dans la base de donnée
-                $updateAccount = $bdd->prepare('UPDATE car_accounts 
+                $updateAccount = $bdd->prepare("UPDATE car_accounts 
                 SET accountPseudo = :adminAccountPseudo, 
                 accountEmail = :adminAccountEmail, 
                 accountAccess = :adminAccountAccess

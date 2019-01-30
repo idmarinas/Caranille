@@ -27,7 +27,7 @@ if (isset($_POST['placeId'])
             $placeId = htmlspecialchars(addslashes($_POST['placeId']));
 
             //On fait une requête pour vérifier si le joueur peut accèder à le lieu choisie
-            $placeQuery = $bdd->prepare('SELECT * FROM car_places
+            $placeQuery = $bdd->prepare("SELECT * FROM car_places
             WHERE placeChapter <= ?
             AND placeId = ?');
             $placeQuery->execute([$characterChapter, $placeId]);

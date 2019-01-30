@@ -30,7 +30,7 @@ if (isset($_POST['adminItemId'])
             $adminItemId = htmlspecialchars(addslashes($_POST['adminItemId']));
 
             //On fait une requête pour vérifier si l'objet choisit existe
-            $itemQuery = $bdd->prepare('SELECT * FROM car_items 
+            $itemQuery = $bdd->prepare("SELECT * FROM car_items 
             WHERE itemId = ?');
             $itemQuery->execute([$adminItemId]);
             $itemRow = $itemQuery->rowCount();

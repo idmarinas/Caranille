@@ -27,7 +27,7 @@ if (isset($_POST['adminBattleInvitationId'])
             $adminBattleInvitationId = htmlspecialchars(addslashes($_POST['adminBattleInvitationId']));
 
             //On fait une requête pour vérifier si l'invitation de combat choisit existe
-            $battleInvitationQuery = $bdd->prepare('SELECT * FROM car_battles_invitations 
+            $battleInvitationQuery = $bdd->prepare("SELECT * FROM car_battles_invitations 
             WHERE battleInvitationId = ?');
             $battleInvitationQuery->execute([$adminBattleInvitationId]);
             $battleInvitationRow = $battleInvitationQuery->rowCount();
@@ -44,7 +44,7 @@ if (isset($_POST['adminBattleInvitationId'])
                 }
                 
                 //On fait une requête pour vérifier si le monstre choisit existe
-                $monsterQuery = $bdd->prepare('SELECT * FROM car_monsters
+                $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters
                 WHERE monsterId = ?');
                 $monsterQuery->execute([$adminBattleInvitationMonsterId]);
                 $monsterRow = $monsterQuery->rowCount();
@@ -60,7 +60,7 @@ if (isset($_POST['adminBattleInvitationId'])
                 }
                 
                 //On fait une requête pour vérifier si l'objet choisit existe
-                $battleInvitationCharacterQuery = $bdd->prepare('SELECT * FROM car_battles_invitations_characters, car_characters
+                $battleInvitationCharacterQuery = $bdd->prepare("SELECT * FROM car_battles_invitations_characters, car_characters
                 WHERE battleInvitationCharacterCharacterId = characterId
                 AND battleInvitationCharacterBattleInvitationId = ?');
                 $battleInvitationCharacterQuery->execute([$adminBattleInvitationId]);

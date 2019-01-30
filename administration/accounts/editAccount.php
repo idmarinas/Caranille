@@ -30,7 +30,7 @@ if (isset($_POST['adminAccountId'])
             $adminAccountId = htmlspecialchars(addslashes($_POST['adminAccountId']));
 
             //On fait une requête pour vérifier si le compte choisit existe
-            $accountQuery = $bdd->prepare('SELECT * FROM car_accounts 
+            $accountQuery = $bdd->prepare("SELECT * FROM car_accounts 
             WHERE accountId = ?');
             $accountQuery->execute([$adminAccountId]);
             $accountRow = $accountQuery->rowCount();
