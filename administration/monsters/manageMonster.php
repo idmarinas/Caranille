@@ -38,8 +38,12 @@ if (isset($_POST['adminMonsterId'])
             //Si le monstre existe
             if ($monsterRow == 1) 
             {
-                //On récupère les informations du formulaire
-                $adminMonsterName = stripslashes($monsterQuery['monsterName']);
+                //On fait une boucle sur le ou les résultats obtenu pour récupérer les informations
+                while ($monster = $monsterQuery->fetch())
+                {
+                    //On récupère les informations du formulaire
+                    $adminMonsterName = stripslashes($monsterQuery['monsterName']);
+                }
                 ?>
                 
                 Que souhaitez-vous faire du monstre <em><?php echo $adminMonsterName ?></em> ?
