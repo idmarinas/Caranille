@@ -75,6 +75,7 @@ if (isset($_POST['adminplaceMonsterPlaceId'])
                             
                         <form method="POST" action="managePlaceMonster.php">
                             <input type="hidden" name="adminplaceMonsterPlaceId" value="<?php echo $adminplaceMonsterPlaceId ?>">
+                            <input type="hidden" class="btn btn-default form-control" name="token" value="<?php echo $_SESSION['token'] ?>">
                             <input type="submit" class="btn btn-default form-control" name="manage" value="Continuer">
                         </form>
                         
