@@ -38,10 +38,8 @@ if (isset($_POST['adminMonsterId'])
             //Si le monstre existe
             if ($monsterRow == 1) 
             {
-                //On fait une recherche dans la base de donnée de tous les monstres
-                $monsterQuery = $bdd->prepare("SELECT * FROM car_monsters
-                WHERE monsterId = ?");
-                $monsterQuery->execute([$adminMonsterId]);
+                //On récupère les informations du formulaire
+                $adminMonsterName = htmlspecialchars(addslashes($_POST['adminMonsterName']));
                 ?>
                 
                 Que souhaitez-vous faire du monstre <em><?php echo $adminMonsterName ?></em> ?
