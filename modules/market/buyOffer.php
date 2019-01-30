@@ -50,7 +50,6 @@ if (isset($_POST['marketId'])
                     $marketItemName = stripslashes($market['itemName']);
                     $marketSalePrice = stripslashes($market['marketSalePrice']);
                     $marketItemRaceId = stripslashes($market['itemRaceId']);
-                    $marketItemType = stripslashes($market['itemType']);
                     $marketItemLevel = stripslashes($market['itemLevel']);
                     $marketItemLevelRequired = stripslashes($market['itemLevelRequired']);
                     $marketItemName = stripslashes($market['itemName']);
