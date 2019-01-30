@@ -39,7 +39,7 @@ if (isset($_POST['adminMonsterId'])
             if ($monsterRow == 1) 
             {
                 //On récupère les informations du formulaire
-                $adminMonsterName = stripslashes($monster['monsterName']);
+                $adminMonsterName = stripslashes($monsterQuery['monsterName']);
                 ?>
                 
                 Que souhaitez-vous faire du monstre <em><?php echo $adminMonsterName ?></em> ?
