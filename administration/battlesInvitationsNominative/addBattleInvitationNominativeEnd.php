@@ -34,8 +34,6 @@ if (isset($_POST['adminBattleInvitationCharacterId'])
             $adminBattleInvitationPicture = htmlspecialchars(addslashes($_POST['adminBattleInvitationPicture']));
             $adminBattleInvitationeName = htmlspecialchars(addslashes($_POST['adminBattleInvitationeName']));
             $adminBattleInvitationDescription = htmlspecialchars(addslashes($_POST['adminBattleInvitationDescription']));
-            $adminBattleInvitationeRateOld = htmlspecialchars(addslashes($_POST['adminBattleInvitationeRateOld']));
-            $adminBattleInvitationeRateNew = htmlspecialchars(addslashes($_POST['adminBattleInvitationeRateNew']));
             $date = date('Y-m-d H:i:s');
             
             //On ajoute l'invitation de combat dans la base de donnée

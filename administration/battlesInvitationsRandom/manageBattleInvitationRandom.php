@@ -59,7 +59,7 @@ if (isset($_POST['battleInvitationId'])
                 $battleInvitationCharacterQuery = $bdd->prepare("SELECT * FROM car_battles_invitations_characters, car_characters
                 WHERE battleInvitationCharacterCharacterId = characterId
                 AND battleInvitationCharacterBattleInvitationId = ?");
-                $battleInvitationCharacterQuery->execute([$battleInvitationId]);
+                $battleInvitationCharacterQuery->execute([$adminBattleInvitationId]);
                 
                 //On fait une recherche dans la base de donnée de toutes les lieux
                 while ($battleInvitationCharacter = $battleInvitationCharacterQuery->fetch())
@@ -94,7 +94,7 @@ if (isset($_POST['battleInvitationId'])
             {
                 echo "Erreur : Cette invitation de combat n'existe pas";
             }
-            $placeQuery->closeCursor();
+            $battleInvitationCharacterQuery->closeCursor();
         }
         //Si tous les champs numérique ne contiennent pas un nombre
         else
